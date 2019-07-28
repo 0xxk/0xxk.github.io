@@ -153,7 +153,7 @@
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
                 <i class="icon icon-lg icon-chevron-left"></i>
             </a>
-            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Búsqueda">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
                 <i class="icon icon-lg icon-search"></i>
             </a>
@@ -188,6 +188,43 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
+            <article id="post-test"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a href="/2019/07/28/test/">phpMyAdmin4.8文件包含漏洞</a>
+    </h3>
+  
+
+
+
+
+     <div class="post-meta">
+        <time class="post-time" title="2019-07-28 16:57:33" datetime="2019-07-28T08:57:33.796Z"  itemprop="datePublished">2019-07-28</time>
+
+    </div>
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        <p>  首先来说下文件包含是什么，粗俗的讲就是本网页包含其他源代码来执行。此处本意正如编程中的函数调用，重复的代码大可不写。合理调用利用重复代码才是王道。</p>
+    
+        <div class="post-more-div">
+            <a href="/2019/07/28/test/" class="post-more waves-button">
+                Leer más
+            </a>
+        </div>
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
             <article id="post-hello-world"
   class="article-card article-type-post" itemprop="blogPost">
 
@@ -196,7 +233,7 @@
 
   
     <h3 class="post-title" itemprop="name">
-      <a href="/2019/07/24/hello-world/">0xxk的第一篇文章</a>
+      <a href="/2019/07/28/hello-world/">0xxk的第一篇文章</a>
     </h3>
   
 
@@ -204,7 +241,7 @@
 
 
      <div class="post-meta">
-        <time class="post-time" title="2019-07-24 11:33:09" datetime="2019-07-24T03:33:09.158Z"  itemprop="datePublished">2019-07-24</time>
+        <time class="post-time" title="2019-07-28 16:30:57" datetime="2019-07-28T08:30:57.112Z"  itemprop="datePublished">2019-07-28</time>
 
     </div>
 
@@ -212,39 +249,10 @@
 
     
         <p>很高兴大家来到我的博客，希望我们能够在这共同学习共同进步！</p>
-<h2 id="创建博客的过程"><a href="#创建博客的过程" class="headerlink" title="创建博客的过程"></a>创建博客的过程</h2><h3 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$在博主的github上git下载，网址为：</span><br><span class="line">https://github.com/Tomotoes/hexo-theme-tomotoes</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$在Blog/_config.yml中修改theme: 主题名。</span><br><span class="line">这里的主题名即上一个目录theme中你下载的主题名。</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="第三步"><a href="#第三步" class="headerlink" title="第三步"></a>第三步</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ 在当前目录下分别执行 ：</span><br><span class="line">                    hexo clean</span><br><span class="line">                    hexo s</span><br><span class="line">                    hexo g</span><br><span class="line">在执行完之后可以看到一个非常简陋的网站，这是因为很多依赖的环境都没有加载</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="第四步"><a href="#第四步" class="headerlink" title="第四步"></a>第四步</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ 进去博主的安装链接中：</span><br><span class="line">https://github.com/Tomotoes/hexo-theme-tomotoes/wiki/%E5%AE%89%E8%A3%85</span><br><span class="line">依次执行其中的命令，最后就可以看到很好看的网站了</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="第五步"><a href="#第五步" class="headerlink" title="第五步"></a>第五步</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$为了我们的网站更加的好看，我们可以去百度教程进一步美化我们的页面。</span><br></pre></td></tr></tbody></table></figure>
-
-<script>
-        document.querySelectorAll('.github-emoji')
-          .forEach(el => {
-            if (!el.dataset.src) { return; }
-            const img = document.createElement('img');
-            img.style = 'display:none !important;';
-            img.src = el.dataset.src;
-            img.addEventListener('error', () => {
-              img.remove();
-              el.style.color = 'inherit';
-              el.style.backgroundImage = 'none';
-              el.style.background = 'none';
-            });
-            img.addEventListener('load', () => {
-              img.remove();
-            });
-            document.body.appendChild(img);
-          });
-      </script>
     
         <div class="post-more-div">
-            <a href="/2019/07/24/hello-world/" class="post-more waves-button">
-                Continue reading...
+            <a href="/2019/07/28/hello-world/" class="post-more waves-button">
+                Leer más
             </a>
         </div>
     </div>
@@ -295,7 +303,7 @@
         </span>
         <br/>
 
-        <span class="license">This blog is licensed under a <a rel="license" rel="external nofollow" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+        <span class="license">Este blog está licenciado bajo una <a rel="license" rel="external nofollow" href="https://creativecommons.org/licenses/by/4.0/">licencia internacional Creative Commons Attribution 4.0</a>.</span>
     </div>
 </footer>
 
