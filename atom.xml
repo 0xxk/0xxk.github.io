@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://0xxk.github.com/"/>
-  <updated>2019-07-31T16:34:54.482Z</updated>
+  <updated>2019-08-01T16:03:45.509Z</updated>
   <id>https://0xxk.github.com/</id>
   
   <author>
@@ -15,6 +15,26 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>DOM与BOM的异同</title>
+    <link href="https://0xxk.github.com/2019/08/02/DOM%E5%92%8CBOM/"/>
+    <id>https://0xxk.github.com/2019/08/02/DOM和BOM/</id>
+    <published>2019-08-01T16:03:45.508Z</published>
+    <updated>2019-08-01T16:03:45.509Z</updated>
+    
+    <content type="html"><![CDATA[<p>​    DOM操作页面，BOM操作浏览器。听到这句话时，我感觉自己的基础不是很扎实。脑海里复现的问题竟然是DOM是什么？BOM是什么？</p><a id="more"></a><p>  为什么COM能操作页面？为什么BOM能操作浏览器？他们之间有什么共同点？有什么不同点呢？既然问题出来了，那我们就一一百度解决！</p><h1 id="DOM是什么？"><a href="#DOM是什么？" class="headerlink" title="DOM是什么？"></a>DOM是什么？</h1><p>​     DOM全称Document Object Model，即文档对象模型。我理解的DOM是一个接口，它接在HTML代码中。就像document.getElementById(‘xxx’)一样，它把Id为“myBtn”的节点“引用”到了这里。就相当于API接口，这样用脚本（JS）控制Web界面就很方便。（观点浅薄，请自行深入）</p><h1 id="BOM是什么？"><a href="#BOM是什么？" class="headerlink" title="BOM是什么？"></a>BOM是什么？</h1><p>​      BOM全称Browser Object Model，即浏览器对象模型。它也是接口，它的口接在全局对象中。也就是可以网页中，我们可以通过BOM接口加上一些动作来对浏览器进行控制。</p><h1 id="为什么COM能操作页面？为什么BOM能操作浏览器？"><a href="#为什么COM能操作页面？为什么BOM能操作浏览器？" class="headerlink" title="为什么COM能操作页面？为什么BOM能操作浏览器？"></a>为什么COM能操作页面？为什么BOM能操作浏览器？</h1><p>​      因为它们都是各自对象模型的接口（分别对应：文档对象模型，浏览器对象模型）。就像一个是手机的屏幕，一个是汽车的方向盘。都能都过对应的那一个点去操控各自的模型。</p><h1 id="他们之间有什么共同点？有什么不同点呢？"><a href="#他们之间有什么共同点？有什么不同点呢？" class="headerlink" title="他们之间有什么共同点？有什么不同点呢？"></a>他们之间有什么共同点？有什么不同点呢？</h1><h2 id="浅谈"><a href="#浅谈" class="headerlink" title="浅谈"></a>浅谈</h2><ul><li><p>不同点：各自操作不同的模型。</p></li><li><p>相同点：你中有我，我中有你。</p></li></ul><h2 id="深论"><a href="#深论" class="headerlink" title="深论"></a>深论</h2><p>  <strong>javascript由三部分组成：ECMAScript,DOM,BOM组成。</strong></p><figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DOM是W3C的标准；[所有浏览器公共遵守的标准]</span><br><span class="line">BOM是各个浏览器厂商根据DOM在各自浏览器上的实现;[表现为不同浏览器定义有差别，实现方式不同]</span><br><span class="line">window是BOM对象，而非js对象。</span><br></pre></td></tr></tbody></table></figure><p>​      <u>DOM（文档对象模型）是HTML和XML的应用程序接口（API）</u>。<br>​      <u>BOM主要处理浏览器窗口和框架，不过通常浏览器特定的JavaScript扩展都被看做BOM的一部分</u>。这些扩展包括：</p><figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">弹出新的浏览器窗口</span><br><span class="line">移动、关闭浏览器窗口以及调整窗口大小</span><br><span class="line">提供web浏览器详细信息的定位对象</span><br><span class="line">提供用户品目分辨率详细信息的屏幕对象</span><br><span class="line">对cookie的支持</span><br><span class="line">IE扩展了BOM，加入了ActiveXObject类，可以通过JavaScript实例化Activex对象</span><br></pre></td></tr></tbody></table></figure><p>​    javascript是通过访问BOM对象来访问、控制、修改客户端（浏览器），由于BOM的window包含了document,window对象的属性和方法是直接可以使用而且被感知的，因此可以直接使用winodw对象的document属性。</p><p>​    通过document属性就可以访问、检索、修改XHTML文档内容与结构。因为document对象又是DOM模型的根节点。可以说，BOM包含了DOM(对象)，浏览器提供出来给予访问的是BOM对象，从BOM对象再访问到DOM对象，从而js可以操作浏览器以及浏览器读取到的文档。其中DOM包含:window</p><h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><ul><li>window对象包含属性：document、location、navigater、screen、history、frames。</li></ul><ul><li><p>Document根节点包含子节点：forms、location、anchors、images、links</p><p>从window.document已然可以看出，DOM最根本的对象是BOM window对象的子对象。</p><p>参考链接：<a href="https://blog.csdn.net/xiao_tommy/article/details/53231165" target="_blank" rel="noopener">https://blog.csdn.net/xiao_tommy/article/details/53231165</a></p></li></ul><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;​    DOM操作页面，BOM操作浏览器。听到这句话时，我感觉自己的基础不是很扎实。脑海里复现的问题竟然是DOM是什么？BOM是什么？&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="https://0xxk.github.com/categories/%E7%BC%96%E7%A8%8B/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>JS事件初识</title>

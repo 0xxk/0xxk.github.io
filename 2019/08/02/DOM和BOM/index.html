@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta http-equiv="Content-Language" content="zh-cn">
+    <meta charset="utf-8">
+    
+    
+    
+    <title>DOM与BOM的异同 | 0xxk&#39;sBlog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    
+    <meta name="theme-color" content="#77AAFF">
+    
+    
+    <meta name="keywords" content>
+    
+    
+
+    
+
+    <!-- Baidu Push -->
+<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+
+	var _hmt = _hmt || [];
+</script>
+
+
+
+    
+    <meta name="description" content="​    DOM操作页面，BOM操作浏览器。听到这句话时，我感觉自己的基础不是很扎实。脑海里复现的问题竟然是DOM是什么？BOM是什么？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DOM与BOM的异同">
+<meta property="og:url" content="https://0xxk.github.com/2019/08/02/DOM和BOM/index.html">
+<meta property="og:site_name" content="0xxk&#39;sBlog">
+<meta property="og:description" content="​    DOM操作页面，BOM操作浏览器。听到这句话时，我感觉自己的基础不是很扎实。脑海里复现的问题竟然是DOM是什么？BOM是什么？">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-08-01T16:03:45.509Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DOM与BOM的异同">
+<meta name="twitter:description" content="​    DOM操作页面，BOM操作浏览器。听到这句话时，我感觉自己的基础不是很扎实。脑海里复现的问题竟然是DOM是什么？BOM是什么？">
+    
+        <link rel="alternate" type="application/atom+xml" title="0xxk&#39;sBlog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link id="style" rel="stylesheet" href="/css/style.css?v=3.0">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+            
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+    <aside id="menu"  class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" >
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg" alt="avatar">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname" id="name">John Doe</h5>
+          
+            <div id="yiyanmotto" class="motto">&nbsp;</div>
+          
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+              <li class="waves-block waves-effect">
+                  <a href="/"  >
+                    <i class="icon icon-lg icon-home"></i>
+                    <span>主 页</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/archives"  >
+                    <i class="icon icon-lg icon-archives"></i>
+                    <span>归 档</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/categories"  >
+                    <i class="icon icon-lg icon-th-list"></i>
+                    <span>分 类</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/tags"  >
+                    <i class="icon icon-lg icon-tags"></i>
+                    <span>标 签</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/about"  >
+                    <i class="icon icon-lg icon-smile-o"></i>
+                    <span>关 于</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+      <div class="nav2">
+          
+              <a class="nav2item" data-title="Email" href="mailto:0xxk@qq.com" target="_parent"title="Email" >
+                <i class="icon icon-lg icon-envelope-o envelope-o"></i>
+              </a>
+          
+              <a class="nav2item" data-title="Github" href="https://github.com/0xxk" target="_blank"title="Github" >
+                <i class="icon icon-lg icon-github github"></i>
+              </a>
+          
+              <a class="nav2item" data-title="微博" href="https://weibo.com/u/6179399347" target="_blank"title="微博" >
+                <i class="icon icon-lg icon-weibo weibo"></i>
+              </a>
+          
+
+            </div>
+        
+      </ul>
+        
+    </div>
+  </div>
+ 
+</aside>
+
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">DOM与BOM的异同</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        <a href="../../atom.xml" target="_blank" class="header-icon waves-effect waves-circle waves-light" id="Rss">
+            <i class="icon icon-lg icon-rss"></i>
+        </a>
+    </div>
+</header>
+<header class="content-header post-header">
+    
+    
+    <div class="container fade-scale">
+        <div id="myheader">
+            <h1 class="title">
+                
+            </h1>
+            <h5 class="subtitle">
+                
+                
+            </h5>
+        </div>
+    </div>
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#DOM是什么？"><span class="post-toc-number">1.</span> <span class="post-toc-text">DOM是什么？</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#BOM是什么？"><span class="post-toc-number">2.</span> <span class="post-toc-text">BOM是什么？</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#为什么COM能操作页面？为什么BOM能操作浏览器？"><span class="post-toc-number">3.</span> <span class="post-toc-text">为什么COM能操作页面？为什么BOM能操作浏览器？</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#他们之间有什么共同点？有什么不同点呢？"><span class="post-toc-number">4.</span> <span class="post-toc-text">他们之间有什么共同点？有什么不同点呢？</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#浅谈"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">浅谈</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#深论"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">深论</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分类"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">分类</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+   
+<article id="post-DOM和BOM"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">DOM与BOM的异同</h1>
+        <div class="post-meta">
+            <i class="icon icon-lg icon-calendar-o"></i>
+            发表于
+            <time class="post-time" title="2019-08-02 00:03:45" datetime="2019-08-01T16:03:45.508Z"  itemprop="datePublished">2019-08-02</time>
+
+            <br id="mybreak"/>
+            
+	<i class="icon icon-lg icon-folder-o"></i>
+	分类：<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/编程/">编程</a></li></ul>
+
+
+            <i>·</i>
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>次浏览
+</span>
+
+
+        </div>
+        <div class="post-count-custom">
+            <i class="icon icon-lg icon-comment-o"></i>
+            阅读本文可能花费您&nbsp;<span class="post-count">3</span>&nbsp;分钟
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>​    DOM操作页面，BOM操作浏览器。听到这句话时，我感觉自己的基础不是很扎实。脑海里复现的问题竟然是DOM是什么？BOM是什么？</p>
+<a id="more"></a>
+<p>  为什么COM能操作页面？为什么BOM能操作浏览器？他们之间有什么共同点？有什么不同点呢？既然问题出来了，那我们就一一百度解决！</p>
+<h1 id="DOM是什么？"><a href="#DOM是什么？" class="headerlink" title="DOM是什么？"></a>DOM是什么？</h1><p>​     DOM全称Document Object Model，即文档对象模型。我理解的DOM是一个接口，它接在HTML代码中。就像document.getElementById(‘xxx’)一样，它把Id为“myBtn”的节点“引用”到了这里。就相当于API接口，这样用脚本（JS）控制Web界面就很方便。（观点浅薄，请自行深入）</p>
+<h1 id="BOM是什么？"><a href="#BOM是什么？" class="headerlink" title="BOM是什么？"></a>BOM是什么？</h1><p>​      BOM全称Browser Object Model，即浏览器对象模型。它也是接口，它的口接在全局对象中。也就是可以网页中，我们可以通过BOM接口加上一些动作来对浏览器进行控制。</p>
+<h1 id="为什么COM能操作页面？为什么BOM能操作浏览器？"><a href="#为什么COM能操作页面？为什么BOM能操作浏览器？" class="headerlink" title="为什么COM能操作页面？为什么BOM能操作浏览器？"></a>为什么COM能操作页面？为什么BOM能操作浏览器？</h1><p>​      因为它们都是各自对象模型的接口（分别对应：文档对象模型，浏览器对象模型）。就像一个是手机的屏幕，一个是汽车的方向盘。都能都过对应的那一个点去操控各自的模型。</p>
+<h1 id="他们之间有什么共同点？有什么不同点呢？"><a href="#他们之间有什么共同点？有什么不同点呢？" class="headerlink" title="他们之间有什么共同点？有什么不同点呢？"></a>他们之间有什么共同点？有什么不同点呢？</h1><h2 id="浅谈"><a href="#浅谈" class="headerlink" title="浅谈"></a>浅谈</h2><ul>
+<li><p>不同点：各自操作不同的模型。</p>
+</li>
+<li><p>相同点：你中有我，我中有你。</p>
+</li>
+</ul>
+<h2 id="深论"><a href="#深论" class="headerlink" title="深论"></a>深论</h2><p>  <strong>javascript由三部分组成：ECMAScript,DOM,BOM组成。</strong></p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DOM是W3C的标准；[所有浏览器公共遵守的标准]</span><br><span class="line">BOM是各个浏览器厂商根据DOM在各自浏览器上的实现;[表现为不同浏览器定义有差别，实现方式不同]</span><br><span class="line">window是BOM对象，而非js对象。</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​      <u>DOM（文档对象模型）是HTML和XML的应用程序接口（API）</u>。<br>​      <u>BOM主要处理浏览器窗口和框架，不过通常浏览器特定的JavaScript扩展都被看做BOM的一部分</u>。这些扩展包括：</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">弹出新的浏览器窗口</span><br><span class="line">移动、关闭浏览器窗口以及调整窗口大小</span><br><span class="line">提供web浏览器详细信息的定位对象</span><br><span class="line">提供用户品目分辨率详细信息的屏幕对象</span><br><span class="line">对cookie的支持</span><br><span class="line">IE扩展了BOM，加入了ActiveXObject类，可以通过JavaScript实例化Activex对象</span><br></pre></td></tr></tbody></table></figure>
+
+<p>​    javascript是通过访问BOM对象来访问、控制、修改客户端（浏览器），由于BOM的window包含了document,window对象的属性和方法是直接可以使用而且被感知的，因此可以直接使用winodw对象的document属性。</p>
+<p>​    通过document属性就可以访问、检索、修改XHTML文档内容与结构。因为document对象又是DOM模型的根节点。可以说，BOM包含了DOM(对象)，浏览器提供出来给予访问的是BOM对象，从BOM对象再访问到DOM对象，从而js可以操作浏览器以及浏览器读取到的文档。其中DOM包含:window</p>
+<h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><ul>
+<li>window对象包含属性：document、location、navigater、screen、history、frames。</li>
+</ul>
+<ul>
+<li><p>Document根节点包含子节点：forms、location、anchors、images、links</p>
+<p>从window.document已然可以看出，DOM最根本的对象是BOM window对象的子对象。</p>
+<p>参考链接：<a href="https://blog.csdn.net/xiao_tommy/article/details/53231165" target="_blank" rel="noopener">https://blog.csdn.net/xiao_tommy/article/details/53231165</a></p>
+</li>
+</ul>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-08-01T16:03:45.509Z" itemprop="dateUpdated">2019-08-02 00:03:45</time>
+</span>
+
+
+        
+        原文链接：<a href="/2019/08/02/DOM和BOM/" target="_blank" rel="external">https://0xxk.github.com/2019/08/02/DOM和BOM/</a>
+        
+    </div>
+    <footer>
+        <div onclick="location.href='https://0xxk.github.com'">
+            <img src="/img/avatar.jpg" alt="John Doe">
+            <a>John Doe</a>
+        </div>
+    </footer>
+</blockquote>
+
+        
+    <div class="page-reward">
+        <nav class="myreward">
+            <a id="rewardBtn" href="javascript:;"><span>打&nbsp;赏</span><span>装成好像很多人打赏的样子</span></a>
+        </nav>
+    </div>
+
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.com/2019/08/02/DOM和BOM/&title=《DOM与BOM的异同》 — 0xxk'sBlog&pic=https://0xxk.github.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.com/2019/08/02/DOM和BOM/&title=《DOM与BOM的异同》 — 0xxk'sBlog&source=​    DOM操作页面，BOM操作浏览器。听到这句话时，我感觉自己的基础不是很扎实。脑海里复现的问题竟然是DOM是什么？BOM是什么？" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.com/2019/08/02/DOM和BOM/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《DOM与BOM的异同》 — 0xxk'sBlog&url=https://0xxk.github.com/2019/08/02/DOM和BOM/&via=https://0xxk.github.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.com/2019/08/02/DOM和BOM/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/08/01/JS事件/" id="post-next" class="post-nav-link">
+        <h4 class="title" data-hover="下一篇：JS事件初识">下一篇：JS事件初识</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+    
+
+    
+
+    
+
+
+</article>
+
+</div>
+
+        <footer class="footer">
+    <div class="footer-content">
+        <span class="power">
+            <i class="icon icon-lg icon-copyright"></i>
+            2017
+            <i class="icon icon-lg icon-heart"></i>
+            <a href="https://0xxk.github.com">0xxk.github..com</a>
+            <br/>
+            Power by
+            <a href="https://hexo.io/" target="_blank" rel="external nofollow">Hexo</a>&nbsp;·&nbsp;
+            Theme
+            <a class="tomotoeslink" href="https://github.com/tomotoes/hexo-theme-tomotoes/" target="_blank" rel="external nofollow">tomotoes</a>
+        </span>
+
+        <br/>
+
+        <span id="RunTime" style="color:#a7a7a2;"></span>
+        <br/>
+
+        <span>
+            
+	<i class="icon icon-lg icon-user">
+<span id="busuanzi_container_site_uv" style='display:none'>
+       访问用户：<span id="busuanzi_value_site_uv"></span>
+    </span>人</i>
+    ·
+    <i class="icon icon-lg icon-eye">
+    <span id="busuanzi_container_site_pv" style='display:none'>
+      访问次数：<span id="busuanzi_value_site_pv"></span>
+    </span>次
+    </i>
+
+
+        </span>
+        <br/>
+
+        <span class="license">This blog is licensed under a <a rel="license" rel="external nofollow" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+    </div>
+</footer>
+
+    </main>
+    
+        
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        <span>感谢您的鼓励支持！</span>
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" data-img="/img/dog.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/avatar.jpg" data-alipay="/img/avatar.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechatPay">&nbsp;&nbsp;微信&nbsp;&nbsp;</span>
+                <span class="reward-toggle-item alipayPay">支付宝</span>
+            </div>
+        </label>
+        
+        <i class="icon icon-caret-up"></i>
+    </div>
+</div>
+
+
+    
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.com/2019/08/02/DOM和BOM/&title=《DOM与BOM的异同》 — 0xxk'sBlog&pic=https://0xxk.github.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.com/2019/08/02/DOM和BOM/&title=《DOM与BOM的异同》 — 0xxk'sBlog&source=​    DOM操作页面，BOM操作浏览器。听到这句话时，我感觉自己的基础不是很扎实。脑海里复现的问题竟然是DOM是什么？BOM是什么？" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.com/2019/08/02/DOM和BOM/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《DOM与BOM的异同》 — 0xxk'sBlog&url=https://0xxk.github.com/2019/08/02/DOM和BOM/&via=https://0xxk.github.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.com/2019/08/02/DOM和BOM/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p class="wechatshare">扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKklEQVR42u3aSXLDMAwFUd//0soBXKL6A0wqApsrl6zpaYHCwM8Hr+tr1Y7f3fPuyOYlQ4aM1zKu5Vo/krz0+irye/1uMmTIOIdxF8HW56RI8kR+pgwZMmT0A2IauPnnkyFDhgxyOx4c1wWqDBkyZHAGCZS14MuTRXJ8Qy0uQ4aMFzJ41/3vf//KfEOGDBmvYlzhSq/lg8mrsWTIkDGbwQMcT85qqSEpqh9KYhkyZAxlpK/Cz0mDLG/AfbhbhgwZ4xidMNoP2Z2NaDJkyJjNSINvpxmX3rn4rwwZMkYz4toXb7xIH5k25mTIkHEaI90Swbdl9McJwbeXIUPGIEbNmiaC6Sg0LX1lyJAxm9FvivHjfNjAP5kMGTLOYfDH7G2xpa20h2tlyJAxlMHbZHu/XLohDG22kCFDxmgG56WJXdrCI5/mYc+IDBkyxjE6pWP60mRgEM8x+hWwDBky/j0jbYTVtlykg8kYKUOGjNGMXYldraLctQlDhgwZJzDSMQBJAWvbxdJW3UMRK0OGjKGMNPDVGmrkA5FhqgwZMs5kpIPJdEjJU8wNg0wZMmSMYFzhQtVwWO7ygPuQFMqQIWMoozMlTIejPMjWElAZMmTMZqQlK0fGW7sa41IZMmScwEgDXx+Zzh+LI0wZMmQcyeDF6roAJg27gC1DhgwZ4EXjoWMjEdyWGsqQIeNVDD4M4C9KHl9LGWXIkHEao9Pi748KiuG1NsiUIUPG+xg/DtTbGcN32R8AAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <!-- waves按钮特效 -->
+<script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+
+<!-- 主题配置脚本 -->
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+</script>
+
+<!-- jquery -->
+<script src="/js/jquery.min.js?v=3.0"></script>
+
+<!-- 搜索 -->
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item waves-block waves-effect" onclick="location.href='{path}'">
+    <div class="title ellipsis" title="{title}">{title}</div>
+</li>
+</template>
+
+
+<!-- main博客脚本 -->
+<script src="/js/main.min.js?v=3.0" ></script>
+
+<!-- 动画&配置 -->
+<script src="/js/script.min.js?v=3.0" ></script>
+
+<!-- 脚本管理 -->
+<script>
+
+if(window.innerWidth > 800){
+	/* 3D标题 */
+	$(".content-header").on("mousemove", threedee);
+
+	/* 底部追随鼠标 */
+	$(".footer").hover(2);
+
+	/* gotop键的涟漪 */
+	$("#gotop").hover(1);
+
+	/* 赞赏的粒子雨 */
+	$("#reward").hover(3);
+
+	/* 微信公众号的底部渲染 */
+	$("#wechat").hover(4);
+
+    /* 标题跳动 */
+    $(".archivestitle").bumpyText();
+
+	/* 图片点击放大 */
+	const postimg = jQuery(".post-content img:not(.github-emoji)");
+	postimg.on("click",function(){
+
+		mask.classList.add("in");
+		main.classList.add("Mask");
+		menu.classList.add("Mask");
+		var myimg = this.cloneNode(true);
+		myimg.classList.add("imgShow");
+
+		setTimeout(function(){
+			jQuery(myimg).animate({
+				opacity:"1"
+			},1000);
+		},0);
+
+		document.body.appendChild(myimg);
+
+		myimg.onclick=function(){
+			document.body.removeChild(myimg);
+			mask.classList.remove("in");
+			main.classList.remove("Mask");
+			menu.classList.remove("Mask");
+		};
+
+	});
+
+}
+
+/* 名字跳动 */
+$("#name").bumpyText();
+
+
+/* 网站运行时间 */
+setInterval(function () {
+	setTime("2019/7/24");
+}, 1000);
+
+/* 文章块的淡出 */
+postshow();
+
+/* 座右铭 */
+
+   getHitokoto();
+
+
+
+/* 粘贴提示 */
+G($(".post-content"), location.href, "John Doe");
+
+
+/* 控制台 */
+if (window.console && window.console.log) {
+	setTimeout(function () {
+		console.log("\n %c 一个坏掉的番茄 %c  © Simon Ma  http://tomotoes.com \n\n", "color:#FFFFFB;background:#1abc9c;padding:5px 0;border-radius:.5rem 0 0 .5rem;", "color:#FFFFFB;background:#080808;padding:5px 0;border-radius:0 .5rem .5rem 0;");
+	}, 0);
+}
+
+</script>
+
+
+
+
+<!-- 公式渲染 -->
+
+
+
+<!-- 不蒜子 -->
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+</body>
+</html>
