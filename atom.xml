@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://0xxk.github.com/"/>
-  <updated>2019-08-01T16:03:45.509Z</updated>
+  <updated>2019-08-04T16:23:40.719Z</updated>
   <id>https://0xxk.github.com/</id>
   
   <author>
@@ -15,6 +15,24 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>CSRF JQ POST提交</title>
+    <link href="https://0xxk.github.com/2019/08/04/CSRF%20JQ%20POST%E6%8F%90%E4%BA%A4/"/>
+    <id>https://0xxk.github.com/2019/08/04/CSRF JQ POST提交/</id>
+    <published>2019-08-04T15:53:36.787Z</published>
+    <updated>2019-08-04T16:23:40.719Z</updated>
+    
+    <content type="html"><![CDATA[<p>​      在温习完前端后，继续学习了JS JQ。在讲JQ时，讲师用JQ本地复现了一遍CSRF。因为我对CSRF的理解一直处于概念上，所以就此机会将JQ复现代码学习理解一遍！</p><a id="more"></a><p>某小游戏网csrf POST更改账户信息。代码具体如下：</p><figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"><!DOCTYPE html></span></span><br><span class="line"><span class="tag"><<span class="name">html</span>></span></span><br><span class="line"><span class="tag"><<span class="name">head</span>></span></span><br><span class="line"><span class="tag"><<span class="name">title</span>></span>jquery<span class="tag"></<span class="name">title</span>></span></span><br><span class="line"><span class="tag"><<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://libs.baidu.com/jquery/2.0.0/jquery.js"</span>></span><span class="tag"></<span class="name">script</span>></span></span><br><span class="line"><span class="tag"></<span class="name">head</span>></span></span><br><span class="line"><span class="tag"><<span class="name">body</span>></span></span><br><span class="line"><span class="tag"><<span class="name">script</span>></span></span><br><span class="line">$.ajax({</span><br><span class="line">      type: 'POST',</span><br><span class="line">      url:'http://www.xxxx.com/xxxapi/user/info',</span><br><span class="line">      dataType: 'json',</span><br><span class="line">      data: {</span><br><span class="line">        "headimg":"/static/usericon/userphoto20.png",</span><br><span class="line">"user_tag":[],</span><br><span class="line">"allow_status":"1",</span><br><span class="line">"nickname":"Leafer",</span><br><span class="line">"real_name":"",</span><br><span class="line">"id_number":""},</span><br><span class="line">      xhrFields: {</span><br><span class="line">          withCredentials:true  //支持附带详细信息,可以携带cookie</span><br><span class="line">      },</span><br><span class="line">      crossDomain: true,//请求偏向外域,支持跨域请求</span><br><span class="line">      success: function (data) {</span><br><span class="line">          console.log(data);</span><br><span class="line">      }</span><br><span class="line">    });</span><br><span class="line"><span class="tag"></<span class="name">script</span>></span></span><br><span class="line"><span class="tag"></<span class="name">body</span>></span></span><br><span class="line"><span class="tag"></<span class="name">html</span>></span></span><br></pre></td></tr></tbody></table></figure><p>本例 type为’POST’。type默认值为”GET”，可选”GET”或”POST”。</p><p>url为发送请求的地址。</p><p>dataType为传递的数据类型。本处为”JSON”。可用值如下：</p><p><u>“xml”:返回XML文档；</u></p><p><u>“html”:返回纯文本HTML信息；</u></p><p><u>“script”:返回纯文本JavaScript代码。</u></p><p><u>“json”:返回JSON数据</u></p><p><u>“jsconp”:JSONP格式</u></p><p><u>“text”:返回纯文本字符串。</u></p><p>xhrFields: {withCredentials:true}支持附带详细信息,携带cookie</p><p>crossDomain:ture 请求偏向外语，支持跨域请求</p><p>success: function (data) {console.log(data);}请求成功后在控制台输出data数据。</p><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="https://b2.bmp.ovh/imgs/2019/08/3babf9af39fab821.jpg" alt title>                </div>                <div class="image-caption"></div>            </figure><p>访问页面后</p><p>参数为：</p><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="https://b2.bmp.ovh/imgs/2019/08/4f115aebee812020.jpg" alt title>                </div>                <div class="image-caption"></div>            </figure><p></p><p>响应值为：</p><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="https://b2.bmp.ovh/imgs/2019/08/a50e9df7272892e2.jpg" alt title>                </div>                <div class="image-caption"></div>            </figure><p>再去查看自己的昵称</p><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="https://b2.bmp.ovh/imgs/2019/08/0e32c5dcff04e351.jpg" alt title>                </div>                <div class="image-caption"></div>            </figure><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;​      在温习完前端后，继续学习了JS JQ。在讲JQ时，讲师用JQ本地复现了一遍CSRF。因为我对CSRF的理解一直处于概念上，所以就此机会将JQ复现代码学习理解一遍！&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>DOM与BOM的异同</title>

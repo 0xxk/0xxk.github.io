@@ -6,7 +6,7 @@
     
     
     
-    <title>0xxk的第一篇文章 | 0xxk&#39;sBlog</title>
+    <title>CSRF JQ POST提交 | 0xxk&#39;sBlog</title>
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     
     <meta name="theme-color" content="#77AAFF">
@@ -39,17 +39,22 @@
 
 
     
-    <meta name="description" content="很高兴大家来到我的博客，希望我们能够在这共同学习共同进步！">
+    <meta name="description" content="​      在温习完前端后，继续学习了JS JQ。在讲JQ时，讲师用JQ本地复现了一遍CSRF。因为我对CSRF的理解一直处于概念上，所以就此机会将JQ复现代码学习理解一遍！">
 <meta property="og:type" content="article">
-<meta property="og:title" content="0xxk的第一篇文章">
-<meta property="og:url" content="https://0xxk.github.com/2019/07/28/hello-world/index.html">
+<meta property="og:title" content="CSRF JQ POST提交">
+<meta property="og:url" content="https://0xxk.github.com/2019/08/04/CSRF JQ POST提交/index.html">
 <meta property="og:site_name" content="0xxk&#39;sBlog">
-<meta property="og:description" content="很高兴大家来到我的博客，希望我们能够在这共同学习共同进步！">
+<meta property="og:description" content="​      在温习完前端后，继续学习了JS JQ。在讲JQ时，讲师用JQ本地复现了一遍CSRF。因为我对CSRF的理解一直处于概念上，所以就此机会将JQ复现代码学习理解一遍！">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-28T08:30:57.112Z">
+<meta property="og:image" content="https://b2.bmp.ovh/imgs/2019/08/3babf9af39fab821.jpg">
+<meta property="og:image" content="https://b2.bmp.ovh/imgs/2019/08/4f115aebee812020.jpg">
+<meta property="og:image" content="https://b2.bmp.ovh/imgs/2019/08/a50e9df7272892e2.jpg">
+<meta property="og:image" content="https://b2.bmp.ovh/imgs/2019/08/0e32c5dcff04e351.jpg">
+<meta property="og:updated_time" content="2019-08-04T16:23:40.719Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="0xxk的第一篇文章">
-<meta name="twitter:description" content="很高兴大家来到我的博客，希望我们能够在这共同学习共同进步！">
+<meta name="twitter:title" content="CSRF JQ POST提交">
+<meta name="twitter:description" content="​      在温习完前端后，继续学习了JS JQ。在讲JQ时，讲师用JQ本地复现了一遍CSRF。因为我对CSRF的理解一直处于概念上，所以就此机会将JQ复现代码学习理解一遍！">
+<meta name="twitter:image" content="https://b2.bmp.ovh/imgs/2019/08/3babf9af39fab821.jpg">
     
         <link rel="alternate" type="application/atom+xml" title="0xxk&#39;sBlog" href="/atom.xml">
     
@@ -151,7 +156,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">0xxk的第一篇文章</div>
+        <div class="flex-col header-title ellipsis">CSRF JQ POST提交</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -188,22 +193,15 @@
 
 <div class="container body-wrap">
     
-    <aside class="post-widget">
-        <nav class="post-toc-wrap" id="post-toc">
-            <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#创建博客的过程"><span class="post-toc-number">1.</span> <span class="post-toc-text">创建博客的过程</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第一步"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">第一步</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第二步"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">第二步</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第三步"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">第三步</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第四步"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">第四步</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第五步"><span class="post-toc-number">1.5.</span> <span class="post-toc-text">第五步</span></a></li></ol></li></ol>
-        </nav>
-    </aside>
-   
-<article id="post-hello-world"
+<article id="post-CSRF JQ POST提交"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">0xxk的第一篇文章</h1>
+        <h1 class="post-card-title">CSRF JQ POST提交</h1>
         <div class="post-meta">
             <i class="icon icon-lg icon-calendar-o"></i>
             发表于
-            <time class="post-time" title="2019-07-28 16:30:57" datetime="2019-07-28T08:30:57.112Z"  itemprop="datePublished">2019-07-28</time>
+            <time class="post-time" title="2019-08-04 23:53:36" datetime="2019-08-04T15:53:36.787Z"  itemprop="datePublished">2019-08-04</time>
 
             <br id="mybreak"/>
             
@@ -225,19 +223,57 @@
             阅读本文可能花费您&nbsp;<span class="post-count">1</span>&nbsp;分钟
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>很高兴大家来到我的博客，希望我们能够在这共同学习共同进步！</p>
+            <p>​      在温习完前端后，继续学习了JS JQ。在讲JQ时，讲师用JQ本地复现了一遍CSRF。因为我对CSRF的理解一直处于概念上，所以就此机会将JQ复现代码学习理解一遍！</p>
 <a id="more"></a>
-<h2 id="创建博客的过程"><a href="#创建博客的过程" class="headerlink" title="创建博客的过程"></a>创建博客的过程</h2><h3 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$在博主的github上git下载，网址为：</span><br><span class="line">https://github.com/Tomotoes/hexo-theme-tomotoes</span><br></pre></td></tr></tbody></table></figure>
 
-<h3 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$在Blog/_config.yml中修改theme: 主题名。</span><br><span class="line">这里的主题名即上一个目录theme中你下载的主题名。</span><br></pre></td></tr></tbody></table></figure>
+<p>某小游戏网csrf POST更改账户信息。代码具体如下：</p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"><!DOCTYPE html></span></span><br><span class="line"><span class="tag"><<span class="name">html</span>></span></span><br><span class="line"><span class="tag"><<span class="name">head</span>></span></span><br><span class="line">	<span class="tag"><<span class="name">title</span>></span>jquery<span class="tag"></<span class="name">title</span>></span></span><br><span class="line">	<span class="tag"><<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://libs.baidu.com/jquery/2.0.0/jquery.js"</span>></span><span class="tag"></<span class="name">script</span>></span></span><br><span class="line"><span class="tag"></<span class="name">head</span>></span></span><br><span class="line"><span class="tag"><<span class="name">body</span>></span></span><br><span class="line">	<span class="tag"><<span class="name">script</span>></span></span><br><span class="line">	$.ajax({</span><br><span class="line">	      type: 'POST',</span><br><span class="line">	      url:'http://www.xxxx.com/xxxapi/user/info',</span><br><span class="line">	      dataType: 'json',</span><br><span class="line">	      data: {</span><br><span class="line">	        "headimg":"/static/usericon/userphoto20.png",</span><br><span class="line">			"user_tag":[],</span><br><span class="line">			"allow_status":"1",</span><br><span class="line">			"nickname":"Leafer",</span><br><span class="line">			"real_name":"",</span><br><span class="line">			"id_number":""},</span><br><span class="line">	      xhrFields: {</span><br><span class="line">	          withCredentials:true  //支持附带详细信息,可以携带cookie</span><br><span class="line">	      },</span><br><span class="line">	      crossDomain: true,//请求偏向外域,支持跨域请求</span><br><span class="line">	      success: function (data) {</span><br><span class="line">	          console.log(data);</span><br><span class="line">	      }</span><br><span class="line">	    });</span><br><span class="line">	<span class="tag"></<span class="name">script</span>></span></span><br><span class="line"><span class="tag"></<span class="name">body</span>></span></span><br><span class="line"><span class="tag"></<span class="name">html</span>></span></span><br></pre></td></tr></tbody></table></figure>
 
-<h3 id="第三步"><a href="#第三步" class="headerlink" title="第三步"></a>第三步</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ 在当前目录下分别执行 ：</span><br><span class="line">                    hexo clean</span><br><span class="line">                    hexo s</span><br><span class="line">                    hexo g</span><br><span class="line">在执行完之后可以看到一个非常简陋的网站，这是因为很多依赖的环境都没有加载</span><br></pre></td></tr></tbody></table></figure>
+<p>本例 type为’POST’。type默认值为”GET”，可选”GET”或”POST”。</p>
+<p>url为发送请求的地址。</p>
+<p>dataType为传递的数据类型。本处为”JSON”。可用值如下：</p>
+<p><u>“xml”:返回XML文档；</u></p>
+<p><u>“html”:返回纯文本HTML信息；</u></p>
+<p><u>“script”:返回纯文本JavaScript代码。</u></p>
+<p><u>“json”:返回JSON数据</u></p>
+<p><u>“jsconp”:JSONP格式</u></p>
+<p><u>“text”:返回纯文本字符串。</u></p>
+<p>xhrFields: {withCredentials:true}支持附带详细信息,携带cookie</p>
+<p>crossDomain:ture 请求偏向外语，支持跨域请求</p>
+<p>success: function (data) {console.log(data);}请求成功后在控制台输出data数据。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://b2.bmp.ovh/imgs/2019/08/3babf9af39fab821.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
 
-<h3 id="第四步"><a href="#第四步" class="headerlink" title="第四步"></a>第四步</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ 进去博主的安装链接中：</span><br><span class="line">https://github.com/Tomotoes/hexo-theme-tomotoes/wiki/%E5%AE%89%E8%A3%85</span><br><span class="line">依次执行其中的命令，最后就可以看到很好看的网站了</span><br></pre></td></tr></tbody></table></figure>
+<p>访问页面后</p>
+<p>参数为：</p><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://b2.bmp.ovh/imgs/2019/08/4f115aebee812020.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure><p></p>
+<p>响应值为：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://b2.bmp.ovh/imgs/2019/08/a50e9df7272892e2.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
 
-<h3 id="第五步"><a href="#第五步" class="headerlink" title="第五步"></a>第五步</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$为了我们的网站更加的好看，我们可以去百度教程进一步美化我们的页面。</span><br></pre></td></tr></tbody></table></figure>
-
-<script>
+<p>再去查看自己的昵称</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://b2.bmp.ovh/imgs/2019/08/0e32c5dcff04e351.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure><script>
         document.querySelectorAll('.github-emoji')
           .forEach(el => {
             if (!el.dataset.src) { return; }
@@ -262,12 +298,12 @@
     <div class="content">
         
 <span class="post-time">
-    Última actualización<time datetime="2019-07-28T08:30:57.112Z" itemprop="dateUpdated">2019-07-28 16:30:57</time>
+    Última actualización<time datetime="2019-08-04T16:23:40.719Z" itemprop="dateUpdated">2019-08-05 00:23:40</time>
 </span>
 
 
         
-        原文链接：<a href="/2019/07/28/hello-world/" target="_blank" rel="external">https://0xxk.github.com/2019/07/28/hello-world/</a>
+        原文链接：<a href="/2019/08/04/CSRF JQ POST提交/" target="_blank" rel="external">https://0xxk.github.com/2019/08/04/CSRF JQ POST提交/</a>
         
     </div>
     <footer>
@@ -297,7 +333,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.com/2019/07/28/hello-world/&title=《0xxk的第一篇文章》 — 0xxk'sBlog&pic=https://0xxk.github.com/img/avatar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.com/2019/08/04/CSRF JQ POST提交/&title=《CSRF JQ POST提交》 — 0xxk'sBlog&pic=https://0xxk.github.com/img/avatar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -307,22 +343,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.com/2019/07/28/hello-world/&title=《0xxk的第一篇文章》 — 0xxk'sBlog&source=很高兴大家来到我的博客，希望我们能够在这共同学习共同进步！" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.com/2019/08/04/CSRF JQ POST提交/&title=《CSRF JQ POST提交》 — 0xxk'sBlog&source=​      在温习完前端后，继续学习了JS JQ。在讲JQ时，讲师用JQ本地复现了一遍CSRF。因为我对CSRF的理解一直处于概念上，所以就此机会将JQ..." data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.com/2019/07/28/hello-world/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.com/2019/08/04/CSRF JQ POST提交/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《0xxk的第一篇文章》 — 0xxk'sBlog&url=https://0xxk.github.com/2019/07/28/hello-world/&via=https://0xxk.github.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《CSRF JQ POST提交》 — 0xxk'sBlog&url=https://0xxk.github.com/2019/08/04/CSRF JQ POST提交/&via=https://0xxk.github.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.com/2019/07/28/hello-world/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.com/2019/08/04/CSRF JQ POST提交/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -342,17 +378,15 @@
     </div>
 
     
-<nav class="post-nav flex-row flex-justify-between">
-  
-    <div class="waves-block waves-effect prev">
-      <a href="/2019/07/28/test/" id="post-prev" class="post-nav-link">
-        <h4 class="title" >
-          上一篇：phpMyAdmin4.8文件包含漏洞
-        </h4>
-      </a>
-    </div>
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
   
 
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/08/02/DOM和BOM/" id="post-next" class="post-nav-link">
+        <h4 class="title" data-hover="下一篇：DOM与BOM的异同">下一篇：DOM与BOM的异同</h4>
+      </a>
+    </div>
   
 </nav>
 
@@ -449,7 +483,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.com/2019/07/28/hello-world/&title=《0xxk的第一篇文章》 — 0xxk'sBlog&pic=https://0xxk.github.com/img/avatar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.com/2019/08/04/CSRF JQ POST提交/&title=《CSRF JQ POST提交》 — 0xxk'sBlog&pic=https://0xxk.github.com/img/avatar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -459,22 +493,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.com/2019/07/28/hello-world/&title=《0xxk的第一篇文章》 — 0xxk'sBlog&source=很高兴大家来到我的博客，希望我们能够在这共同学习共同进步！" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.com/2019/08/04/CSRF JQ POST提交/&title=《CSRF JQ POST提交》 — 0xxk'sBlog&source=​      在温习完前端后，继续学习了JS JQ。在讲JQ时，讲师用JQ本地复现了一遍CSRF。因为我对CSRF的理解一直处于概念上，所以就此机会将JQ..." data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.com/2019/07/28/hello-world/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.com/2019/08/04/CSRF JQ POST提交/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《0xxk的第一篇文章》 — 0xxk'sBlog&url=https://0xxk.github.com/2019/07/28/hello-world/&via=https://0xxk.github.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《CSRF JQ POST提交》 — 0xxk'sBlog&url=https://0xxk.github.com/2019/08/04/CSRF JQ POST提交/&via=https://0xxk.github.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.com/2019/07/28/hello-world/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.com/2019/08/04/CSRF JQ POST提交/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -485,7 +519,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p class="wechatshare">扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACNUlEQVR42u3aUXKDMAxFUfa/abqATMx9ErS1uP7KTInxyYcqSzoOvM6P9e2Z9Plv3zqeWDJkyNiWcS4XecH60J/7kJ+An02GDBnvYaRbk9DJ/0qevDizDBkyZJQC4jpwp++VIUOGjHsDLrmybvB/Q4YMGf+MQQLlOmjWdviDu7gMGTI2ZPCq++9/fqS/IUOGjK0YZ7jSfWqNyfhUMmTIGM3gAY7D7k0NgyuxDBkyhjLWxa90kCItwK3fSN4SbyFDhozNGf2yfhqya22Di4ArQ4aMcQzSSqwNgaVJHgdf7CxDhoyhjFow7TQsO1fZi3KbDBkyhjLSl60PwQfI+A7BmIUMGTKGMnjTkbcEatfX2s4yZMiYzSCBj1wj+T7p1TSoGsqQIWMoI72yEkanPdAJ3DJkyJjKqI15palerWEZD1vIkCFjKIMUxUjJngdr0khI95EhQ8YbGPwiSrarHZqPl6GwK0OGjEEMXt6qhct+mxOliTJkyBjNSC+rJFB2uqnp+IUMGTLew+BpWX/kK/1usI8MGTJeyegfK0310uGMI430MmTI2JxxV7Getwpq7wpyWxkyZIxgnOHiYbFTVismhTJkyBjKqDU4eaEthfEgHqSMMmTIGMFIi1zrsNiB8Z3jzoYMGTJGMDoX1CfAcXNChgwZMsKUjoxKkDGO9XdvDrgyZMgYxCCJHc/feDhGl1gZMmSMZqSF/k6rspZ0XvyIMmTIGM24q5bVuoKCJ2sjGjJkyNic8QPZigPx+Bt2gQAAAABJRU5ErkJggg==" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLElEQVR42u3aS46DQAxFUfa/aXoaKaL6PhtaTfkyigifOgwsl+3jwMf5cXyf+TxP/iXPPJ44ZMiQ8VrGuTz4ovnzv+9a/16vTYYMGXMYV68njyZhlL9xfe/leRkyZMgAy+KvJwFahgwZMjqM9TW1RZD0UYYMGTLIJrYTTDn48b24DBkyXsjgVfe///1If0OGDBmvYpzhQdI4fiUJx2hVMmTI2JrBA1wtcSQJXy3gypAhYw6j04zkQZknnWnL8+j3VGXIkPHvGetXdsphnZ1m+hFlyJAxk8GHwGqNyVppD2W4MmTI2JRRK8enBbJahT/+rDJkyNiaQYLmvQ3RWrMh/sYyZMh4OYO3FTupW7wdTQtzMmTIGMzgr0mHJ8gTeICWIUPGHEa/BMaDdS0EtwbCZMiQ8VoGT+Nqbc40vNbCsQwZMmYyeMKXhmD+OeJrZMiQsSkjTcLStmKnGBe0ImTIkLE1o7aB7NybDpnxTyNDhow5DLK4zkhrOt4RhGMZMmSMYdRaBWmJrROUL58jQ4aMMYxO0Kwtjp/5ZVUyZMgYwEgHSWtNgnhrilNYGTJk7Mo4wyNdVm10NW1LyJAhY29G2h9MR8dqS0mbpjJkyJjA4FtNPufQKfGngV6GDBlzGGkpn29ueUsgDf2oLihDhozBDB6aa5vkuCQnQ4YMGTctjhfs1iu5LTWUIUPGqxhpQY0PbKXDHLwkJ0OGjDkMvnUsTnM0crn0ShkyZGzH+AEWbZ07WmDjKgAAAABJRU5ErkJggg==" alt="微信分享二维码">
 </div>
 
 
