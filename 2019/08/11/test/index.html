@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta http-equiv="Content-Language" content="zh-cn">
+    <meta charset="utf-8">
+    
+    
+    
+    <title>phpMyAdmin4.8文件包含漏洞 | oxxk blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    
+    <meta name="theme-color" content="#77AAFF">
+    
+    
+    <meta name="keywords" content>
+    
+    
+
+    
+
+    <!-- Baidu Push -->
+<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+
+	var _hmt = _hmt || [];
+</script>
+
+
+
+    
+    <meta name="description" content="首先来说下文件包含是什么，粗俗的讲就是本网页包含其他源代码来执行。此处本意正如编程中的函数调用，重复的代码大可不写。合理调用利用重复代码才是王道。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="phpMyAdmin4.8文件包含漏洞">
+<meta property="og:url" content="https://0xxk.github.io/2019/08/11/test/index.html">
+<meta property="og:site_name" content="oxxk blog">
+<meta property="og:description" content="首先来说下文件包含是什么，粗俗的讲就是本网页包含其他源代码来执行。此处本意正如编程中的函数调用，重复的代码大可不写。合理调用利用重复代码才是王道。">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://b2.bmp.ovh/imgs/2019/07/c808e947e90f8b27.png">
+<meta property="og:image" content="https://b2.bmp.ovh/imgs/2019/07/aa9ab63e7f9a8544.png">
+<meta property="og:image" content="https://b2.bmp.ovh/imgs/2019/07/8320934fc9a999e3.png">
+<meta property="og:image" content="https://b2.bmp.ovh/imgs/2019/07/0674ca60ee73dc17.png">
+<meta property="og:image" content="https://b2.bmp.ovh/imgs/2019/07/de97f23630670e65.png">
+<meta property="og:image" content="https://b2.bmp.ovh/imgs/2019/07/53d2315cd601428b.png">
+<meta property="og:image" content="https://b2.bmp.ovh/imgs/2019/07/e54a00ac99cd2747.png">
+<meta property="og:image" content="https://b2.bmp.ovh/imgs/2019/07/2f5d9f00745ae085.png">
+<meta property="og:image" content="https://b2.bmp.ovh/imgs/2019/07/58e737094b5b901c.png">
+<meta property="og:image" content="https://b2.bmp.ovh/imgs/2019/07/9ae651d090d9872c.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/28/el6bk9.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/28/elcU74.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/28/elcgBD.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/28/elcogP.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/28/elcqHg.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/28/elgibF.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/28/elU3NT.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/28/elU84U.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/28/el2GeU.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/28/elUgvd.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/28/elUI58.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/28/elaMxH.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/28/elaJdP.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/28/elaaRg.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/28/ela0Mj.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/28/elaRWF.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/28/elaTdx.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/28/elajQH.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/28/eld3pF.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/28/eldwtK.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/07/28/elds6H.png">
+<meta property="og:updated_time" content="2019-07-28T08:57:33.796Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="phpMyAdmin4.8文件包含漏洞">
+<meta name="twitter:description" content="首先来说下文件包含是什么，粗俗的讲就是本网页包含其他源代码来执行。此处本意正如编程中的函数调用，重复的代码大可不写。合理调用利用重复代码才是王道。">
+<meta name="twitter:image" content="https://b2.bmp.ovh/imgs/2019/07/c808e947e90f8b27.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="oxxk blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link id="style" rel="stylesheet" href="/css/style.css?v=3.0">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+            
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+    <aside id="menu"  class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" >
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg" alt="avatar">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname" id="name">0xxk</h5>
+          
+            <div id="yiyanmotto" class="motto">&nbsp;</div>
+          
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+              <li class="waves-block waves-effect">
+                  <a href="/"  >
+                    <i class="icon icon-lg icon-home"></i>
+                    <span>主 页</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/archives"  >
+                    <i class="icon icon-lg icon-archives"></i>
+                    <span>归 档</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/categories"  >
+                    <i class="icon icon-lg icon-th-list"></i>
+                    <span>分 类</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/tags"  >
+                    <i class="icon icon-lg icon-tags"></i>
+                    <span>标 签</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/about"  >
+                    <i class="icon icon-lg icon-smile-o"></i>
+                    <span>关 于</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+      <div class="nav2">
+          
+              <a class="nav2item" data-title="Github" href="https://github.com/oxxk" target="_blank"title="Github" >
+                <i class="icon icon-lg icon-github github"></i>
+              </a>
+          
+
+            </div>
+        
+      </ul>
+        
+    </div>
+  </div>
+ 
+</aside>
+
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">phpMyAdmin4.8文件包含漏洞</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        <a href="../../atom.xml" target="_blank" class="header-icon waves-effect waves-circle waves-light" id="Rss">
+            <i class="icon icon-lg icon-rss"></i>
+        </a>
+    </div>
+</header>
+<header class="content-header post-header">
+    
+    
+    <div class="container fade-scale">
+        <div id="myheader">
+            <h1 class="title">
+                
+            </h1>
+            <h5 class="subtitle">
+                
+                
+            </h5>
+        </div>
+    </div>
+
+</header>
+
+
+<div class="container body-wrap">
+    
+<article id="post-test"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">phpMyAdmin4.8文件包含漏洞</h1>
+        <div class="post-meta">
+            <i class="icon icon-lg icon-calendar-o"></i>
+            发表于
+            <time class="post-time" title="2019-08-11 22:49:49" datetime="2019-08-11T14:49:49.771Z"  itemprop="datePublished">2019-08-11</time>
+
+            <br id="mybreak"/>
+            
+<script>
+	mybreak.style="display:none";
+</script>
+
+
+            <i>·</i>
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>次浏览
+</span>
+
+
+        </div>
+        <div class="post-count-custom">
+            <i class="icon icon-lg icon-comment-o"></i>
+            阅读本文可能花费您&nbsp;<span class="post-count">6</span>&nbsp;分钟
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>  首先来说下文件包含是什么，粗俗的讲就是本网页包含其他源代码来执行。此处本意正如编程中的函数调用，重复的代码大可不写。合理调用利用重复代码才是王道。</p>
+<a id="more"></a>
+<p>那么文件包含漏洞是什么呢？文件包含不该是正常网站的一个功能吗？用尘哥的话说就是xx程序员多了，就有了漏洞，就有了安全这行业。本来应该包含正确代码到文件中去执行的，但是在包含这个地方没有做好过滤。导致我们能让网站随我们心意“任意”执行我们想要做的“事情”。</p>
+<p>  在phpMyadmin4.0 4.1中就有这么一处包含的位置过滤不严导致可控。我们通过文件包含去调用我们“上传”到网站上的恶意代码，如：一句话木马。只要将其包含就可以“执行”。<br>让我们先来认识下PHP中文件包含的函数：</p>
+<p>  include()</p>
+<p>使用此函数，只有代码执行到此函数时才将文件包含进来，发生错误时只警告并继续执行整个php文件。</p>
+<p>  include_once()</p>
+<p>这个函数跟include函数作用几乎相同，只是他在导入函数之前先检测下改文件是否被导入。如果已经执行一遍那么就不重复执行了。</p>
+<p>  require()</p>
+<p>使用此函数，只要程序执行，立即调用此函数包含文件，发生错误时，会输出错误信息并立即终止程序。</p>
+<p>  require_once()</p>
+<p>功能和前者一样，区别在于当重复调用同一文件时，程序只调用一次。</p>
+<p>先让我们大致的浏览的一下phpMyadmin网站的结构。既然说是文件包含，那么漏洞点必然在包含的位置那。大致浏览了一波，好像没有找到明显的?xxx=xx.php这种页面。那么直接上手源代码吧，提示漏洞出在index.php中。让我们依次去查找文件包含的关键字：</p>
+<p>  include()</p>
+<p>  <img src="https://b2.bmp.ovh/imgs/2019/07/c808e947e90f8b27.png" alt></p>
+<p>  <img src="https://b2.bmp.ovh/imgs/2019/07/aa9ab63e7f9a8544.png" alt></p>
+<p>  <img src="https://b2.bmp.ovh/imgs/2019/07/8320934fc9a999e3.png" alt></p>
+<p>  <img src="https://b2.bmp.ovh/imgs/2019/07/0674ca60ee73dc17.png" alt><br>  搜索全文后发现只有这四个地方用到了包含include函数.</p>
+<p>include_once()</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://b2.bmp.ovh/imgs/2019/07/de97f23630670e65.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>就只有一处</p>
+<p>require</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://b2.bmp.ovh/imgs/2019/07/53d2315cd601428b.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>就只有这一处</p>
+<p>Require_once</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://b2.bmp.ovh/imgs/2019/07/e54a00ac99cd2747.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>也只有这么一处。<br>因为我们需要被包含文件位置可变（目前非可控）。所以除去所有相对路径后只剩下include中的两处了。<br>分别是：</p>
+<p><img src="https://b2.bmp.ovh/imgs/2019/07/2f5d9f00745ae085.png" alt>    <img src="https://b2.bmp.ovh/imgs/2019/07/58e737094b5b901c.png" alt></p>
+<p>先让我们来分析下include $page的条件（哦吼，php学的烂看不懂。让我百度一波）</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://b2.bmp.ovh/imgs/2019/07/9ae651d090d9872c.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>$page中的数值会在函数中判断后由Utile类getScriptNameForOption函数返回值赋予。继续溯源到Util::getScriptNameForOption中去。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://s2.ax1x.com/2019/07/28/el6bk9.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>查看Util.php源代码，定位到3064行——3110行。代码分别如下</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://s2.ax1x.com/2019/07/28/elcU74.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://s2.ax1x.com/2019/07/28/elcgBD.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://s2.ax1x.com/2019/07/28/elcogP.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>总的看了下它共有三个判断语句，如果传入的$location等于server、database、table中的一个。那么就进行swith($target)选择一个值return返回。由此可见，这个包含的地方不是漏洞点。<br>现在只剩下include $_REQUEST[‘target’];了。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://s2.ax1x.com/2019/07/28/elcqHg.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>首先对涉及到的函数进行百度（菜是原罪）</p>
+<p>1.empty:若变量已存在、非空字符串或者非零，则返回false值，反之返回true。</p>
+<p>2.is_string:检测变量是否是字符串，如果是字符串返回TURE，反则返回FALSE。</p>
+<p>3.preg_match:用于执行一个正则表达式匹配</p>
+<p>4.in_array:搜索数组中是否存在指定的值。</p>
+<p>5.将target传去Core类的checkPageValidity进行判断。</p>
+<p>如果以上五项都为True，则执行下面的include $_REQUEST[‘target’];</p>
+<p>让我们依次来分析各项为True的条件。</p>
+<p>empty()：要让后面的’target’存在或者是空字符串或者非零。这样empty返回0，和前面的！非一下就成了1.</p>
+<p>is_string：target的数值要为字符串。</p>
+<p>preg_match:如果target满足正则条件则返回1。target字符串的头不能为index，否则！1就返回0。</p>
+<p>in_array:target中的值不能出现在$target_blacklist中。$target_blacklist中有’import.php’和’export.php’。只要’target’中的值不包含’import.php’和’export.php’就可以了</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://s2.ax1x.com/2019/07/28/elgibF.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>Core::checkPageValidity：将’target’的值传入core类的checkPageValidity函数中去进行判断。如果返回的数值为True，那么就为1。对Core::checkPageValidity进行溯源：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://s2.ax1x.com/2019/07/28/elU3NT.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>进入Core.php，定位checkPageValidity函数进行判断。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://s2.ax1x.com/2019/07/28/elU84U.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>大致查看下有哪些判断条件，共有五个判断语句。如下逐个分析：</p>
+<p>在这个if中，因为我们没有给whitelist传送一个值过来，所以导致这里empty($whitelist)为True。转而执行下面的$whitelist = self::$goto_whitelist;在slfe::$goto_whitelist中存放着白名单。这里将白名单赋予给$whitelist变量。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://s2.ax1x.com/2019/07/28/el2GeU.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>goto_whitelist白名单如下（部分）：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://s2.ax1x.com/2019/07/28/elUgvd.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>在这里变量page也就是传入的target要被定义过或是字符串，否则返回false。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://s2.ax1x.com/2019/07/28/elUI58.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>我们传入的变量如果是白名单里的一种，那么就返回true。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://s2.ax1x.com/2019/07/28/elaMxH.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>5.这里用到了mb_substr函数和mb_strpos函数。mb_substr的作用是返回字符串的一部分。mb_strpos这里是判断后面字符出现的位置。这里总的含义就是将变量page里出现在?号前面的数据截取后传入$_page。如下举例：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://s2.ax1x.com/2019/07/28/elaJdP.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://s2.ax1x.com/2019/07/28/elaaRg.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p> 在这里我曾有一个zz的地方，知道mb_strpos函数的作用后不免思考：为什么要加上一个？号后再判断它位置来截断呢？毫无意思的操作，自己加然后截断自己的参数。从而导致我觉得.号作用不是拼接而有其他意思。后来如上图试验后才明白函数原来是从左往后去判断截断的。如果在用户输入有?的前提下将文件名和参数分开，没有?时也可以取出文件名。</p>
+<p>但是在这里有一个问题，正如我们上面使用的语句：<br>db_sql.php?/../../../../../../etc/passwd。它虽然绕过了之前所有的过滤，但是在php中问号后面的是会被当作参数来执行的。那还是达不到包含文件的作用的！继续来看下面的参数！</p>
+<p>5.在这里有一个很有趣的地方，那就是urldecode()。他的作用是将url编码解码一次，那么在这里就很有意思了！</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://s2.ax1x.com/2019/07/28/ela0Mj.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>它将解码后的在拿去判断，这是无用的！因为php最后包含的是解码之前的代码！如下所示：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://s2.ax1x.com/2019/07/28/elaRWF.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>文件包含的是db_sql.php%3f/../../../../../../etc/passwd，可解码后判断的是db_sql.php?/../../../../../../etc/passwd这是不一样的。这这个if里我们顺利通过了关键字白名单判断且用正确格式包含了自己想要得到的数据。</p>
+<p>综合上面所有的判定条件。我们要通过target参数传入一串字符串，字符串前面的文件名要在白名单中，且？要进行二次url编码（浏览器传送时会自动解码一次）。这样就可以绕过所有的过滤达到我们要的效果了。</p>
+<p>如下所示：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://s2.ax1x.com/2019/07/28/elaTdx.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>因本人很菜，无法在默认配置下利用文件包含漏洞点去拿getshell。至此只写下如何查看phpinfo()。</p>
+<p>一．通过数据库写入phpinfo()从而来包含。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://s2.ax1x.com/2019/07/28/elajQH.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>再来查看当前数据库位置</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://s2.ax1x.com/2019/07/28/eld3pF.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>具体目录根据保存规则推算。在这里tt.frm得允许其他人可读。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://s2.ax1x.com/2019/07/28/eldwtK.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>二．第二种方法就是网上常见得包含Php日志。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://s2.ax1x.com/2019/07/28/elds6H.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>在这里不需要sess_sxxxx有读权限。因为文件本身的所有者就是apache。二第一种方法之所以要其他人读权限。是因为数据库本身的所有者是apache</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-07-28T08:57:33.796Z" itemprop="dateUpdated">2019-07-28 16:57:33</time>
+</span>
+
+
+        
+        原文链接：<a href="/2019/08/11/test/" target="_blank" rel="external">https://0xxk.github.io/2019/08/11/test/</a>
+        
+    </div>
+    <footer>
+        <div onclick="location.href='https://0xxk.github.io'">
+            <img src="/img/avatar.jpg" alt="0xxk">
+            <a>0xxk</a>
+        </div>
+    </footer>
+</blockquote>
+
+        
+    <div class="page-reward">
+        <nav class="myreward">
+            <a id="rewardBtn" href="javascript:;"><span>打&nbsp;赏</span><span>装成好像很多人打赏的样子</span></a>
+        </nav>
+    </div>
+
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.io/2019/08/11/test/&title=《phpMyAdmin4.8文件包含漏洞》 — oxxk blog&pic=https://0xxk.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.io/2019/08/11/test/&title=《phpMyAdmin4.8文件包含漏洞》 — oxxk blog&source=  首先来说下文件包含是什么，粗俗的讲就是本网页包含其他源代码来执行。此处本意正如编程中的函数调用，重复的代码大可不写。合理调用利用重复代码才是王道。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.io/2019/08/11/test/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《phpMyAdmin4.8文件包含漏洞》 — oxxk blog&url=https://0xxk.github.io/2019/08/11/test/&via=https://0xxk.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.io/2019/08/11/test/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2019/08/11/作业/" id="post-prev" class="post-nav-link">
+        <h4 class="title" >
+          上一篇：作业
+        </h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/08/11/JS事件/" id="post-next" class="post-nav-link">
+        <h4 class="title" data-hover="下一篇：JS事件初识">下一篇：JS事件初识</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+    
+
+    
+
+    
+
+
+</article>
+
+</div>
+
+        <footer class="footer">
+    <div class="footer-content">
+        <span class="power">
+            <i class="icon icon-lg icon-copyright"></i>
+            2017
+            <i class="icon icon-lg icon-heart"></i>
+            <a href="https://0xxk.github.io">tomotoes.com</a>
+            <br/>
+            Power by
+            <a href="https://hexo.io/" target="_blank" rel="external nofollow">Hexo</a>&nbsp;·&nbsp;
+            Theme
+            <a class="tomotoeslink" href="https://github.com/tomotoes/hexo-theme-tomotoes/" target="_blank" rel="external nofollow">tomotoes</a>
+        </span>
+
+        <br/>
+
+        <span id="RunTime" style="color:#a7a7a2;"></span>
+        <br/>
+
+        <span>
+            
+	<i class="icon icon-lg icon-user">
+<span id="busuanzi_container_site_uv" style='display:none'>
+       访问用户：<span id="busuanzi_value_site_uv"></span>
+    </span>人</i>
+    ·
+    <i class="icon icon-lg icon-eye">
+    <span id="busuanzi_container_site_pv" style='display:none'>
+      访问次数：<span id="busuanzi_value_site_pv"></span>
+    </span>次
+    </i>
+
+
+        </span>
+        <br/>
+
+        <span class="license">This blog is licensed under a <a rel="license" rel="external nofollow" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+    </div>
+</footer>
+
+    </main>
+    
+        
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        <span>感谢您的鼓励支持！</span>
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" data-img="/img/dog.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechatPay">&nbsp;&nbsp;微信&nbsp;&nbsp;</span>
+                <span class="reward-toggle-item alipayPay">支付宝</span>
+            </div>
+        </label>
+        
+        <i class="icon icon-caret-up"></i>
+    </div>
+</div>
+
+
+    
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.io/2019/08/11/test/&title=《phpMyAdmin4.8文件包含漏洞》 — oxxk blog&pic=https://0xxk.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.io/2019/08/11/test/&title=《phpMyAdmin4.8文件包含漏洞》 — oxxk blog&source=  首先来说下文件包含是什么，粗俗的讲就是本网页包含其他源代码来执行。此处本意正如编程中的函数调用，重复的代码大可不写。合理调用利用重复代码才是王道。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.io/2019/08/11/test/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《phpMyAdmin4.8文件包含漏洞》 — oxxk blog&url=https://0xxk.github.io/2019/08/11/test/&via=https://0xxk.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.io/2019/08/11/test/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p class="wechatshare">扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAAAAACKZ2kyAAABxklEQVR42u3aQQ7DIAxE0dz/0um2UgWZGYNDpc+qail5ZGFhm+uSx/01vr/5nTP6db7a4gEXLtwy956O0RwXOt+wYoALF24/d/SAedjKoO4m4cKF+79c6WHRVuHChXs+1w1qLwcyuHDhFrhK8qP8a/6w1lwNLly4Ba5epdz3eUt9Fy5cuBH3Nocb/tyA9bAmXLhwW7h6QNGPHe5q9ky4cOG2cOvNUWW+vknp1cCFC3cb1y1qZAmMe43DOJHBhQu3hete0spaL2G4hAsXbiM3S3KyEklWUoELF+5b3FXtz6xlK70yuHDhtnDd8mWWAq3aPFy4cM/hZgXTeUiaf/MQ+ODChbuZmwWgVe1V5ejzkKvBhQt3A9cNN3oz1U14jMMTXLhw27mVAOS2WPQ2jJ2rwYULdyk3a68qBxQ98Bm5Gly4cDdzK6VSvTWrJ0hXZQm4cOEWuJWLWe5FK7uZChcu3Je4bvByS6jKAUhJiuzNwIULt8x1g5dSBFE2lhVZ4MKF28nNiphGoTNKfoaBDC5cuEdy66lU2IiFCxfukdxKi7R+IQMuXLid3Kwh6h5Q9KNS2BOGCxfuIu6qxmol8G2p78KFCzfhfgAeipp5sWaUUQAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <!-- waves按钮特效 -->
+<script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+
+<!-- 主题配置脚本 -->
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+</script>
+
+<!-- jquery -->
+<script src="/js/jquery.min.js?v=3.0"></script>
+
+<!-- 搜索 -->
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item waves-block waves-effect" onclick="location.href='{path}'">
+    <div class="title ellipsis" title="{title}">{title}</div>
+</li>
+</template>
+
+
+<!-- main博客脚本 -->
+<script src="/js/main.min.js?v=3.0" ></script>
+
+<!-- 动画&配置 -->
+<script src="/js/script.min.js?v=3.0" ></script>
+
+<!-- 脚本管理 -->
+<script>
+
+if(window.innerWidth > 800){
+	/* 3D标题 */
+	$(".content-header").on("mousemove", threedee);
+
+	/* 底部追随鼠标 */
+	$(".footer").hover(2);
+
+	/* gotop键的涟漪 */
+	$("#gotop").hover(1);
+
+	/* 赞赏的粒子雨 */
+	$("#reward").hover(3);
+
+	/* 微信公众号的底部渲染 */
+	$("#wechat").hover(4);
+
+    /* 标题跳动 */
+    $(".archivestitle").bumpyText();
+
+	/* 图片点击放大 */
+	const postimg = jQuery(".post-content img:not(.github-emoji)");
+	postimg.on("click",function(){
+
+		mask.classList.add("in");
+		main.classList.add("Mask");
+		menu.classList.add("Mask");
+		var myimg = this.cloneNode(true);
+		myimg.classList.add("imgShow");
+
+		setTimeout(function(){
+			jQuery(myimg).animate({
+				opacity:"1"
+			},1000);
+		},0);
+
+		document.body.appendChild(myimg);
+
+		myimg.onclick=function(){
+			document.body.removeChild(myimg);
+			mask.classList.remove("in");
+			main.classList.remove("Mask");
+			menu.classList.remove("Mask");
+		};
+
+	});
+
+}
+
+/* 名字跳动 */
+$("#name").bumpyText();
+
+
+/* 网站运行时间 */
+setInterval(function () {
+	setTime("2017/10/11");
+}, 1000);
+
+/* 文章块的淡出 */
+postshow();
+
+/* 座右铭 */
+
+   getHitokoto();
+
+
+
+/* 粘贴提示 */
+G($(".post-content"), location.href, "0xxk");
+
+
+/* 控制台 */
+if (window.console && window.console.log) {
+	setTimeout(function () {
+		console.log("\n %c 一个坏掉的番茄 %c  © Simon Ma  http://tomotoes.com \n\n", "color:#FFFFFB;background:#1abc9c;padding:5px 0;border-radius:.5rem 0 0 .5rem;", "color:#FFFFFB;background:#080808;padding:5px 0;border-radius:0 .5rem .5rem 0;");
+	}, 0);
+}
+
+</script>
+
+
+
+
+<!-- 公式渲染 -->
+
+
+
+<!-- 不蒜子 -->
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+</body>
+</html>

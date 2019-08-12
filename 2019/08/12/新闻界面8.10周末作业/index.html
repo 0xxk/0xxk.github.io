@@ -6,7 +6,7 @@
     
     
     
-    <title>oxxk blog</title>
+    <title>新闻作业 | oxxk blog</title>
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     
     <meta name="theme-color" content="#77AAFF">
@@ -39,13 +39,17 @@
 
 
     
-    <meta property="og:type" content="website">
-<meta property="og:title" content="oxxk blog">
-<meta property="og:url" content="https://0xxk.github.io/index.html">
+    <meta name="description" content="结构: basedir:存放上下界面 ​                header.php 上 ​                footer.php下 data:存放新闻用户信息 ​                tupian 存放所有图片 ​                xinwenwenjian存放所有新闻的信息 ​                yonghuxinxiwenjian">
+<meta property="og:type" content="article">
+<meta property="og:title" content="新闻作业">
+<meta property="og:url" content="https://0xxk.github.io/2019/08/12/新闻界面8.10周末作业/index.html">
 <meta property="og:site_name" content="oxxk blog">
+<meta property="og:description" content="结构: basedir:存放上下界面 ​                header.php 上 ​                footer.php下 data:存放新闻用户信息 ​                tupian 存放所有图片 ​                xinwenwenjian存放所有新闻的信息 ​                yonghuxinxiwenjian">
 <meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-08-12T15:41:00.671Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="oxxk blog">
+<meta name="twitter:title" content="新闻作业">
+<meta name="twitter:description" content="结构: basedir:存放上下界面 ​                header.php 上 ​                footer.php下 data:存放新闻用户信息 ​                tupian 存放所有图片 ​                xinwenwenjian存放所有新闻的信息 ​                yonghuxinxiwenjian">
     
         <link rel="alternate" type="application/atom+xml" title="oxxk blog" href="/atom.xml">
     
@@ -60,7 +64,7 @@
 
 <body>
     <div id="loading" class="active"></div>
-    <aside id="menu"   >
+    <aside id="menu"  class="hide" >
   <div class="inner flex-row-vertical">
     <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
         <i class="icon icon-lg icon-close"></i>
@@ -81,7 +85,7 @@
     <div class="scroll-wrap flex-col">
       <ul class="nav">
         
-              <li class="waves-block waves-effect active">
+              <li class="waves-block waves-effect">
                   <a href="/"  >
                     <i class="icon icon-lg icon-home"></i>
                     <span>主 页</span><i class="icon icon-lg icon-caret-left"></i>
@@ -139,7 +143,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">oxxk blog</div>
+        <div class="flex-col header-title ellipsis">新闻作业</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -156,19 +160,16 @@
         </a>
     </div>
 </header>
-<header class="content-header index-header">
+<header class="content-header post-header">
     
     
     <div class="container fade-scale">
         <div id="myheader">
             <h1 class="title">
-                 
-                    oxxk blog
                 
             </h1>
             <h5 class="subtitle">
                 
-                    在渗透的道路上努力前行
                 
             </h5>
         </div>
@@ -176,34 +177,47 @@
 
 </header>
 
+
 <div class="container body-wrap">
-    <ul class="post-list">
     
-        <li class="post-list-item fade">
-            <article id="post-新闻界面8.10周末作业"
-  class="article-card article-type-post" itemprop="blogPost">
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#主页包含界面："><span class="post-toc-number">1.</span> <span class="post-toc-text">主页包含界面：</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#登陆界面"><span class="post-toc-number">2.</span> <span class="post-toc-text">登陆界面</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#注册功能"><span class="post-toc-number">3.</span> <span class="post-toc-text">注册功能</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#新闻展示界面："><span class="post-toc-number">4.</span> <span class="post-toc-text">新闻展示界面：</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#修改密码功能"><span class="post-toc-number">5.</span> <span class="post-toc-text">修改密码功能</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#用户退出功能"><span class="post-toc-number">6.</span> <span class="post-toc-text">用户退出功能</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#增加新闻功能"><span class="post-toc-number">7.</span> <span class="post-toc-text">增加新闻功能</span></a></li></ol>
+        </nav>
+    </aside>
+   
+<article id="post-新闻界面8.10周末作业"
+  class="post-article article-type-post fade" itemprop="blogPost">
 
-    
+    <div class="post-card">
+        <h1 class="post-card-title">新闻作业</h1>
+        <div class="post-meta">
+            <i class="icon icon-lg icon-calendar-o"></i>
+            发表于
+            <time class="post-time" title="2019-08-12 17:51:17" datetime="2019-08-12T09:51:17.770Z"  itemprop="datePublished">2019-08-12</time>
+
+            <br id="mybreak"/>
+            
+<script>
+	mybreak.style="display:none";
+</script>
 
 
-  
-    <h3 class="post-title" itemprop="name">
-      <a href="/2019/08/12/新闻界面8.10周末作业/">新闻作业</a>
-    </h3>
-  
+            <i>·</i>
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>次浏览
+</span>
 
 
-
-
-     <div class="post-meta">
-        <time class="post-time" title="2019-08-12 17:51:17" datetime="2019-08-12T09:51:17.770Z"  itemprop="datePublished">2019-08-12</time>
-
-    </div>
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        <a id="more"></a>
+        </div>
+        <div class="post-count-custom">
+            <i class="icon icon-lg icon-comment-o"></i>
+            阅读本文可能花费您&nbsp;<span class="post-count">18</span>&nbsp;分钟
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <a id="more"></a>
 
 <p>结构:</p>
 <p>basedir:存放上下界面</p>
@@ -249,314 +263,115 @@
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">Require_once</span> <span class="string">'../basedir/header.php'</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$action = $_GET[<span class="string">'action'</span>];</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line">&lt;div style=<span class="string">"width:100%;text-align:center"</span>&gt;</span><br><span class="line">    &lt;h1&gt;新闻详情&lt;/h1&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;hr&gt;</span><br><span class="line"></span><br><span class="line">&lt;table align=<span class="string">"center"</span> width=<span class="string">"600"</span>&gt;</span><br><span class="line">    &lt;tr &gt;&lt;th id=<span class="string">"xwjm"</span>&gt;&lt;a href=<span class="string">"index.php"</span>&gt;新闻界面&lt;/th&gt;</span><br><span class="line">&lt;/table&gt;</span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$f = fopen(<span class="string">'../data/xinwenwenjian/new.db'</span>,<span class="string">'r'</span>);</span><br><span class="line"><span class="keyword">while</span> (!feof($f))&#123;</span><br><span class="line">    $str = fgets($f);</span><br><span class="line"></span><br><span class="line">    $shuzu = explode(<span class="string">"|"</span>,$str);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(count($shuzu) !=<span class="number">6</span>)&#123;</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $shuzu = explode(<span class="string">'|'</span>,$str);<span class="comment">//按照|进行分割</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(trim(base64_decode($shuzu[<span class="number">1</span>])) == $action)&#123;</span><br><span class="line"></span><br><span class="line">        $biaoti = base64_decode($shuzu[<span class="number">1</span>]);</span><br><span class="line">        $jianjie= base64_decode($shuzu[<span class="number">5</span>]);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&lt;&lt;&lt;EOF</span></span><br><span class="line"><span class="string">    &lt;table align="center"&gt;</span></span><br><span class="line"><span class="string">            &lt;tr&gt;</span></span><br><span class="line"><span class="string">                &lt;td align="center"&gt;&lt;h2&gt;<span class="subst">&#123;$biaoti&#125;</span>&lt;/h2&gt;&lt;/td&gt;            </span></span><br><span class="line"><span class="string">                &lt;/tr&gt;</span></span><br><span class="line"><span class="string">                </span></span><br><span class="line"><span class="string">                &lt;tr&gt;            </span></span><br><span class="line"><span class="string">                &lt;td colspan="3" align="center" &gt;&lt;h3&gt;<span class="subst">&#123;$jianjie&#125;</span>&lt;/h3&gt; &lt;/td&gt;</span></span><br><span class="line"><span class="string">            &lt;/tr&gt;</span></span><br><span class="line"><span class="string">    &lt;/table&gt;</span></span><br><span class="line"><span class="string">            </span></span><br><span class="line"><span class="string">EOF;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">Require_once</span> <span class="string">'../basedir/footer.php'</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
 
-    
-        <div class="post-more-div">
-            <a href="/2019/08/12/新闻界面8.10周末作业/" class="post-more waves-button">
-                Continue reading...
-            </a>
         </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-08-12T15:41:00.671Z" itemprop="dateUpdated">2019-08-12 23:41:00</time>
+</span>
+
+
+        
+        原文链接：<a href="/2019/08/12/新闻界面8.10周末作业/" target="_blank" rel="external">https://0xxk.github.io/2019/08/12/新闻界面8.10周末作业/</a>
+        
     </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-8.12"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a href="/2019/08/12/8.12/">8.12作业</a>
-    </h3>
-  
-
-
-
-
-     <div class="post-meta">
-        <time class="post-time" title="2019-08-12 17:46:20" datetime="2019-08-12T09:46:20.580Z"  itemprop="datePublished">2019-08-12</time>
-
-    </div>
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        <p>放在了ceshi数据库里</p>
-    
-        <div class="post-more-div">
-            <a href="/2019/08/12/8.12/" class="post-more waves-button">
-                Continue reading...
-            </a>
+    <footer>
+        <div onclick="location.href='https://0xxk.github.io'">
+            <img src="/img/avatar.jpg" alt="0xxk">
+            <a>0xxk</a>
         </div>
-    </div>
-    
-</article>
+    </footer>
+</blockquote>
 
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-DOM和BOM"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a href="/2019/08/11/DOM和BOM/">DOM与BOM的异同</a>
-    </h3>
-  
-
-
-
-
-     <div class="post-meta">
-        <time class="post-time" title="2019-08-11 22:49:49" datetime="2019-08-11T14:49:49.784Z"  itemprop="datePublished">2019-08-11</time>
-
+        
+    <div class="page-reward">
+        <nav class="myreward">
+            <a id="rewardBtn" href="javascript:;"><span>打&nbsp;赏</span><span>装成好像很多人打赏的样子</span></a>
+        </nav>
     </div>
 
-    <div class="post-content" id="post-content" itemprop="postContent">
 
-    
-        <p>​    DOM操作页面，BOM操作浏览器。听到这句话时，我感觉自己的基础不是很扎实。脑海里复现的问题竟然是DOM是什么？BOM是什么？</p>
-    
-        <div class="post-more-div">
-            <a href="/2019/08/11/DOM和BOM/" class="post-more waves-button">
-                Continue reading...
-            </a>
-        </div>
-    </div>
-    
-</article>
 
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-CSRF JQ POST提交"
-  class="article-card article-type-post" itemprop="blogPost">
+        <div class="post-footer">
+            
 
+            
+<div class="page-share-wrap">
     
 
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a href="/2019/08/11/CSRF JQ POST提交/">CSRF JQ POST提交</a>
-    </h3>
-  
-
-
-
-
-     <div class="post-meta">
-        <time class="post-time" title="2019-08-11 22:49:49" datetime="2019-08-11T14:49:49.780Z"  itemprop="datePublished">2019-08-11</time>
-
-    </div>
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        <p>​      在温习完前端后，继续学习了JS JQ。在讲JQ时，讲师用JQ本地复现了一遍CSRF。因为我对CSRF的理解一直处于概念上，所以就此机会将JQ复现代码学习理解一遍！</p>
-    
-        <div class="post-more-div">
-            <a href="/2019/08/11/CSRF JQ POST提交/" class="post-more waves-button">
-                Continue reading...
-            </a>
-        </div>
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-作业"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a href="/2019/08/11/作业/">作业</a>
-    </h3>
-  
-
-
-
-
-     <div class="post-meta">
-        <time class="post-time" title="2019-08-11 22:49:49" datetime="2019-08-11T14:49:49.777Z"  itemprop="datePublished">2019-08-11</time>
-
-    </div>
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        <p>这是一份作业</p>
-    
-        <div class="post-more-div">
-            <a href="/2019/08/11/作业/" class="post-more waves-button">
-                Continue reading...
-            </a>
-        </div>
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-test"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a href="/2019/08/11/test/">phpMyAdmin4.8文件包含漏洞</a>
-    </h3>
-  
-
-
-
-
-     <div class="post-meta">
-        <time class="post-time" title="2019-08-11 22:49:49" datetime="2019-08-11T14:49:49.771Z"  itemprop="datePublished">2019-08-11</time>
-
-    </div>
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        <p>  首先来说下文件包含是什么，粗俗的讲就是本网页包含其他源代码来执行。此处本意正如编程中的函数调用，重复的代码大可不写。合理调用利用重复代码才是王道。</p>
-    
-        <div class="post-more-div">
-            <a href="/2019/08/11/test/" class="post-more waves-button">
-                Continue reading...
-            </a>
-        </div>
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-JS事件"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a href="/2019/08/11/JS事件/">JS事件初识</a>
-    </h3>
-  
-
-
-
-
-     <div class="post-meta">
-        <time class="post-time" title="2019-08-11 22:49:49" datetime="2019-08-11T14:49:49.758Z"  itemprop="datePublished">2019-08-11</time>
-
-    </div>
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        <p>  学习了JS后发现自己还有很多很多不会的东西。对于陌生的语言，从基础开始学习是非常有必要的。</p>
-    
-        <div class="post-more-div">
-            <a href="/2019/08/11/JS事件/" class="post-more waves-button">
-                Continue reading...
-            </a>
-        </div>
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-PHP代码练习"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a href="/2019/08/07/PHP代码练习/">PHP代码练习</a>
-    </h3>
-  
-
-
-
-
-     <div class="post-meta">
-        <time class="post-time" title="2019-08-07 17:06:28" datetime="2019-08-07T09:06:28.000Z"  itemprop="datePublished">2019-08-07</time>
-
-    </div>
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        <h1 id="素数查找"><a href="#素数查找" class="headerlink" title="素数查找"></a>素数查找</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// 素数:只能被1和自身整除</span><br><span class="line">for($i=1;$i&lt;100;$i++)</span><br><span class="line">&#123;</span><br><span class="line">    for($j=1;$j&lt;$i;$j++)</span><br><span class="line">    &#123;</span><br><span class="line">        if(($i%$j)==0)</span><br><span class="line">        &#123;</span><br><span class="line">            $i++;</span><br><span class="line">            continue; //不是继续查找</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    echo $i.&quot;\n&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="三元排大小"><a href="#三元排大小" class="headerlink" title="三元排大小"></a>三元排大小</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;&lt;br&gt;&quot;;</span><br><span class="line">($a==$b&amp;&amp;$b==$c)?(</span><br><span class="line">    print &quot;$a=$b=$c&quot;</span><br><span class="line">):(</span><br><span class="line">    ($a==$b)?(</span><br><span class="line">        ($a&gt;$c)?(</span><br><span class="line">            print &quot;$a=$b&gt;$c&quot;</span><br><span class="line">        ):(</span><br><span class="line">            print &quot;$c&gt;$a=$b&quot;</span><br><span class="line">        )</span><br><span class="line">    ):(</span><br><span class="line">        ($a==$c)?(</span><br><span class="line">            ($a&gt;$b)?(</span><br><span class="line">                print &quot;$a=$c&gt;$b&quot;</span><br><span class="line">            ):(</span><br><span class="line">                print &quot;$b&gt;$a=$c&quot;</span><br><span class="line">            )</span><br><span class="line">        ):(</span><br><span class="line">        ($b==$c)?(</span><br><span class="line">            ($a&gt;$b)?(</span><br><span class="line">                print &quot;$a&gt;$b=$c&quot;</span><br><span class="line">            ):(</span><br><span class="line">                print &quot;$b=$c&gt;$a&quot;</span><br><span class="line">            )</span><br><span class="line">            ):(</span><br><span class="line">                ($a&gt;$b)? (($a&gt;$c)? (($c&gt;$b)? (print &quot;$a&gt;$c&gt;$b&quot;):(print &quot;$a&gt;$b&gt;$c&quot;)):(print &quot;$c&gt;$a&gt;$b&quot;)):(($b&gt;$c)? (($a&gt;$c)? (print &quot;$b&gt;$a&gt;$c&quot;):(print &quot;$b&gt;$c&gt;$a&quot;)):(print &quot;$c&gt;$b&gt;$a&quot;))</span><br><span class="line">            )</span><br><span class="line">        )</span><br><span class="line">    )</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<h1 id="五角星"><a href="#五角星" class="headerlink" title="五角星"></a>五角星</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">for($i1=1;$i1&lt;7;$i1++)             /*这是五角星的上面一个角*/</span><br><span class="line">      &#123;</span><br><span class="line">          for($j1=1;$j1&lt;19-$i1;$j1++)     /*这是空格*/</span><br><span class="line">              printf(&quot; &quot;);</span><br><span class="line">          for($k1=1;$k1&lt;=2*$i1-1;$k1++)   /*这是“*”*/</span><br><span class="line">              printf(&quot;*&quot;);</span><br><span class="line">          printf(&quot;\n&quot;);</span><br><span class="line">      &#125;</span><br><span class="line">      for($i2=1;$i2&lt;5;$i2++)     /*这是五角星的中间两个角*/</span><br><span class="line">      &#123;</span><br><span class="line">          for($j2=1;$j2&lt;3*$i2-3;$j2++)</span><br><span class="line">              printf(&quot; &quot;);</span><br><span class="line">          for($k2=1;$k2&lt;=42-6*$i2;$k2++)</span><br><span class="line">              printf(&quot;*&quot;);</span><br><span class="line">          printf(&quot;\n&quot;);</span><br><span class="line">      &#125;</span><br><span class="line">      for($i3=1;$i3&lt;3;$i3++)        //这是中间与下部相接的部分</span><br><span class="line">      &#123;</span><br><span class="line">          for($j3=1;$j3&lt;12-$i3;$j3++)</span><br><span class="line">              printf(&quot; &quot;);</span><br><span class="line">          for($k3=1;$k3&lt;=12+2*$i3;$k3++)</span><br><span class="line">              printf(&quot;*&quot;);</span><br><span class="line">          printf(&quot;\n&quot;);</span><br><span class="line">      &#125;</span><br><span class="line">              for($i4=1;$i4&lt;5;$i4++)         // 这是五角星的下面两个角</span><br><span class="line">              &#123;</span><br><span class="line">                  for($j4=1;$j4&lt;10-$i4;$j4++)</span><br><span class="line">                      printf(&quot; &quot;);</span><br><span class="line">                  for($k4=1;$k4&lt;=10-2*$i4;$k4++)</span><br><span class="line">                      printf(&quot;*&quot;);</span><br><span class="line">                  for($m4=1;$m4&lt;6*$i4-3;$m4++)</span><br><span class="line">                      printf(&quot; &quot;);</span><br><span class="line">                  for($n4=1;$n4&lt;=10-2*$i4;$n4++)</span><br><span class="line">                      printf(&quot;*&quot;);</span><br><span class="line">                  printf(&quot;\n&quot;);</span><br><span class="line">              &#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="/PHP代码练习/20190807055324467.png" alt title>
-                </div>
-                <div class="image-caption"></div>
-            </figure>
-<h1 id="for循环实现关联数组的遍历"><a href="#for循环实现关联数组的遍历" class="headerlink" title="for循环实现关联数组的遍历"></a>for循环实现关联数组的遍历</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$arr=[&apos;q&apos;=&gt;&apos;12&apos;,&apos;w&apos;=&gt;&apos;13&apos;,&apos;e&apos;=&gt;&apos;14&apos;,&apos;r&apos;=&gt;&quot;15&quot;];</span><br><span class="line">$num=count($arr);</span><br><span class="line">for($i=0;$i&lt;$num;$i++)</span><br><span class="line">&#123;</span><br><span class="line">    echo key($arr).&quot;=&gt;&quot;.current($arr).&quot;\n&quot;;</span><br><span class="line">    next($arr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="通过文件读写对HTML表格的操作"><a href="#通过文件读写对HTML表格的操作" class="headerlink" title="通过文件读写对HTML表格的操作"></a>通过文件读写对HTML表格的操作</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;  &gt;</span><br><span class="line">    &lt;title&gt;news&lt;/title&gt;</span><br><span class="line"></span><br><span class="line">&lt;/head&gt;</span><br><span class="line"></span><br><span class="line">&lt;body background=&quot;img/2.jpg&quot;&gt;</span><br><span class="line"></span><br><span class="line">&lt;table border=&quot;1&quot; width=&quot;100%&quot; cellspacing=&quot;10&quot; cellpadding=&quot;10&quot; align=&quot;center &quot; bgcolor=&quot;#6495ed&quot;&gt;</span><br><span class="line">        &lt;tr&gt;</span><br><span class="line">            &lt;th id=&quot;pm&quot;&gt;排名&lt;/th&gt;</span><br><span class="line">            &lt;th id=&quot;mz&quot;&gt;名字&lt;/th&gt;</span><br><span class="line">            &lt;th id=&quot;jj&quot;  bgcolor=&quot;#a52a2a&quot;&gt;简介&lt;/th&gt;</span><br><span class="line">            &lt;th id=&quot;ss&quot;&gt;搜索指数&lt;/th&gt;</span><br><span class="line">        &lt;/tr&gt;</span><br><span class="line">        &lt;?php</span><br><span class="line">            // 打开数据文件</span><br><span class="line">            $file=fopen(&quot;/Project/PHP/news/data/new.db&quot;,&quot;r&quot;);</span><br><span class="line"></span><br><span class="line">            if($file==null)</span><br><span class="line">            &#123;</span><br><span class="line">                echo &quot;文件打开失败&quot;;</span><br><span class="line">                die();</span><br><span class="line">            &#125;</span><br><span class="line">            $str=fgets($file);  // 去掉表格标题</span><br><span class="line">            $i=0;</span><br><span class="line">            while(!feof($file))</span><br><span class="line">            &#123;</span><br><span class="line">                $str=fgets($file);</span><br><span class="line">                $data=explode(&apos;||&apos;,$str);// 获取字符串按 || 分割成数组</span><br><span class="line">                if($i&lt;3)</span><br><span class="line">                &#123;</span><br><span class="line">                    // 前三行调用图片和简介</span><br><span class="line"></span><br><span class="line">                    table_qiansan($data);</span><br><span class="line">                &#125;</span><br><span class="line">                else&#123;</span><br><span class="line"></span><br><span class="line">                    table_fun($data);// 调用自定义函数</span><br><span class="line">                &#125;</span><br><span class="line">                $i++;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            fclose($file);</span><br><span class="line">        ?&gt;</span><br><span class="line"></span><br><span class="line">&lt;/table&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;?php</span><br><span class="line">// 三行前的信息读取</span><br><span class="line">// 分别显示 id 图片 简介</span><br><span class="line">function table_qiansan($data)</span><br><span class="line">&#123;</span><br><span class="line">    $data[2]=substr( $data[2],0,200);</span><br><span class="line">    echo &lt;&lt;&lt;EOF</span><br><span class="line">    &lt;tr&gt;</span><br><span class="line">        &lt;td&gt;$data[0]&lt;/td&gt;</span><br><span class="line">        &lt;td&gt;&lt;img src=&quot;img/1.jpg&quot;&gt;&lt;/td&gt;</span><br><span class="line">        &lt;td colspan=&quot;2&quot;&gt;$data[2]&lt;/td&gt;</span><br><span class="line">    &lt;/tr&gt;</span><br><span class="line">EOF;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 三行后的信息</span><br><span class="line">function table_fun($data)</span><br><span class="line">&#123;</span><br><span class="line">  echo &lt;&lt;&lt;EOF</span><br><span class="line">  &lt;tr&gt;</span><br><span class="line">    &lt;td&gt;$data[0]&lt;/td&gt;</span><br><span class="line">    &lt;td&gt;$data[1]&lt;/td&gt;</span><br><span class="line">    &lt;td&gt;$data[2]&lt;/td&gt;</span><br><span class="line">    &lt;td&gt;$data[3]&lt;/td&gt;</span><br><span class="line">  &lt;/tr&gt;;</span><br><span class="line">EOF;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-
-<p>效果图</p>
-<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="/PHP代码练习/20190807083753363.png" alt title>
-                </div>
-                <div class="image-caption"></div>
-            </figure>
-
-
-
-
-
-
-
-
-
-
-    
-        <div class="post-more-div">
-            <a href="/2019/08/07/PHP代码练习/" class="post-more waves-button">
-                Continue reading...
-            </a>
-        </div>
-    </div>
-    
-</article>
-
-        </li>
-    
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.io/2019/08/12/新闻界面8.10周末作业/&title=《新闻作业》 — oxxk blog&pic=https://0xxk.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.io/2019/08/12/新闻界面8.10周末作业/&title=《新闻作业》 — oxxk blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.io/2019/08/12/新闻界面8.10周末作业/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《新闻作业》 — oxxk blog&url=https://0xxk.github.io/2019/08/12/新闻界面8.10周末作业/&via=https://0xxk.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.io/2019/08/12/新闻界面8.10周末作业/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
     </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
 
     
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/08/12/8.12/" id="post-next" class="post-nav-link">
+        <h4 class="title" data-hover="下一篇：8.12作业">下一篇：8.12作业</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+    
+
+    
+
+    
+
+
+</article>
 
 </div>
 
@@ -602,8 +417,83 @@
 
     </main>
     
+        
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        <span>感谢您的鼓励支持！</span>
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" data-img="/img/dog.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechatPay">&nbsp;&nbsp;微信&nbsp;&nbsp;</span>
+                <span class="reward-toggle-item alipayPay">支付宝</span>
+            </div>
+        </label>
+        
+        <i class="icon icon-caret-up"></i>
+    </div>
+</div>
+
+
+    
     <div class="mask" id="mask"></div>
 <a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.io/2019/08/12/新闻界面8.10周末作业/&title=《新闻作业》 — oxxk blog&pic=https://0xxk.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.io/2019/08/12/新闻界面8.10周末作业/&title=《新闻作业》 — oxxk blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.io/2019/08/12/新闻界面8.10周末作业/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《新闻作业》 — oxxk blog&url=https://0xxk.github.io/2019/08/12/新闻界面8.10周末作业/&via=https://0xxk.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.io/2019/08/12/新闻界面8.10周末作业/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p class="wechatshare">扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACrklEQVR42u3aQY4bMQwEwP3/pxMgpwSB7W5Ssn2oORnjHY2KBiQtyZ+f+Pr15/r/8993nv9Nfj8Z//CFh4eHN5r6oyt//fOR82+f38/njIeHh3eblyzWmwk9D9OjgCbhfmHBw8PD+ygvD0GOSQI3mw8eHh7eN/DajSF5y2wEPDw8vG/gJUfYNjmbbxhJ4K7nWvDw8PBi3qYA9qnPb6rv4eHh4ZVV9XaTyJOtydI/m+E/4+Dh4eFd4M1aAdpmgtnUk8BFocTDw8M7yssf2yQC8m2mTVK8CC4eHh7eNV6+1M7KVHloZpiH4cDDw8O7wLtRrMqP4LPtZBYgPDw8vFO8tjkgbyDIP+eL/oGqHR4eHt6alxyd21e2SYr8qfy4HxXA8PDw8Ba82caQl7jaRq62SFZU+fDw8PCu8TYH6Hy6myN+m1zGw8PDO8XblOo3B+5ZMnf4i+Hh4eFd47Wp2/xoeypBPDxG4+Hh4V3gzdIK+bNtG8HsL/Hw8PDew8un2xbvN2nfHFm0IODh4eEd4s3Sr0kg2vRBHsoibYGHh4d3mTc7vO6X8k0C98WYeHh4eJd5mzapWftUW5Zrtys8PDy827xiwS2nEhWryrRItJ3g4eHhXebNWgo+lQJOinN4eHh493gzTDLF5H7bzrVqusLDw8M7xEsG3SR822as9vge7Xt4eHh4h3inUrezFoE21Tv7MfDw8PDO8vJkwSwE+beztEX0u+Hh4eFd4yXX7EidvCsB1w1eeHh4eBd4m8W3XeJnk94kR/Dw8PDu8U5tBm2KoS195QHCw8PDew9vVnk/tQ20B/Q6JYGHh4f3IV7bVjV7atZwULcO4OHh4b2R1x6FNwA8PDy8b+YlyYg82Tqb1mYLOZDGxcPDw+uqV8W/+snk8om24ySbUH3h4eHhpbzfnOsr8BSafWIAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
 
 
     <!-- waves按钮特效 -->
@@ -611,7 +501,7 @@
 
 <!-- 主题配置脚本 -->
 <script>
-var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 </script>
 
 <!-- jquery -->
