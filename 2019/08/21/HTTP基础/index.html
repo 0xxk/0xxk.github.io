@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta http-equiv="Content-Language" content="zh-cn">
+    <meta charset="utf-8">
+    
+    
+    
+    <title>HTTP基础 | oxxk blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    
+    <meta name="theme-color" content="#77AAFF">
+    
+    
+    <meta name="keywords" content>
+    
+    
+
+    
+
+    <!-- Baidu Push -->
+<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+
+	var _hmt = _hmt || [];
+</script>
+
+
+
+    
+    <meta name="description" content="作业">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTP基础">
+<meta property="og:url" content="https://0xxk.github.io/2019/08/21/HTTP基础/index.html">
+<meta property="og:site_name" content="oxxk blog">
+<meta property="og:description" content="作业">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://0xxk.github.io/images/8.21网络神图.png">
+<meta property="og:updated_time" content="2019-08-21T14:39:58.852Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HTTP基础">
+<meta name="twitter:description" content="作业">
+<meta name="twitter:image" content="https://0xxk.github.io/images/8.21网络神图.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="oxxk blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link id="style" rel="stylesheet" href="/css/style.css?v=3.0">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+            
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+    <aside id="menu"  class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" >
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg" alt="avatar">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname" id="name">0xxk</h5>
+          
+            <div id="yiyanmotto" class="motto">&nbsp;</div>
+          
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+              <li class="waves-block waves-effect">
+                  <a href="/"  >
+                    <i class="icon icon-lg icon-home"></i>
+                    <span>主 页</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/archives"  >
+                    <i class="icon icon-lg icon-archives"></i>
+                    <span>归 档</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/categories"  >
+                    <i class="icon icon-lg icon-th-list"></i>
+                    <span>分 类</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/tags"  >
+                    <i class="icon icon-lg icon-tags"></i>
+                    <span>标 签</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/about"  >
+                    <i class="icon icon-lg icon-smile-o"></i>
+                    <span>关 于</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+      <div class="nav2">
+          
+              <a class="nav2item" data-title="Github" href="https://github.com/oxxk" target="_blank"title="Github" >
+                <i class="icon icon-lg icon-github github"></i>
+              </a>
+          
+
+            </div>
+        
+      </ul>
+        
+    </div>
+  </div>
+ 
+</aside>
+
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">HTTP基础</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        <a href="../../atom.xml" target="_blank" class="header-icon waves-effect waves-circle waves-light" id="Rss">
+            <i class="icon icon-lg icon-rss"></i>
+        </a>
+    </div>
+</header>
+<header class="content-header post-header">
+    
+    
+    <div class="container fade-scale">
+        <div id="myheader">
+            <h1 class="title">
+                
+            </h1>
+            <h5 class="subtitle">
+                
+                
+            </h5>
+        </div>
+    </div>
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#一-HTTP协议"><span class="post-toc-number">1.</span> <span class="post-toc-text">一.HTTP协议</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#二-HTTP-URL"><span class="post-toc-number">2.</span> <span class="post-toc-text">二.HTTP URL</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#三-计算机网络模型基础"><span class="post-toc-number">3.</span> <span class="post-toc-text">三.计算机网络模型基础</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#四-http协议中，常见头部字段信息的含义（请求头和响应头）"><span class="post-toc-number">4.</span> <span class="post-toc-text">四.http协议中，常见头部字段信息的含义（请求头和响应头）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Response"><span class="post-toc-number">4.0.0.1.</span> <span class="post-toc-text">Response</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#HTTP响应也由四个部分组成，分别是：状态行、消息报头、空行和响应正文。"><span class="post-toc-number">4.0.0.1.1.</span> <span class="post-toc-text">HTTP响应也由四个部分组成，分别是：状态行、消息报头、空行和响应正文。</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#第一部分：状态行，由HTTP协议版本号，-状态码，-状态消息-三部分组成。"><span class="post-toc-number">4.0.0.1.2.</span> <span class="post-toc-text">第一部分：状态行，由HTTP协议版本号， 状态码， 状态消息 三部分组成。</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#第二部分：消息报头，用来说明客户端要使用的一些附加信息"><span class="post-toc-number">4.0.0.1.3.</span> <span class="post-toc-text">第二部分：消息报头，用来说明客户端要使用的一些附加信息</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#第三部分：空行，消息报头后面的空行是必须的"><span class="post-toc-number">4.0.0.1.4.</span> <span class="post-toc-text">第三部分：空行，消息报头后面的空行是必须的</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#第四部分：响应正文，服务器返回给客户端的文本信息。"><span class="post-toc-number">4.0.0.1.5.</span> <span class="post-toc-text">第四部分：响应正文，服务器返回给客户端的文本信息。</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+   
+<article id="post-HTTP基础"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">HTTP基础</h1>
+        <div class="post-meta">
+            <i class="icon icon-lg icon-calendar-o"></i>
+            发表于
+            <time class="post-time" title="2019-08-21 20:42:51" datetime="2019-08-21T12:42:51.003Z"  itemprop="datePublished">2019-08-21</time>
+
+            <br id="mybreak"/>
+            
+<script>
+	mybreak.style="display:none";
+</script>
+
+
+            <i>·</i>
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>次浏览
+</span>
+
+
+        </div>
+        <div class="post-count-custom">
+            <i class="icon icon-lg icon-comment-o"></i>
+            阅读本文可能花费您&nbsp;<span class="post-count">5</span>&nbsp;分钟
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>作业</p>
+<a id="more"></a>
+
+<h1 id="一-HTTP协议"><a href="#一-HTTP协议" class="headerlink" title="一.HTTP协议"></a><strong>一.HTTP协议</strong></h1><p>HTTP协议是超文本传输协议，基于TCP/IP通信协议来传递数据，是一个属于应用层的面向对象的协议。常用状态码</p>
+<table>
+<thead>
+<tr>
+<th align="center">状态码</th>
+<th align="center">意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">200 OK</td>
+<td align="center">从客户端发来的请求在服务器端被正常处理</td>
+</tr>
+<tr>
+<td align="center">204 No Content</td>
+<td align="center">服务器接收的请求已成功处理，但在返回响应报文中不含实体的主体部分</td>
+</tr>
+<tr>
+<td align="center">301 Moved Permanently</td>
+<td align="center">永久性重定向</td>
+</tr>
+<tr>
+<td align="center">302 Found</td>
+<td align="center">临时性重定向</td>
+</tr>
+<tr>
+<td align="center">304 Not Modified</td>
+<td align="center">客户端发送附带条件请求时，服务器端允许请求访问资源，但未满足条件的情况</td>
+</tr>
+<tr>
+<td align="center">400 Bad Request</td>
+<td align="center">请求报文中存在语法错误</td>
+</tr>
+<tr>
+<td align="center">403 Forbidden</td>
+<td align="center">对请求资源的访问被服务器拒绝</td>
+</tr>
+<tr>
+<td align="center">404 Not Found</td>
+<td align="center">服务器上无法找到请求的资源</td>
+</tr>
+<tr>
+<td align="center">500 lnternal Server Error</td>
+<td align="center">服务器端在执行请求时发生了错误</td>
+</tr>
+</tbody></table>
+<h1 id="二-HTTP-URL"><a href="#二-HTTP-URL" class="headerlink" title="二.HTTP URL"></a><strong>二.HTTP URL</strong></h1><p>URL,中文叫做统一资源定位符，是互联网上用来表示某一处资源的地址。</p>
+<p>以下面这个URL为例，介绍下普通URL的各部分组成：<br><a href="http://www.asp.com:8080/news/index.asp?boardID=5&ID=24618&page=1#name" target="_blank" rel="noopener">http  ://    www.asp.com: 8080       /news      /index.asp?    boardID=5&amp;ID=24618&amp;page=1#  name</a>协议部分       域名部分     端口部分    虚拟目录部分   文件名部分              参数部分          锚部分</p>
+<p>HTTP之请求方法</p>
+<p>根据HTTP标准，HTTP请求可以使用多种请求方法。</p>
+<table>
+<thead>
+<tr>
+<th align="center">HTTP1.0</th>
+<th align="center">HTTP1.1</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">GET,POST,HEAD</td>
+<td align="center">GET,POST,HEADOPTIONS,PUT,DELETE,TRACE,CONNECT</td>
+</tr>
+</tbody></table>
+<p>描述</p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>GET</td>
+<td>请求指定的页面信息，并返回实体主体。</td>
+</tr>
+<tr>
+<td>2</td>
+<td>HEAD</td>
+<td>类似于GET请求，只不过返回的响应中没有具体的内容，用于获取报头。</td>
+</tr>
+<tr>
+<td>3</td>
+<td>POST</td>
+<td>向指定资源提交数据进行处理请求（例如提交表单或者上传文件）。数据被包含在请求体中。POST请求可能会导致新的资源的建立和/或已有的资源的修改。</td>
+</tr>
+<tr>
+<td>4</td>
+<td>PUT</td>
+<td>从客户端向服务器传送的数据取代指定的文档的内容。</td>
+</tr>
+<tr>
+<td>5</td>
+<td>DELETE</td>
+<td>请求服务器删除指定的特面。</td>
+</tr>
+<tr>
+<td>6</td>
+<td>CONNECT</td>
+<td>HTTP/1.1 协议中预留给能够将连接改为管道方式的代理服务器。</td>
+</tr>
+<tr>
+<td>7</td>
+<td>OPTIONS</td>
+<td>允许客户端查看服务器的性能。</td>
+</tr>
+<tr>
+<td>8</td>
+<td>TRACE</td>
+<td>回显服务器收到的请求，主要用于测试或诊断。</td>
+</tr>
+<tr>
+<td>9</td>
+<td>PATCH</td>
+<td>是对PUT方法的补充，用来对已知资源进行局部更新。</td>
+</tr>
+</tbody></table>
+<h1 id="三-计算机网络模型基础"><a href="#三-计算机网络模型基础" class="headerlink" title="三.计算机网络模型基础"></a><strong>三.计算机网络模型基础</strong></h1><p>OSI模型总共分为七层，从下到上分别是：物理层、数据链路层、网络层、传输层、会话层、表示层、应用层。每层基本协议如下图所示：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/8.21网络神图.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+
+
+<h1 id="四-http协议中，常见头部字段信息的含义（请求头和响应头）"><a href="#四-http协议中，常见头部字段信息的含义（请求头和响应头）" class="headerlink" title="四.http协议中，常见头部字段信息的含义（请求头和响应头）"></a><strong>四.http协议中，常见头部字段信息的含义（请求头和响应头）</strong></h1><p><strong>Request</strong></p>
+<p><strong>第一部分：请求行，用来说明请求类型,要访问的资源以及所使用的HTTP版本.</strong></p>
+<p><strong>第二部分：请求头部，紧接着请求行（即第一行）之后的部分，用来说明服务器要使用的附加信息</strong></p>
+<p>从第二行起为请求头部，HOST将指出请求的目的地.User-Agent,服务器端和客户端脚本都能访问它,它是浏览器类型检测逻辑的重要基础.该信息由你的浏览器来定义,并且在每个请求中自动发送等等</p>
+<p><strong>第三部分：空行，请求头部后面的空行是必须的</strong></p>
+<p>即使第四部分的请求数据为空，也必须有空行。</p>
+<p><strong>第四部分：请求数据也叫主体，可以添加任意的其他数据。</strong></p>
+<p>这个例子的请求数据为空。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">GET /index.asp HTTP/1.1    请求行，说明请求类型,要访问的资源以及所使用的HTTP版本</span><br><span class="line">Host                       请求地址</span><br><span class="line">User-Agent                 浏览器信息</span><br><span class="line">Accept                     设置接收文件的类型</span><br><span class="line">Referer                    请求当前页面的前一个地址</span><br><span class="line">Accept-Encoding            设置接收的编码类型</span><br><span class="line">Accept-Language            设置接收的语言</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP1.1</span><br><span class="line">Host:</span><br><span class="line">User-Agent:</span><br><span class="line">Content-Type:                                   内容MIME类型</span><br><span class="line">Content-Length:                                 内容长度</span><br><span class="line">Connection: Keep-Alive                          控制不再转发给代理的首部字段、管理持久连接</span><br><span class="line">                                                空行</span><br><span class="line">name=Professional%20Ajax&amp;publisher=Wiley        数据内容</span><br></pre></td></tr></table></figure>
+
+<h4 id="Response"><a href="#Response" class="headerlink" title="Response"></a>Response</h4><h5 id="HTTP响应也由四个部分组成，分别是：状态行、消息报头、空行和响应正文。"><a href="#HTTP响应也由四个部分组成，分别是：状态行、消息报头、空行和响应正文。" class="headerlink" title="HTTP响应也由四个部分组成，分别是：状态行、消息报头、空行和响应正文。"></a>HTTP响应也由四个部分组成，分别是：状态行、消息报头、空行和响应正文。</h5><h5 id="第一部分：状态行，由HTTP协议版本号，-状态码，-状态消息-三部分组成。"><a href="#第一部分：状态行，由HTTP协议版本号，-状态码，-状态消息-三部分组成。" class="headerlink" title="第一部分：状态行，由HTTP协议版本号， 状态码， 状态消息 三部分组成。"></a>第一部分：状态行，由HTTP协议版本号， 状态码， 状态消息 三部分组成。</h5><h5 id="第二部分：消息报头，用来说明客户端要使用的一些附加信息"><a href="#第二部分：消息报头，用来说明客户端要使用的一些附加信息" class="headerlink" title="第二部分：消息报头，用来说明客户端要使用的一些附加信息"></a>第二部分：消息报头，用来说明客户端要使用的一些附加信息</h5><h5 id="第三部分：空行，消息报头后面的空行是必须的"><a href="#第三部分：空行，消息报头后面的空行是必须的" class="headerlink" title="第三部分：空行，消息报头后面的空行是必须的"></a>第三部分：空行，消息报头后面的空行是必须的</h5><h5 id="第四部分：响应正文，服务器返回给客户端的文本信息。"><a href="#第四部分：响应正文，服务器返回给客户端的文本信息。" class="headerlink" title="第四部分：响应正文，服务器返回给客户端的文本信息。"></a>第四部分：响应正文，服务器返回给客户端的文本信息。</h5><p>空行后面的html部分为响应正文。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Connection:                     </span><br><span class="line">Date:                       生成响应的日期和时间</span><br><span class="line">Server: Microsoft-IIS/6.0   服务器信息</span><br><span class="line">Content-Length: 31821       相应内容长度</span><br><span class="line">Content-Type: text/html     MIME类型的HTML(text/html)</span><br><span class="line">Set-Cookie: ASPSESSIONIDSCAQRATR=IEDHHFPBCGDOOFHJKPKCKPOC; path=/   发给客户端的，在根目录下</span><br><span class="line">Cache-control: private      指定了请求和响应遵循的缓存机制</span><br><span class="line">                            空行</span><br><span class="line">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot;&gt;  ----- 【响应正文】</span><br><span class="line">&lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;ÍøÕ¾Ê×Ò³-ÂÌÃË¿Æ¼¼--¾ÞÈË±³ºóµÄ×¨¼Ò&lt;/TITLE&gt;</span><br><span class="line">&lt;META http-equiv=Content-Type content=&quot;text/html; charset=gb2312&quot;&gt;</span><br><span class="line">&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;imgbye/Styles.css&quot;&gt;</span><br><span class="line">&lt;META content=ÂÌÃË¿Æ¼¼--¾ÞÈË±³ºóµÄ×¨¼Ò name=keywords&gt;</span><br><span class="line">&lt;META content=ÂÌÃË¿Æ¼¼--¾ÞÈË±³ºóµÄ×¨¼Ò name=description&gt;</span><br><span class="line">&lt;style type=&quot;text/css&quot;&gt;</span><br><span class="line">&lt;!--</span><br></pre></td></tr></table></figure>
+
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-08-21T14:39:58.852Z" itemprop="dateUpdated">2019-08-21 22:39:58</time>
+</span>
+
+
+        
+        原文链接：<a href="/2019/08/21/HTTP基础/" target="_blank" rel="external">https://0xxk.github.io/2019/08/21/HTTP基础/</a>
+        
+    </div>
+    <footer>
+        <div onclick="location.href='https://0xxk.github.io'">
+            <img src="/img/avatar.jpg" alt="0xxk">
+            <a>0xxk</a>
+        </div>
+    </footer>
+</blockquote>
+
+        
+    <div class="page-reward">
+        <nav class="myreward">
+            <a id="rewardBtn" href="javascript:;"><span>打&nbsp;赏</span><span>装成好像很多人打赏的样子</span></a>
+        </nav>
+    </div>
+
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.io/2019/08/21/HTTP基础/&title=《HTTP基础》 — oxxk blog&pic=https://0xxk.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.io/2019/08/21/HTTP基础/&title=《HTTP基础》 — oxxk blog&source=作业" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.io/2019/08/21/HTTP基础/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《HTTP基础》 — oxxk blog&url=https://0xxk.github.io/2019/08/21/HTTP基础/&via=https://0xxk.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.io/2019/08/21/HTTP基础/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2019/08/21/burp绕过token验证/" id="post-prev" class="post-nav-link">
+        <h4 class="title" >
+          上一篇：burp绕过token验证
+        </h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/08/20/8.20作业/" id="post-next" class="post-nav-link">
+        <h4 class="title" data-hover="下一篇：[no title]">下一篇：[no title]</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+    
+
+    
+
+    
+
+
+</article>
+
+</div>
+
+        <footer class="footer">
+    <div class="footer-content">
+        <span class="power">
+            <i class="icon icon-lg icon-copyright"></i>
+            2017
+            <i class="icon icon-lg icon-heart"></i>
+            <a href="https://0xxk.github.io">tomotoes.com</a>
+            <br/>
+            Power by
+            <a href="https://hexo.io/" target="_blank" rel="external nofollow">Hexo</a>&nbsp;·&nbsp;
+            Theme
+            <a class="tomotoeslink" href="https://github.com/tomotoes/hexo-theme-tomotoes/" target="_blank" rel="external nofollow">tomotoes</a>
+        </span>
+
+        <br/>
+
+        <span id="RunTime" style="color:#a7a7a2;"></span>
+        <br/>
+
+        <span>
+            
+	<i class="icon icon-lg icon-user">
+<span id="busuanzi_container_site_uv" style='display:none'>
+       访问用户：<span id="busuanzi_value_site_uv"></span>
+    </span>人</i>
+    ·
+    <i class="icon icon-lg icon-eye">
+    <span id="busuanzi_container_site_pv" style='display:none'>
+      访问次数：<span id="busuanzi_value_site_pv"></span>
+    </span>次
+    </i>
+
+
+        </span>
+        <br/>
+
+        <span class="license">This blog is licensed under a <a rel="license" rel="external nofollow" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+    </div>
+</footer>
+
+    </main>
+    
+        
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        <span>感谢您的鼓励支持！</span>
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" data-img="/img/dog.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechatPay">&nbsp;&nbsp;微信&nbsp;&nbsp;</span>
+                <span class="reward-toggle-item alipayPay">支付宝</span>
+            </div>
+        </label>
+        
+        <i class="icon icon-caret-up"></i>
+    </div>
+</div>
+
+
+    
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.io/2019/08/21/HTTP基础/&title=《HTTP基础》 — oxxk blog&pic=https://0xxk.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.io/2019/08/21/HTTP基础/&title=《HTTP基础》 — oxxk blog&source=作业" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.io/2019/08/21/HTTP基础/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《HTTP基础》 — oxxk blog&url=https://0xxk.github.io/2019/08/21/HTTP基础/&via=https://0xxk.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.io/2019/08/21/HTTP基础/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p class="wechatshare">扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACOUlEQVR42u3awW7EIAxF0f7/T6dS1V0Fve/RVAIuq1E0k+Fk4djGHx94PV/r55XR9dF3Rlfm9/yzJUOGjG0Zz3SRDc2Rc+oIw/cmQ4aMexjzIDsPlPP7zMM0CcHkBSBDhgwZPAVcuRt5WDJkyJDB0zWSXHZsGTJkyFgpYtMG2co3X6zFZciQsSEjPRj4z88vnm/IkCFjE8YTrjQ15A24bj/fv5UhQ8bRjK7VxY8qUfEZBtkgw5UhQ8YRDNIC43/Mr/D7o9JXhgwZlzG6UrYbrSBbRONoMmTIOJrB/2x9o/xQszuukCFDxqmMrnTkm1tpxvH7y5Ah42wGD50kseOjFV1Zi14GMmTIOI6RbqJryXXNu6DBJ0OGjMsYJOzyQjSFpaFWhgwZ9zB4o41f56khD8S/BFwZMmQcykhD6jzI8kbbemMOHWHKkCHjCEYXFtNtxWNeOAGVIUPGPYy0NO3GMkjCR9p2wzeGDBkyDmXwFJAfDKSturR8RcMWMmTIOI6RVr0PXl0zjjcBh7W4DBkyDmJ0Y17dKAYPynEgliFDxjUM3lDrqGSQonwcMmTIOJrBxxrimnhhqCI9opAhQ8bZjCdc6ROK6+mwqSdDhowbGF2gfC+VJGG9OzSVIUPG7oyuud+lcenBZ7AHGTJkXMDoStZu5CJtxgUBV4YMGdcz+JAEz0PXSTJkyJDB07VRwbmeXL4ecGXIkLEJo2uc8XCZhmCyNxkyZNzDWDkY6ALrejJaBm4ZMmTsx/gEn9itY/vvw/4AAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <!-- waves按钮特效 -->
+<script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+
+<!-- 主题配置脚本 -->
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+</script>
+
+<!-- jquery -->
+<script src="/js/jquery.min.js?v=3.0"></script>
+
+<!-- 搜索 -->
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item waves-block waves-effect" onclick="location.href='{path}'">
+    <div class="title ellipsis" title="{title}">{title}</div>
+</li>
+</template>
+
+
+<!-- main博客脚本 -->
+<script src="/js/main.min.js?v=3.0" ></script>
+
+<!-- 动画&配置 -->
+<script src="/js/script.min.js?v=3.0" ></script>
+
+<!-- 脚本管理 -->
+<script>
+
+if(window.innerWidth > 800){
+	/* 3D标题 */
+	$(".content-header").on("mousemove", threedee);
+
+	/* 底部追随鼠标 */
+	$(".footer").hover(2);
+
+	/* gotop键的涟漪 */
+	$("#gotop").hover(1);
+
+	/* 赞赏的粒子雨 */
+	$("#reward").hover(3);
+
+	/* 微信公众号的底部渲染 */
+	$("#wechat").hover(4);
+
+    /* 标题跳动 */
+    $(".archivestitle").bumpyText();
+
+	/* 图片点击放大 */
+	const postimg = jQuery(".post-content img:not(.github-emoji)");
+	postimg.on("click",function(){
+
+		mask.classList.add("in");
+		main.classList.add("Mask");
+		menu.classList.add("Mask");
+		var myimg = this.cloneNode(true);
+		myimg.classList.add("imgShow");
+
+		setTimeout(function(){
+			jQuery(myimg).animate({
+				opacity:"1"
+			},1000);
+		},0);
+
+		document.body.appendChild(myimg);
+
+		myimg.onclick=function(){
+			document.body.removeChild(myimg);
+			mask.classList.remove("in");
+			main.classList.remove("Mask");
+			menu.classList.remove("Mask");
+		};
+
+	});
+
+}
+
+/* 名字跳动 */
+$("#name").bumpyText();
+
+
+/* 网站运行时间 */
+setInterval(function () {
+	setTime("2017/10/11");
+}, 1000);
+
+/* 文章块的淡出 */
+postshow();
+
+/* 座右铭 */
+
+   getHitokoto();
+
+
+
+/* 粘贴提示 */
+G($(".post-content"), location.href, "0xxk");
+
+
+/* 控制台 */
+if (window.console && window.console.log) {
+	setTimeout(function () {
+		console.log("\n %c 一个坏掉的番茄 %c  © Simon Ma  http://tomotoes.com \n\n", "color:#FFFFFB;background:#1abc9c;padding:5px 0;border-radius:.5rem 0 0 .5rem;", "color:#FFFFFB;background:#080808;padding:5px 0;border-radius:0 .5rem .5rem 0;");
+	}, 0);
+}
+
+</script>
+
+
+
+
+<!-- 公式渲染 -->
+
+
+
+<!-- 不蒜子 -->
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+</body>
+</html>
