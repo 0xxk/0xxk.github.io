@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta http-equiv="Content-Language" content="zh-cn">
+    <meta charset="utf-8">
+    
+    
+    
+    <title>SQL注入总结 | oxxk blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    
+    <meta name="theme-color" content="#77AAFF">
+    
+    
+    <meta name="keywords" content>
+    
+    
+
+    
+
+    <!-- Baidu Push -->
+<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+
+	var _hmt = _hmt || [];
+</script>
+
+
+
+    
+    <meta name="description" content="这两周的SQL注入总结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL注入总结">
+<meta property="og:url" content="https://0xxk.github.io/2019/09/09/注入总结/index.html">
+<meta property="og:site_name" content="oxxk blog">
+<meta property="og:description" content="这两周的SQL注入总结">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-09-08T16:12:18.798Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SQL注入总结">
+<meta name="twitter:description" content="这两周的SQL注入总结">
+    
+        <link rel="alternate" type="application/atom+xml" title="oxxk blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link id="style" rel="stylesheet" href="/css/style.css?v=3.0">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+            
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+    <aside id="menu"  class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" >
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg" alt="avatar">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname" id="name">0xxk</h5>
+          
+            <div id="yiyanmotto" class="motto">&nbsp;</div>
+          
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+              <li class="waves-block waves-effect">
+                  <a href="/"  >
+                    <i class="icon icon-lg icon-home"></i>
+                    <span>主 页</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/archives"  >
+                    <i class="icon icon-lg icon-archives"></i>
+                    <span>归 档</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/categories"  >
+                    <i class="icon icon-lg icon-th-list"></i>
+                    <span>分 类</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/tags"  >
+                    <i class="icon icon-lg icon-tags"></i>
+                    <span>标 签</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/about"  >
+                    <i class="icon icon-lg icon-smile-o"></i>
+                    <span>关 于</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+      <div class="nav2">
+          
+              <a class="nav2item" data-title="Github" href="https://github.com/oxxk" target="_blank"title="Github" >
+                <i class="icon icon-lg icon-github github"></i>
+              </a>
+          
+
+            </div>
+        
+      </ul>
+        
+    </div>
+  </div>
+ 
+</aside>
+
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">SQL注入总结</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        <a href="../../atom.xml" target="_blank" class="header-icon waves-effect waves-circle waves-light" id="Rss">
+            <i class="icon icon-lg icon-rss"></i>
+        </a>
+    </div>
+</header>
+<header class="content-header post-header">
+    
+    
+    <div class="container fade-scale">
+        <div id="myheader">
+            <h1 class="title">
+                
+            </h1>
+            <h5 class="subtitle">
+                
+                
+            </h5>
+        </div>
+    </div>
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#SQL注入原理"><span class="post-toc-number">1.</span> <span class="post-toc-text">SQL注入原理</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#SQL注入分类"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">SQL注入分类</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#注入过程"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">注入过程</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#确定请求方式"><span class="post-toc-number">1.2.1.</span> <span class="post-toc-text">确定请求方式</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#确定数据库类型"><span class="post-toc-number">1.2.2.</span> <span class="post-toc-text">确定数据库类型</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#寻找注入点"><span class="post-toc-number">1.2.3.</span> <span class="post-toc-text">寻找注入点</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#判断注入点的参数类型"><span class="post-toc-number">1.2.4.</span> <span class="post-toc-text">判断注入点的参数类型</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#判断截断符号"><span class="post-toc-number">1.2.5.</span> <span class="post-toc-text">判断截断符号</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#根据注入点的反馈类选择注入方法"><span class="post-toc-number">1.2.6.</span> <span class="post-toc-text">根据注入点的反馈类选择注入方法</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#判断WAF过滤字符"><span class="post-toc-number">1.2.7.</span> <span class="post-toc-text">判断WAF过滤字符</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#构建符合标准的注入语句"><span class="post-toc-number">1.2.8.</span> <span class="post-toc-text">构建符合标准的注入语句</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#注入时常用的函数"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">注入时常用的函数</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#特殊注入方法"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">特殊注入方法</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+   
+<article id="post-注入总结"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">SQL注入总结</h1>
+        <div class="post-meta">
+            <i class="icon icon-lg icon-calendar-o"></i>
+            发表于
+            <time class="post-time" title="2019-09-09 00:01:49" datetime="2019-09-08T16:01:49.106Z"  itemprop="datePublished">2019-09-09</time>
+
+            <br id="mybreak"/>
+            
+<script>
+	mybreak.style="display:none";
+</script>
+
+
+            <i>·</i>
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>次浏览
+</span>
+
+
+        </div>
+        <div class="post-count-custom">
+            <i class="icon icon-lg icon-comment-o"></i>
+            阅读本文可能花费您&nbsp;<span class="post-count">8</span>&nbsp;分钟
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>这两周的SQL注入总结</p>
+<a id="more"></a>
+
+<h1 id="SQL注入原理"><a href="#SQL注入原理" class="headerlink" title="SQL注入原理"></a>SQL注入原理</h1><p>​        SQL注入即是指web应用程序对用户输入数据的合法性没有判断，攻击者可以在web应用程序中事先定义好的查询语句的结尾上添加额外的SQL语句，以此来实现欺骗数据库服务器执行非授权的任意查询，从而进一步得到相应的数据信息。</p>
+<p>​        注入本质：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">将用户提交的恶意代码和原本的SQL 语句进行拼接，将拼接后的语句带入数据库来执行恶意语句，从而达到非授权任意查询的效果。</span><br></pre></td></tr></table></figure>
+
+<p>​        注入漏洞有两个关键条件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.用户能控制输入的内容</span><br><span class="line"></span><br><span class="line">2.Web应用把用户输入的内容带入到数据库中执行</span><br></pre></td></tr></table></figure>
+
+<h2 id="SQL注入分类"><a href="#SQL注入分类" class="headerlink" title="SQL注入分类"></a>SQL注入分类</h2><p>根据数据库来分可以分为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1.Mysql数据库注入 2. Mssql数据库注入 3.Oracle数据库注入 4.Access数据库注入</span><br></pre></td></tr></table></figure>
+
+<p>根据请求方式不同可以分为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1.GET方式请求注入 2.POST方式请求注入 3.请求头注入</span><br></pre></td></tr></table></figure>
+
+<p>根据sql注入点的参数类型可以分为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1.整数型注入 	2.字符型注入</span><br></pre></td></tr></table></figure>
+
+<p>根据sql注入点的反馈类型分</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1.基于错误显示的sql注入  2.union类型的sql注入</span><br><span class="line">3.布尔类型的sql注入     4.基于时间的sql注入</span><br><span class="line">5.多语句注入			  6.内联注入</span><br><span class="line">7...</span><br></pre></td></tr></table></figure>
+
+<h2 id="注入过程"><a href="#注入过程" class="headerlink" title="注入过程"></a>注入过程</h2><p>大体分为这几个主要步骤：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1.确定请求方式                   2.确定数据库类型  </span><br><span class="line"></span><br><span class="line">3.寻找注入点     			    4. 判断注入点的参数类型</span><br><span class="line"></span><br><span class="line">5.判断截断符号                   6.根据注入点的反馈类选择注入方法</span><br><span class="line"></span><br><span class="line">7.判断WAF过滤字符				   8.构建符合标准的注入语句</span><br></pre></td></tr></table></figure>
+
+<h3 id="确定请求方式"><a href="#确定请求方式" class="headerlink" title="确定请求方式"></a>确定请求方式</h3><p>HTTP 定义了与服务器交互的不同方法，最基本的方法是 GET 和 POST。</p>
+<p><strong>GET方式</strong>在客户端通过URL提交数据，数据在URL中可以看到，例如在日常中订购服务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http：//www.cnblogs.com/javame/index.htm？servId=2</span><br></pre></td></tr></table></figure>
+
+<p><strong>POST方式</strong>数据放置在HTML HEADER内提交，数据在URL中看不到</p>
+<p><u>GET只能传输比较少的数据，安全性较低，POST传输数据较多，安全性也比GET高。</u></p>
+<h3 id="确定数据库类型"><a href="#确定数据库类型" class="headerlink" title="确定数据库类型"></a>确定数据库类型</h3><p>获取数据时，每种数据库架构、语法、类型都是不一样的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">and (select count(*) from MSysAccessObjects) &gt; 0</span><br></pre></td></tr></table></figure>
+
+<p>返回正常则说明是Access</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">and (select count(*) from sysobjects) &gt; 0</span><br></pre></td></tr></table></figure>
+
+<p>返回正常说明是Mssql</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">and length(user()) &gt; 0</span><br></pre></td></tr></table></figure>
+
+<p>返回正常说明是MySQL</p>
+<p>Mssql中可以调用 substring,Oracle 则可调用 substr</p>
+<h3 id="寻找注入点"><a href="#寻找注入点" class="headerlink" title="寻找注入点"></a>寻找注入点</h3><p><strong>精髓</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">只要和数据库交互的地方都有可能存在注入</span><br></pre></td></tr></table></figure>
+
+<p>一般就是在URL后面的?id=n 后面，网页搜索框中，登陆帐号，请求头。</p>
+<h3 id="判断注入点的参数类型"><a href="#判断注入点的参数类型" class="headerlink" title="判断注入点的参数类型"></a>判断注入点的参数类型</h3><p>注入点参数类型主要分为:数字型、字符型。</p>
+<p>判断数字型:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">如?id=2 ，将2变为3。在?id=后面设置3-1。如果?id=3-1的页面和2的一样，那么就是数字型注入</span><br></pre></td></tr></table></figure>
+
+<p>判断字符型:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">常规字符型有&apos; 、&quot;、&apos;)、&quot;)、))。在?id=2后面分别加入前面的符号。如果报错或者页面回显不正常，那么证明有注入。</span><br></pre></td></tr></table></figure>
+
+<h3 id="判断截断符号"><a href="#判断截断符号" class="headerlink" title="判断截断符号"></a>判断截断符号</h3><p>在我们确定是字符还是数字型之后，要判断他的截断符号是什么</p>
+<p><strong>数字型</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">直接在语句后面添加要注入的语句即可</span><br></pre></td></tr></table></figure>
+
+<p><strong>字符型</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">在确定完截断符号之后不断尝试注释符号，直到找到拼接后让页面恢复正常的字符。</span><br><span class="line"></span><br><span class="line">常见的有:-- | %23 /**/</span><br></pre></td></tr></table></figure>
+
+<h3 id="根据注入点的反馈类选择注入方法"><a href="#根据注入点的反馈类选择注入方法" class="headerlink" title="根据注入点的反馈类选择注入方法"></a>根据注入点的反馈类选择注入方法</h3><p>当我们确定完注释符号和截断符号时就可以选择注入方法了。大致有六种：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.基于错误显示的sql注入  2.union类型的sql注入</span><br><span class="line">3.布尔类型的sql注入     4.基于时间的sql注入</span><br><span class="line">5.多语句注入			  6.内联注入</span><br></pre></td></tr></table></figure>
+
+<p><strong>在这里分情况进行注入</strong></p>
+<p>有回显时：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">可以选择union类型的sql注入和基于错误显示的sql注入</span><br></pre></td></tr></table></figure>
+
+<p>无回显时：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">可以选择布尔类型的sql注入和基于时间的sql盲注</span><br></pre></td></tr></table></figure>
+
+<p>特殊情况：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">情况满足可以使用多语句注入。当-- | 等注释符被过滤时可以使用内联注入</span><br></pre></td></tr></table></figure>
+
+<h3 id="判断WAF过滤字符"><a href="#判断WAF过滤字符" class="headerlink" title="判断WAF过滤字符"></a>判断WAF过滤字符</h3><p>当我们在注入时可能会遇到and select union等关键字符被WAF过滤的情况，这时候就要肠坏死绕过WAF了。常见的绕过方法如下：</p>
+<p><strong>HTTP参数控制：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">HPP（HTTP Parameter Polution）重复参数污染</span><br><span class="line"></span><br><span class="line">HPF （HTTP Parameter Fragment）HTTP分割注入</span><br></pre></td></tr></table></figure>
+
+<p><strong>白名单绕过：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">基于IP地址的白名单，一般很难绕过</span><br><span class="line"></span><br><span class="line">基于应用层的数据白名单，可能造成bypass</span><br><span class="line"></span><br><span class="line">特殊目录白名单绕过：admin/dede/install等特殊目录</span><br></pre></td></tr></table></figure>
+
+<p><strong>过滤掉and和or情况下的盲注：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">?id=strcmp(left((select%20username%20from%20users%20limit%200,1),1),0x42)%23</span><br><span class="line"></span><br><span class="line">?id=strcmp(left((select+username+from+users+limit+0,1),1)0x42)%23</span><br></pre></td></tr></table></figure>
+
+<p><strong>加括号绕过：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">?id=-1+union+(select+1,2,3+from+users)%23</span><br><span class="line"></span><br><span class="line">?id=(-1)union(select(1),(2),(3)from(users))</span><br><span class="line"></span><br><span class="line">?id=(1)or(0x50=0x50)</span><br><span class="line"></span><br><span class="line">?id=(-1)union((((()select(1),hex(2),hex(3)from(users)))))</span><br><span class="line"></span><br><span class="line">?id=-1 union select 1,&#123;x 2&#125;,3</span><br></pre></td></tr></table></figure>
+
+<p><strong>等价函数与命令：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">函数或变量：</span><br><span class="line"></span><br><span class="line">hex()/bin() ==&gt;ascii()</span><br><span class="line"></span><br><span class="line">sleep ==&gt; benchmark()</span><br><span class="line"></span><br><span class="line">concat_ws() ==&gt; group_concat()</span><br><span class="line"></span><br><span class="line">mid()/substr() ==&gt; substring()</span><br><span class="line"></span><br><span class="line">@@version/datadir ==&gt; version/datadir()</span><br><span class="line"></span><br><span class="line">逻辑符号：</span><br><span class="line"></span><br><span class="line">and ==&gt; &amp;&amp;</span><br><span class="line"></span><br><span class="line">or ==&gt; ||</span><br></pre></td></tr></table></figure>
+
+<p><strong>利用注释绕过：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">普通注释：</span><br><span class="line">?id=1/**/union/**/sElect**/1,2,3%23</span><br><span class="line"></span><br><span class="line">内联注释：相比普通注释，内联注释用的更多，有一个特性/*!*/只有Mysql能识别,/*!*/表示注释里面的语句会被执行</span><br><span class="line">?id-1/*UNION*/%20/*!SELECT*/%201,2,3</span><br><span class="line">?d=1%0A/**//*!50000%55nlOn*//*yoyu*/all/*%0A*//*!%53eLEct*/%0A/*nnaa*/+1,2,3</span><br><span class="line">/*!50000%55nlOn*/50000表示假如，数据库是5.00.00以上版本，该语句才会被执行</span><br></pre></td></tr></table></figure>
+
+<p><strong>利用编码绕过：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Unicode编码</span><br><span class="line">单引号：%u0027/%u02b9/%u02bc/%u02c8/%u2032</span><br><span class="line">空格：%u0020/%uff00/%c0%20</span><br><span class="line">左括号：%u0028/%uff08/%c0%28/</span><br><span class="line">右括号：%u0029/%uff09</span><br></pre></td></tr></table></figure>
+
+<p><strong>用特殊字符代替空格：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">%09 tab键</span><br><span class="line">%0a 换行 </span><br><span class="line">%0c 新的一页</span><br><span class="line">%0d return功能</span><br><span class="line">%0b tab键 </span><br><span class="line">%a0 空格</span><br></pre></td></tr></table></figure>
+
+<p><strong>特殊符号：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">反引号`,select`version()`</span><br><span class="line">神奇的&quot;-+.&quot;, select+id from users;&quot;+&quot;用于字符串连接，&quot;-&quot;和&quot;.&quot;可以逃过空格和关键字过滤</span><br><span class="line">@符号，select @^1.from users;@表用户定义，@@表示系统变量</span><br><span class="line">select-conut(id) test from users;//绕过空格规则</span><br><span class="line">关键字拆分：&apos;se&apos;+&apos;lec&apos;+&apos;t&apos; %s%e%L%E%c%t 1</span><br></pre></td></tr></table></figure>
+
+<h3 id="构建符合标准的注入语句"><a href="#构建符合标准的注入语句" class="headerlink" title="构建符合标准的注入语句"></a>构建符合标准的注入语句</h3><p>最后就是将截断符号，注释符，选择后的注入方式，绕过WAF 结合在一起。</p>
+<h2 id="注入时常用的函数"><a href="#注入时常用的函数" class="headerlink" title="注入时常用的函数"></a>注入时常用的函数</h2><table>
+<thead>
+<tr>
+<th>函数名称</th>
+<th>函数功能</th>
+<th></th>
+<th>函数名称</th>
+<th>函数功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>system_user()</td>
+<td>系统函数名</td>
+<td></td>
+<td>count()</td>
+<td>返回执行结果的数量</td>
+</tr>
+<tr>
+<td>user()</td>
+<td>用户名</td>
+<td></td>
+<td>concat()</td>
+<td>没有分隔符的连接字符串</td>
+</tr>
+<tr>
+<td>current_user()</td>
+<td>当前用户名</td>
+<td></td>
+<td>concat_ws()</td>
+<td>含有分隔符的连接字符串</td>
+</tr>
+<tr>
+<td>session_user()</td>
+<td>连接数据库的用户名</td>
+<td></td>
+<td>load_file()</td>
+<td>读取本地的文件</td>
+</tr>
+<tr>
+<td>database()</td>
+<td>数据库名</td>
+<td></td>
+<td>into outfile()</td>
+<td>写文件</td>
+</tr>
+<tr>
+<td>versionI</td>
+<td>数据库版本</td>
+<td></td>
+<td>ascii()</td>
+<td>字符串的ASCII代码值</td>
+</tr>
+<tr>
+<td>@@datadir</td>
+<td>数据库路径</td>
+<td></td>
+<td>ord()</td>
+<td>返回字符串第一个字符的ASCII值</td>
+</tr>
+<tr>
+<td>@@basedir</td>
+<td>数据库安装路近</td>
+<td></td>
+<td>mid()</td>
+<td>返回一个字符串的一部分</td>
+</tr>
+<tr>
+<td>@@version_compile_os</td>
+<td>操作系统</td>
+<td></td>
+<td>substr()</td>
+<td>返回7一个字符串的一部分</td>
+</tr>
+<tr>
+<td>length()</td>
+<td>返回字符串的长度</td>
+<td></td>
+<td>if()</td>
+<td>&gt; select if (1&gt;2,2,3);   -&gt;3</td>
+</tr>
+<tr>
+<td>left()</td>
+<td>返回字符串左面的几个字符</td>
+<td></td>
+<td>strcmp()</td>
+<td>比较字符串的内容</td>
+</tr>
+<tr>
+<td>floor()</td>
+<td>返回小于或等于x的最大整数</td>
+<td></td>
+<td>ifnull()</td>
+<td>假如参数1不为null,则返回值为参数1,否则返回值为参数2</td>
+</tr>
+<tr>
+<td>rand()</td>
+<td>返回0和1之间的随机数</td>
+<td></td>
+<td>exp()</td>
+<td>返回e的x次方</td>
+</tr>
+<tr>
+<td>sleep()</td>
+<td>让此语句运行n秒钟</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="特殊注入方法"><a href="#特殊注入方法" class="headerlink" title="特殊注入方法"></a>特殊注入方法</h2><p>除去常见的注入方法之外还有这样的注入方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">二次编码注入</span><br><span class="line"></span><br><span class="line">二次注入</span><br><span class="line"></span><br><span class="line">偏移注入</span><br><span class="line"></span><br><span class="line">外带查询</span><br></pre></td></tr></table></figure>
+
+<p>在这里查漏补缺记一下偏移注入：</p>
+<p>access偏移注入</p>
+<p><strong>[背景]</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.偏移注入指access偏移注入，主要是由于数据库结构的问题，其他数据库没办法利用</span><br><span class="line"></span><br><span class="line">2.用于解决判断出表明，得不到字段的困境。</span><br></pre></td></tr></table></figure>
+
+<p><strong>[偏移注入的特点]</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.看人品和技巧的注入方法，不是%100能成功</span><br><span class="line"></span><br><span class="line">2.无需管理帐号密码字段，直接爆破帐号密码。</span><br></pre></td></tr></table></figure>
+
+<p><strong>[利用条件]</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.已知管理表名</span><br><span class="line"></span><br><span class="line">2.已直任意字段（一个或多个 多个会增加几率）</span><br></pre></td></tr></table></figure>
+
+<p><strong>[影响偏移注入成功率的因素]</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1.管理表的字段越少越好（最好就三个 1.id 2.帐号字段 3.密码字段）</span><br><span class="line"></span><br><span class="line">2.当前注入点的脚本内查询的表内的字段数的字段越多越好（最好有几十个）</span><br><span class="line"></span><br><span class="line">3.已知的字段数越多越好</span><br></pre></td></tr></table></figure>
+
+<p><strong>[偏移注入的流程]</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1.判断字段数 </span><br><span class="line"></span><br><span class="line">2.判断表名</span><br><span class="line"></span><br><span class="line">3.开始偏移注入</span><br></pre></td></tr></table></figure>
+
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-09-08T16:12:18.798Z" itemprop="dateUpdated">2019-09-09 00:12:18</time>
+</span>
+
+
+        
+        原文链接：<a href="/2019/09/09/注入总结/" target="_blank" rel="external">https://0xxk.github.io/2019/09/09/注入总结/</a>
+        
+    </div>
+    <footer>
+        <div onclick="location.href='https://0xxk.github.io'">
+            <img src="/img/avatar.jpg" alt="0xxk">
+            <a>0xxk</a>
+        </div>
+    </footer>
+</blockquote>
+
+        
+    <div class="page-reward">
+        <nav class="myreward">
+            <a id="rewardBtn" href="javascript:;"><span>打&nbsp;赏</span><span>装成好像很多人打赏的样子</span></a>
+        </nav>
+    </div>
+
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.io/2019/09/09/注入总结/&title=《SQL注入总结》 — oxxk blog&pic=https://0xxk.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.io/2019/09/09/注入总结/&title=《SQL注入总结》 — oxxk blog&source=这两周的SQL注入总结" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.io/2019/09/09/注入总结/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《SQL注入总结》 — oxxk blog&url=https://0xxk.github.io/2019/09/09/注入总结/&via=https://0xxk.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.io/2019/09/09/注入总结/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/09/08/sqlmap常规注入操作/" id="post-next" class="post-nav-link">
+        <h4 class="title" data-hover="下一篇：SQLMAP注入">下一篇：SQLMAP注入</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+    
+
+    
+
+    
+
+
+</article>
+
+</div>
+
+        <footer class="footer">
+    <div class="footer-content">
+        <span class="power">
+            <i class="icon icon-lg icon-copyright"></i>
+            2017
+            <i class="icon icon-lg icon-heart"></i>
+            <a href="https://0xxk.github.io">tomotoes.com</a>
+            <br/>
+            Power by
+            <a href="https://hexo.io/" target="_blank" rel="external nofollow">Hexo</a>&nbsp;·&nbsp;
+            Theme
+            <a class="tomotoeslink" href="https://github.com/tomotoes/hexo-theme-tomotoes/" target="_blank" rel="external nofollow">tomotoes</a>
+        </span>
+
+        <br/>
+
+        <span id="RunTime" style="color:#a7a7a2;"></span>
+        <br/>
+
+        <span>
+            
+	<i class="icon icon-lg icon-user">
+<span id="busuanzi_container_site_uv" style='display:none'>
+       访问用户：<span id="busuanzi_value_site_uv"></span>
+    </span>人</i>
+    ·
+    <i class="icon icon-lg icon-eye">
+    <span id="busuanzi_container_site_pv" style='display:none'>
+      访问次数：<span id="busuanzi_value_site_pv"></span>
+    </span>次
+    </i>
+
+
+        </span>
+        <br/>
+
+        <span class="license">This blog is licensed under a <a rel="license" rel="external nofollow" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+    </div>
+</footer>
+
+    </main>
+    
+        
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        <span>感谢您的鼓励支持！</span>
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" data-img="/img/dog.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechatPay">&nbsp;&nbsp;微信&nbsp;&nbsp;</span>
+                <span class="reward-toggle-item alipayPay">支付宝</span>
+            </div>
+        </label>
+        
+        <i class="icon icon-caret-up"></i>
+    </div>
+</div>
+
+
+    
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.io/2019/09/09/注入总结/&title=《SQL注入总结》 — oxxk blog&pic=https://0xxk.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.io/2019/09/09/注入总结/&title=《SQL注入总结》 — oxxk blog&source=这两周的SQL注入总结" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.io/2019/09/09/注入总结/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《SQL注入总结》 — oxxk blog&url=https://0xxk.github.io/2019/09/09/注入总结/&via=https://0xxk.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.io/2019/09/09/注入总结/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p class="wechatshare">扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACM0lEQVR42u3azY6DMAxF4b7/SzOb7lrCuTZTCeewGlU04aOSxz95vfB1nFyf95zdv17z7JObLxkyZDyWcSyv9Zbrh+58iz+bDBky9mGcRbD1Pet1DnCREEz2kiFDhgySwPFUj68sQ4YMGf2Ay8vO9E4ZMmTIqBWxnMRLUx6yb6vFZciQ8UAG77r//u9/mW/IkCHjUYwjvO4qTe96nveaMmTIGM1Im/58SLles5Z6XpTEMmTIGMqoHe3i4bgz+Aw+kSFDxmgGT/XSEWMn7eNB+ctvIkOGjHEMchNv4qcla3/kKUOGjH0YnQNenXZbGuiL/zFkyJAxiHHX0Yr1d2sjh6B8lSFDxlAGb5N1Er508BmMEGTIkLEZg4TjdEtSEqfDTtRukyFDxlBG55BEGkBJ0om+K0OGjA0Y6XCxtiVvwMUpqQwZMjZg8BSt3+hPG3PoGWTIkLEBIx0M1A5edB76ItDLkCFjS0Z/M54UknHpxcoyZMgYzSBpXxoKg41LDbv4yIUMGTIGMXhbjQTTzqENNLb8XEeGDBkbMDrpHWnP1R6alMoyZMjYh8EPSdRSwHTHeF4pQ4aMoYzaYQvSMuu8Gr6CDBkydmB0WmadphtvpZGXJUOGjB0YPMim44HgaFcpxSx2BGXIkPFYRhr4am2y2qggqMVlyJAho1Ez8uDOS2UZMmTI4AUkD6b9cIwOsMqQIWMoIz3yxVv5tVcQHzuTIUPGaEZaOpImWrpO5zXJkCFjNOMPKpqTYUWv+BIAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <!-- waves按钮特效 -->
+<script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+
+<!-- 主题配置脚本 -->
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+</script>
+
+<!-- jquery -->
+<script src="/js/jquery.min.js?v=3.0"></script>
+
+<!-- 搜索 -->
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item waves-block waves-effect" onclick="location.href='{path}'">
+    <div class="title ellipsis" title="{title}">{title}</div>
+</li>
+</template>
+
+
+<!-- main博客脚本 -->
+<script src="/js/main.min.js?v=3.0" ></script>
+
+<!-- 动画&配置 -->
+<script src="/js/script.min.js?v=3.0" ></script>
+
+<!-- 脚本管理 -->
+<script>
+
+if(window.innerWidth > 800){
+	/* 3D标题 */
+	$(".content-header").on("mousemove", threedee);
+
+	/* 底部追随鼠标 */
+	$(".footer").hover(2);
+
+	/* gotop键的涟漪 */
+	$("#gotop").hover(1);
+
+	/* 赞赏的粒子雨 */
+	$("#reward").hover(3);
+
+	/* 微信公众号的底部渲染 */
+	$("#wechat").hover(4);
+
+    /* 标题跳动 */
+    $(".archivestitle").bumpyText();
+
+	/* 图片点击放大 */
+	const postimg = jQuery(".post-content img:not(.github-emoji)");
+	postimg.on("click",function(){
+
+		mask.classList.add("in");
+		main.classList.add("Mask");
+		menu.classList.add("Mask");
+		var myimg = this.cloneNode(true);
+		myimg.classList.add("imgShow");
+
+		setTimeout(function(){
+			jQuery(myimg).animate({
+				opacity:"1"
+			},1000);
+		},0);
+
+		document.body.appendChild(myimg);
+
+		myimg.onclick=function(){
+			document.body.removeChild(myimg);
+			mask.classList.remove("in");
+			main.classList.remove("Mask");
+			menu.classList.remove("Mask");
+		};
+
+	});
+
+}
+
+/* 名字跳动 */
+$("#name").bumpyText();
+
+
+/* 网站运行时间 */
+setInterval(function () {
+	setTime("2017/10/11");
+}, 1000);
+
+/* 文章块的淡出 */
+postshow();
+
+/* 座右铭 */
+
+   getHitokoto();
+
+
+
+/* 粘贴提示 */
+G($(".post-content"), location.href, "0xxk");
+
+
+/* 控制台 */
+if (window.console && window.console.log) {
+	setTimeout(function () {
+		console.log("\n %c 一个坏掉的番茄 %c  © Simon Ma  http://tomotoes.com \n\n", "color:#FFFFFB;background:#1abc9c;padding:5px 0;border-radius:.5rem 0 0 .5rem;", "color:#FFFFFB;background:#080808;padding:5px 0;border-radius:0 .5rem .5rem 0;");
+	}, 0);
+}
+
+</script>
+
+
+
+
+<!-- 公式渲染 -->
+
+
+
+<!-- 不蒜子 -->
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+</body>
+</html>
